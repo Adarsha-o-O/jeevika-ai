@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeevika AI Voice Assistant</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 16px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    #response {
+      margin-top: 20px;
+      padding: 15px;
+      background: #eef3ff;
+      border-radius: 10px;
+      min-height: 60px;
+    }
+
+    #transcript {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Jeevika AI Voice Assistant</h1>
+
+  <div class="card">
+
+    <label>Beneficiary ID</label>
+    <input
+      type="number"
+      id="beneficiaryId"
+      value="4"
+    />
+
+    <label>Language</label>
+
+    <select id="language">
+      <option value="English">English</option>
+      <option value="Kannada">Kannada</option>
+      <option value="Hindi">Hindi</option>
+    </select>
+
+    <button onclick="startListening()">
+      🎤 Speak
+    </button>
+
+    <div id="transcript">
+      Waiting for voice...
+    </div>
+
+    <button onclick="sendQuery()">
+      Send Query
+    </button>
+
+    <div id="response">
+      Assistant response will appear here.
+    </div>
+
+  </div>
+
+
+<script>
+
+let spokenText = "";
+
+
+function getSpeechLanguage() {
+
+  const language =
+    document.getElementById(
+      "language"
+    ).value;
+
+  if (language === "Kannada") {
+    return "kn-IN";
+  }
+
+  if (language === "Hindi") {
+    return "hi-IN";
+  }
+
+  return "en-IN";
+}
+
+
+function startListening() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    alert(
+      "Speech recognition is not supported in this browser."
+    );
+
+    return;
+  }
+
+
+  const recognition =
+    new SpeechRecognition();
+
+
+  recognition.lang =
+    getSpeechLanguage();
+
+
+  recognition.interimResults =
+    false;
+
+
+  recognition.continuous =
+    false;
+
+
+  recognition.start();
+
+
+  document.getElementById(
+    "transcript"
+  ).innerText =
+    "Listening...";
+
+
+  recognition.onresult =
+    function(event) {
+
+      spokenText =
+        event.results[0][0]
+          .transcript;
+
+
+      document.getElementById(
+        "transcript"
+      ).innerText =
+        "You said: "
+        + spokenText;
+    };
+
+
+  recognition.onerror =
+    function(event) {
+
+      document.getElementById(
+        "transcript"
+      ).innerText =
+        "Voice error: "
+        + event.error;
+    };
+
+}
+
+
+async function sendQuery() {
+
+  if (!spokenText) {
+
+    alert(
+      "Please speak first."
+    );
+
+    return;
+  }
+
+
+  const beneficiaryId =
+    document.getElementById(
+      "beneficiaryId"
+    ).value;
+
+
+  const language =
+    document.getElementById(
+      "language"
+    ).value;
+
+
+  const response =
+    await fetch(
+      `http://127.0.0.1:8000/assistant/query/${beneficiaryId}`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          query: spokenText,
+          language: language
+        })
+      }
+    );
+
+
+  if (!response.ok) {
+
+    document.getElementById(
+      "response"
+    ).innerText =
+      "Backend error";
+
+    return;
+  }
+
+
+  const data =
+    await response.json();
+
+
+  document.getElementById(
+    "response"
+  ).innerText =
+    data.assistant_response;
+
+
+  speakResponse(
+    data.assistant_response,
+    language
+  );
+}
+
+
+function speakResponse(
+  text,
+  language
+) {
+
+  const speech =
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+
+  if (language === "Kannada") {
+    speech.lang = "kn-IN";
+  }
+  else if (language === "Hindi") {
+    speech.lang = "hi-IN";
+  }
+  else {
+    speech.lang = "en-IN";
+  }
+
+
+  window.speechSynthesis.cancel();
+
+  window.speechSynthesis.speak(
+    speech
+  );
+}
+
+</script>
+
+</body>
+</html>
