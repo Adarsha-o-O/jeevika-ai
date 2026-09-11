@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.database.database import get_db
 from app.models.beneficiary import Beneficiary
+from app.models.recommendation import Recommendation
 from app.ml.livelihood_mapper import map_livelihood
 
 
@@ -53,15 +54,65 @@ def generate_recommendations(
         "preferred_language": beneficiary.preferred_language,
         "income_target": beneficiary.income_target,
         "willing_to_relocate": beneficiary.willing_to_relocate,
-
         "experience_years": 0
     }
 
     recommendations = map_livelihood(profile)
 
-    return {
+    response_data = {
         "beneficiary_id": beneficiary.id,
         "beneficiary_name": beneficiary.name,
         "recommendation_count": len(recommendations),
         "recommendations": recommendations
+    }
+
+    saved_recommendation = Recommendation(
+        beneficiary_id=beneficiary.id,
+        recommendation_data=json.dumps(
+            response_data
+        )
+    )
+
+    db.add(saved_recommendation)
+    db.commit()
+    db.refresh(saved_recommendation)
+
+    return {
+        "recommendation_id":
+            saved_recommendation.id,
+
+        **response_data
+    }
+
+@router.get("/saved/{beneficiary_id}")
+def get_saved_recommendations(
+    beneficiary_id: int,
+    db: Session = Depends(get_db)
+):
+    records = (
+        db.query(Recommendation)
+        .filter(
+            Recommendation.beneficiary_id == beneficiary_id
+        )
+        .all()
+    )
+
+    if not records:
+        raise HTTPException(
+            status_code=404,
+            detail="No saved recommendations found"
+        )
+
+    return {
+        "beneficiary_id": beneficiary_id,
+        "saved_count": len(records),
+        "saved_recommendations": [
+            {
+                "recommendation_id": record.id,
+                "data": json.loads(
+                    record.recommendation_data
+                )
+            }
+            for record in records
+        ]
     }

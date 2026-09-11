@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 
 from app.api.beneficiaries import router as beneficiary_router
-from app.database.database import Base, engine
-from app.models.beneficiary import Beneficiary
 from app.api.recommendations import router as recommendations_router
+
+from app.database.database import Base, engine
+
+from app.models.beneficiary import Beneficiary
+from app.models.recommendation import Recommendation
 
 
 Base.metadata.create_all(bind=engine)
