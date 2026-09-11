@@ -8,11 +8,12 @@ def normalize_text(value: str) -> str:
 EDUCATION_LEVELS = {
     "5th": 1,
     "8th": 2,
-    "10th": 3,
-    "12th": 4,
-    "diploma": 5,
-    "graduate": 6,
-    "postgraduate": 7
+    "9th": 3,
+    "10th": 4,
+    "12th": 5,
+    "diploma": 6,
+    "graduate": 7,
+    "postgraduate": 8
 }
 
 
@@ -25,6 +26,9 @@ def normalize_education(value: str) -> str:
 
         "8th pass": "8th",
         "class 8": "8th",
+
+        "9th pass": "9th",
+        "class 9": "9th",
 
         "10th pass": "10th",
         "class 10": "10th",
