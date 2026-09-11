@@ -87,11 +87,19 @@ def map_schemes(
 
             occupation_match = (
                 not scheme_occupation
+                or scheme_occupation in {
+                    "all",
+                    "any"
+                }
                 or scheme_occupation == occupation
             )
 
             sector_match = (
                 not scheme_sector
+                or scheme_sector in {
+                    "all",
+                    "any"
+                }
                 or scheme_sector == sector
             )
 
