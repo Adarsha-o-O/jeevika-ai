@@ -1,6 +1,72 @@
 from typing import Dict, List
 
 
+SKILL_ALIASES = {
+    "car repair": "mechanical work",
+    "vehicle repair": "mechanical work",
+    "mechanic work": "mechanical work",
+
+    "computer knowledge": "computer basics",
+    "basic computer": "computer basics",
+    "computer skills": "computer basics",
+
+    "customer handling": "customer service",
+    "customer support": "customer service",
+
+    "salesmanship": "sales",
+    "selling": "sales",
+
+    "typing skills": "typing",
+
+    "electrical repair": "electrical work",
+    "electrical maintenance": "electrical work",
+
+    "pipe work": "pipe fitting",
+    "plumbing work": "plumbing",
+
+    "metal fabrication": "metal work",
+
+    "farm work": "farming",
+    "agricultural work": "farming",
+
+    "sewing work": "sewing",
+    "tailoring": "stitching",
+
+    "cooking skills": "cooking",
+
+    "cleaning work": "cleaning"
+}
+
+
+INTEREST_ALIASES = {
+    "cars": "automobiles",
+    "vehicles": "automobiles",
+
+    "computer": "computers",
+    "technology": "technical work",
+
+    "farming": "agriculture",
+
+    "fashion designing": "design",
+
+    "repairing": "repair work",
+
+    "helping people": "healthcare",
+
+    "food": "cooking"
+}
+
+
+def normalize_skill(value: str) -> str:
+    value = str(value).lower().strip()
+    return SKILL_ALIASES.get(value, value)
+
+
+def normalize_interest(value: str) -> str:
+    value = str(value).lower().strip()
+    return INTEREST_ALIASES.get(value, value)
+
+
 def build_explanation(
     occupation_name: str,
     score: int,
@@ -77,7 +143,7 @@ def calculate_score(
     ).lower().strip()
 
     user_skills = {
-        str(skill).lower().strip()
+        normalize_skill(skill)
         for skill in profile.get(
             "existing_skills",
             []
@@ -85,7 +151,7 @@ def calculate_score(
     }
 
     user_interests = {
-        str(interest).lower().strip()
+        normalize_interest(interest)
         for interest in profile.get(
             "interests",
             []
@@ -101,7 +167,7 @@ def calculate_score(
     }
 
     occupation_skills = {
-        str(skill).lower().strip()
+        normalize_skill(skill)
         for skill in occupation.get(
             "skills",
             []
@@ -109,7 +175,7 @@ def calculate_score(
     }
 
     occupation_interests = {
-        str(interest).lower().strip()
+        normalize_interest(interest)
         for interest in occupation.get(
             "interests",
             []
@@ -235,6 +301,7 @@ def calculate_score(
     return {
         "score": score,
         "reasons": reasons,
+
         "matched_skills":
             matched_skills_list,
 

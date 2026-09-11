@@ -1,5 +1,7 @@
 from typing import Dict, List
 
+from app.ml.scoring_engine import normalize_skill
+
 
 def detect_skill_gap(
     profile: Dict,
@@ -7,33 +9,58 @@ def detect_skill_gap(
 ) -> Dict:
     """
     Compare beneficiary skills with occupation requirements
-    and return matched and missing skills.
+    using the same skill normalization as the scoring engine.
     """
 
     user_skills = {
-        skill.lower().strip()
-        for skill in profile.get("existing_skills", [])
+        normalize_skill(skill)
+        for skill in profile.get(
+            "existing_skills",
+            []
+        )
     }
 
     required_skills = {
-        skill.lower().strip()
-        for skill in occupation.get("skills", [])
+        normalize_skill(skill)
+        for skill in occupation.get(
+            "skills",
+            []
+        )
     }
 
     matched_skills = sorted(
-        user_skills.intersection(required_skills)
+        user_skills.intersection(
+            required_skills
+        )
     )
 
     missing_skills = sorted(
-        required_skills.difference(user_skills)
+        required_skills.difference(
+            user_skills
+        )
     )
 
     return {
-        "occupation": occupation.get("occupation"),
-        "sector": occupation.get("sector"),
-        "matched_skills": matched_skills,
-        "missing_skills": missing_skills,
-        "skill_gap_count": len(missing_skills)
+        "occupation":
+            occupation.get(
+                "occupation"
+            ),
+
+        "sector":
+            occupation.get(
+                "sector"
+            ),
+
+        "matched_skills":
+            matched_skills,
+
+        "missing_skills":
+            missing_skills,
+
+        "skill_gap_count":
+            len(
+                missing_skills
+            )
     }
 
 
@@ -43,7 +70,8 @@ def add_skill_gaps(
     occupations: List[Dict]
 ) -> List[Dict]:
     """
-    Add skill-gap information to livelihood recommendations.
+    Add normalized skill-gap information
+    to livelihood recommendations.
     """
 
     occupation_lookup = {
@@ -55,10 +83,16 @@ def add_skill_gaps(
 
     for recommendation in recommendations:
 
-        occupation_name = recommendation["occupation"]
+        occupation_name = (
+            recommendation[
+                "occupation"
+            ]
+        )
 
-        occupation = occupation_lookup.get(
-            occupation_name
+        occupation = (
+            occupation_lookup.get(
+                occupation_name
+            )
         )
 
         if occupation is None:
@@ -69,16 +103,29 @@ def add_skill_gaps(
             occupation
         )
 
-        enriched_recommendation = {
-            **recommendation,
-            "required_skills": occupation.get(
+        required_skills = sorted({
+            normalize_skill(skill)
+            for skill in occupation.get(
                 "skills",
                 []
-            ),
-            "skill_gap": gap["missing_skills"],
-            "skill_gap_count": gap[
-                "skill_gap_count"
-            ]
+            )
+        })
+
+        enriched_recommendation = {
+            **recommendation,
+
+            "required_skills":
+                required_skills,
+
+            "skill_gap":
+                gap[
+                    "missing_skills"
+                ],
+
+            "skill_gap_count":
+                gap[
+                    "skill_gap_count"
+                ]
         }
 
         enriched_results.append(
