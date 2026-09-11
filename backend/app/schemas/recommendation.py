@@ -1,6 +1,5 @@
 from typing import List, Optional
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field
 
 class EligibilityRoute(BaseModel):
     minimum_education: str
@@ -18,7 +17,9 @@ class NSQFQualification(BaseModel):
     qualification_code: str
     duration_hours: str
 
-    eligibility_routes: List[EligibilityRoute]
+    eligibility_routes: List[EligibilityRoute] = Field(
+        default_factory=list
+    )
 
     overall_eligible: bool
     eligibility_message: str
@@ -33,7 +34,7 @@ class RecommendationItem(BaseModel):
     matched_interests: List[str]
     reasons: List[str]
 
-    recommendation_explanation: str
+    recommendation_explanation: str = ""
 
     required_skills: List[str]
     skill_gap: List[str]
