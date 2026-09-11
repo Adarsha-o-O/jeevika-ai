@@ -1,70 +1,10 @@
 from typing import Dict, List
 
-
-SKILL_ALIASES = {
-    "car repair": "mechanical work",
-    "vehicle repair": "mechanical work",
-    "mechanic work": "mechanical work",
-
-    "computer knowledge": "computer basics",
-    "basic computer": "computer basics",
-    "computer skills": "computer basics",
-
-    "customer handling": "customer service",
-    "customer support": "customer service",
-
-    "salesmanship": "sales",
-    "selling": "sales",
-
-    "typing skills": "typing",
-
-    "electrical repair": "electrical work",
-    "electrical maintenance": "electrical work",
-
-    "pipe work": "pipe fitting",
-    "plumbing work": "plumbing",
-
-    "metal fabrication": "metal work",
-
-    "farm work": "farming",
-    "agricultural work": "farming",
-
-    "sewing work": "sewing",
-    "tailoring": "stitching",
-
-    "cooking skills": "cooking",
-
-    "cleaning work": "cleaning"
-}
-
-
-INTEREST_ALIASES = {
-    "cars": "automobiles",
-    "vehicles": "automobiles",
-
-    "computer": "computers",
-    "technology": "technical work",
-
-    "farming": "agriculture",
-
-    "fashion designing": "design",
-
-    "repairing": "repair work",
-
-    "helping people": "healthcare",
-
-    "food": "cooking"
-}
-
-
-def normalize_skill(value: str) -> str:
-    value = str(value).lower().strip()
-    return SKILL_ALIASES.get(value, value)
-
-
-def normalize_interest(value: str) -> str:
-    value = str(value).lower().strip()
-    return INTEREST_ALIASES.get(value, value)
+from app.ml.text_matcher import (
+    normalize_skill,
+    normalize_interest,
+    find_matches
+)
 
 
 def build_explanation(
@@ -74,10 +14,6 @@ def build_explanation(
     matched_interests: List[str],
     reasons: List[str]
 ) -> str:
-    """
-    Build a simple human-readable explanation
-    for the recommendation.
-    """
 
     explanation_parts = []
 
@@ -112,28 +48,22 @@ def build_explanation(
         )
 
     if explanation_parts:
-        explanation = (
+        return (
             f"{occupation_name} is recommended because "
             + "; ".join(explanation_parts)
             + f". Overall profile match: {score}%."
         )
-    else:
-        explanation = (
-            f"{occupation_name} has an overall "
-            f"profile match of {score}%."
-        )
 
-    return explanation
+    return (
+        f"{occupation_name} has an overall "
+        f"profile match of {score}%."
+    )
 
 
 def calculate_score(
     profile: Dict,
     occupation: Dict
 ) -> Dict:
-    """
-    Calculate compatibility score between
-    a beneficiary and an occupation.
-    """
 
     score = 0
     reasons = []
@@ -185,13 +115,13 @@ def calculate_score(
     # Education = 20%
     if user_education in allowed_education:
         score += 20
-
         reasons.append(
             "Education requirement matched"
         )
 
-    # Existing skills = maximum 40%
-    matched_skills = user_skills.intersection(
+    # Skill matching = maximum 40%
+    matched_skills = find_matches(
+        user_skills,
         occupation_skills
     )
 
@@ -212,16 +142,13 @@ def calculate_score(
 
         reasons.append(
             "Matched skills: "
-            + ", ".join(
-                sorted(matched_skills)
-            )
+            + ", ".join(matched_skills)
         )
 
-    # Interests = maximum 30%
-    matched_interests = (
-        user_interests.intersection(
-            occupation_interests
-        )
+    # Interest matching = maximum 30%
+    matched_interests = find_matches(
+        user_interests,
+        occupation_interests
     )
 
     if matched_interests:
@@ -241,9 +168,7 @@ def calculate_score(
 
         reasons.append(
             "Matched interests: "
-            + ", ".join(
-                sorted(matched_interests)
-            )
+            + ", ".join(matched_interests)
         )
 
     # Current occupation relationship = 10%
@@ -272,18 +197,7 @@ def calculate_score(
             "current work experience"
         )
 
-    score = min(
-        score,
-        100
-    )
-
-    matched_skills_list = sorted(
-        matched_skills
-    )
-
-    matched_interests_list = sorted(
-        matched_interests
-    )
+    score = min(score, 100)
 
     recommendation_explanation = (
         build_explanation(
@@ -292,8 +206,8 @@ def calculate_score(
                 "This occupation"
             ),
             score=score,
-            matched_skills=matched_skills_list,
-            matched_interests=matched_interests_list,
+            matched_skills=matched_skills,
+            matched_interests=matched_interests,
             reasons=reasons
         )
     )
@@ -301,13 +215,8 @@ def calculate_score(
     return {
         "score": score,
         "reasons": reasons,
-
-        "matched_skills":
-            matched_skills_list,
-
-        "matched_interests":
-            matched_interests_list,
-
+        "matched_skills": matched_skills,
+        "matched_interests": matched_interests,
         "recommendation_explanation":
             recommendation_explanation
     }
@@ -329,55 +238,31 @@ def rank_occupations(
             occupation
         )
 
-        # Avoid recommendations
-        # based only on education.
         has_personal_match = (
-            len(
-                result[
-                    "matched_skills"
-                ]
-            ) > 0
-
+            len(result["matched_skills"]) > 0
             or
-
-            len(
-                result[
-                    "matched_interests"
-                ]
-            ) > 0
+            len(result["matched_interests"]) > 0
         )
 
         if (
-            result["score"]
-            >= minimum_score
-
-            and
-
-            has_personal_match
+            result["score"] >= minimum_score
+            and has_personal_match
         ):
             ranked.append({
                 "occupation":
-                    occupation[
-                        "occupation"
-                    ],
+                    occupation["occupation"],
 
                 "sector":
-                    occupation[
-                        "sector"
-                    ],
+                    occupation["sector"],
 
                 "match_score":
                     result["score"],
 
                 "matched_skills":
-                    result[
-                        "matched_skills"
-                    ],
+                    result["matched_skills"],
 
                 "matched_interests":
-                    result[
-                        "matched_interests"
-                    ],
+                    result["matched_interests"],
 
                 "reasons":
                     result["reasons"],

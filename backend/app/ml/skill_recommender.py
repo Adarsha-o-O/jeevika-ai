@@ -1,16 +1,15 @@
 from typing import Dict, List
 
-from app.ml.scoring_engine import normalize_skill
+from app.ml.text_matcher import (
+    normalize_skill,
+    find_matches
+)
 
 
 def detect_skill_gap(
     profile: Dict,
     occupation: Dict
 ) -> Dict:
-    """
-    Compare beneficiary skills with occupation requirements
-    using the same skill normalization as the scoring engine.
-    """
 
     user_skills = {
         normalize_skill(skill)
@@ -28,28 +27,23 @@ def detect_skill_gap(
         )
     }
 
-    matched_skills = sorted(
-        user_skills.intersection(
-            required_skills
-        )
+    matched_skills = find_matches(
+        user_skills,
+        required_skills
     )
 
     missing_skills = sorted(
         required_skills.difference(
-            user_skills
+            set(matched_skills)
         )
     )
 
     return {
         "occupation":
-            occupation.get(
-                "occupation"
-            ),
+            occupation.get("occupation"),
 
         "sector":
-            occupation.get(
-                "sector"
-            ),
+            occupation.get("sector"),
 
         "matched_skills":
             matched_skills,
@@ -58,9 +52,7 @@ def detect_skill_gap(
             missing_skills,
 
         "skill_gap_count":
-            len(
-                missing_skills
-            )
+            len(missing_skills)
     }
 
 
@@ -69,10 +61,6 @@ def add_skill_gaps(
     recommendations: List[Dict],
     occupations: List[Dict]
 ) -> List[Dict]:
-    """
-    Add normalized skill-gap information
-    to livelihood recommendations.
-    """
 
     occupation_lookup = {
         item["occupation"]: item
@@ -118,14 +106,10 @@ def add_skill_gaps(
                 required_skills,
 
             "skill_gap":
-                gap[
-                    "missing_skills"
-                ],
+                gap["missing_skills"],
 
             "skill_gap_count":
-                gap[
-                    "skill_gap_count"
-                ]
+                gap["skill_gap_count"]
         }
 
         enriched_results.append(
