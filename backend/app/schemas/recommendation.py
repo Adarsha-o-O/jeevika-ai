@@ -26,6 +26,8 @@ class RecommendationItem(BaseModel):
     matched_interests: List[str]
     reasons: List[str]
 
+    recommendation_explanation: str
+
     required_skills: List[str]
     skill_gap: List[str]
     skill_gap_count: int
