@@ -23,5 +23,7 @@ class Beneficiary(Base):
 
     preferred_language = Column(String, default="English")
 
+    experience_years = Column(Integer, default=0)
+
     income_target = Column(Integer, nullable=True)
     willing_to_relocate = Column(Boolean, default=False)

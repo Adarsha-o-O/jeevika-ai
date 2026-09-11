@@ -62,8 +62,8 @@ def generate_recommendations(
         "preferred_language": beneficiary.preferred_language,
         "income_target": beneficiary.income_target,
         "willing_to_relocate": beneficiary.willing_to_relocate,
-        "experience_years": 0
-    }
+        "experience_years": beneficiary.experience_years or 0
+}
 
     recommendations = map_livelihood(profile)
 

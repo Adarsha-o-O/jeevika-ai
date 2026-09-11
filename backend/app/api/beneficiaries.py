@@ -32,6 +32,7 @@ def create_beneficiary(
         existing_skills=json.dumps(profile.existing_skills),
         interests=json.dumps(profile.interests),
         preferred_language=profile.preferred_language,
+        experience_years=profile.experience_years,
         income_target=profile.income_target,
         willing_to_relocate=profile.willing_to_relocate
     )
