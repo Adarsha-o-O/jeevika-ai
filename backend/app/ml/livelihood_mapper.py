@@ -1,4 +1,3 @@
-
 from typing import Dict, List
 
 from app.ml.scoring_engine import rank_occupations
@@ -11,41 +10,158 @@ OCCUPATIONS = [
         "occupation": "Automotive Service Technician",
         "sector": "Automotive",
         "minimum_education": ["10th", "12th", "Diploma"],
-        "skills": ["driving", "mechanical work", "tools"],
-        "interests": ["automobiles", "mechanical work"]
+        "skills": [
+            "driving",
+            "mechanical work",
+            "tools"
+        ],
+        "interests": [
+            "automobiles",
+            "mechanical work"
+        ]
     },
+
     {
         "occupation": "Tractor Mechanic",
         "sector": "Agriculture",
-        "minimum_education": ["8th", "10th", "12th"],
-        "skills": ["farming", "mechanical work", "tools"],
-        "interests": ["agriculture", "mechanical work"]
+        "minimum_education": [
+            "8th",
+            "10th",
+            "12th"
+        ],
+        "skills": [
+            "farming",
+            "mechanical work",
+            "tools"
+        ],
+        "interests": [
+            "agriculture",
+            "mechanical work"
+        ]
     },
+
     {
         "occupation": "Electrician",
         "sector": "Electrical",
-        "minimum_education": ["10th", "12th", "ITI"],
-        "skills": ["electrical work", "tools"],
-        "interests": ["electrical", "technical work"]
+        "minimum_education": [
+            "10th",
+            "12th",
+            "ITI"
+        ],
+        "skills": [
+            "electrical work",
+            "wiring",
+            "tools"
+        ],
+        "interests": [
+            "electrical",
+            "technical work"
+        ]
     },
+
     {
         "occupation": "Tailor",
         "sector": "Apparel",
-        "minimum_education": ["5th", "8th", "10th", "12th"],
-        "skills": ["stitching", "sewing"],
-        "interests": ["fashion", "clothing", "design"]
+        "minimum_education": [
+            "5th",
+            "8th",
+            "10th",
+            "12th"
+        ],
+        "skills": [
+            "stitching",
+            "sewing"
+        ],
+        "interests": [
+            "fashion",
+            "clothing",
+            "design"
+        ]
     },
+
     {
         "occupation": "Data Entry Operator",
         "sector": "IT-ITES",
-        "minimum_education": ["10th", "12th", "Diploma"],
-        "skills": ["typing", "computer basics"],
-        "interests": ["computers", "office work"]
+        "minimum_education": [
+            "10th",
+            "12th",
+            "Diploma"
+        ],
+        "skills": [
+            "typing",
+            "computer basics",
+            "data entry"
+        ],
+        "interests": [
+            "computers",
+            "office work"
+        ]
+    },
+
+    {
+        "occupation": "Plumber",
+        "sector": "Plumbing",
+        "minimum_education": [
+            "8th",
+            "10th",
+            "12th"
+        ],
+        "skills": [
+            "plumbing",
+            "pipe fitting",
+            "tools"
+        ],
+        "interests": [
+            "repair work",
+            "technical work",
+            "construction"
+        ]
+    },
+
+    {
+        "occupation": "Welder",
+        "sector": "Manufacturing",
+        "minimum_education": [
+            "8th",
+            "10th",
+            "ITI"
+        ],
+        "skills": [
+            "welding",
+            "metal work",
+            "tools"
+        ],
+        "interests": [
+            "manufacturing",
+            "metal work",
+            "technical work"
+        ]
+    },
+
+    {
+        "occupation": "Retail Sales Associate",
+        "sector": "Retail",
+        "minimum_education": [
+            "10th",
+            "12th"
+        ],
+        "skills": [
+            "communication",
+            "customer service",
+            "sales"
+        ],
+        "interests": [
+            "retail",
+            "sales",
+            "customer service"
+        ]
     }
 ]
 
 
-def map_livelihood(profile: Dict) -> List[Dict]:
+def map_livelihood(
+    profile: Dict
+) -> List[Dict]:
 
     ranked = rank_occupations(
         profile=profile,
