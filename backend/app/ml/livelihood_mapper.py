@@ -5,6 +5,8 @@ from typing import Dict, List
 from app.ml.scoring_engine import rank_occupations
 from app.ml.skill_recommender import add_skill_gaps
 from app.ml.nsqf_mapper import map_nsqf_courses
+from app.ml.scheme_mapper import map_schemes
+from app.ml.opportunity_mapper import map_opportunities
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -42,41 +44,36 @@ def load_occupations() -> List[Dict]:
 
         for row in reader:
             occupations.append({
-                "occupation":
+                "occupation": row.get(
+                    "occupation",
+                    ""
+                ).strip(),
+
+                "sector": row.get(
+                    "sector",
+                    ""
+                ).strip(),
+
+                "minimum_education": split_field(
                     row.get(
-                        "occupation",
+                        "minimum_education",
                         ""
-                    ).strip(),
-
-                "sector":
-                    row.get(
-                        "sector",
-                        ""
-                    ).strip(),
-
-                "minimum_education":
-                    split_field(
-                        row.get(
-                            "minimum_education",
-                            ""
-                        )
-                    ),
-
-                "skills":
-                    split_field(
-                        row.get(
-                            "skills",
-                            ""
-                        )
-                    ),
-
-                "interests":
-                    split_field(
-                        row.get(
-                            "interests",
-                            ""
-                        )
                     )
+                ),
+
+                "skills": split_field(
+                    row.get(
+                        "skills",
+                        ""
+                    )
+                ),
+
+                "interests": split_field(
+                    row.get(
+                        "interests",
+                        ""
+                    )
+                )
             })
 
     return occupations
@@ -101,7 +98,19 @@ def map_livelihood(
         occupations=occupations
     )
 
-    return map_nsqf_courses(
+    nsqf_results = map_nsqf_courses(
         profile=profile,
         recommendations=skill_gap_results
     )
+
+    scheme_results = map_schemes(
+        profile=profile,
+        recommendations=nsqf_results
+    )
+
+    final_results = map_opportunities(
+        profile=profile,
+        recommendations=scheme_results
+    )
+
+    return final_results

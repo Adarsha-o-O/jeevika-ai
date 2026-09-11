@@ -42,6 +42,14 @@ class RecommendationItem(BaseModel):
 
     nsqf_qualifications: List[NSQFQualification]
 
+    government_schemes: List[dict] = Field(
+        default_factory=list
+    )
+
+    local_opportunities: List[dict] = Field(
+        default_factory=list
+    )
+
 
 class RecommendationResponse(BaseModel):
     recommendation_id: int
