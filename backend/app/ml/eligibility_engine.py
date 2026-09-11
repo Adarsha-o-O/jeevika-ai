@@ -5,18 +5,78 @@ def normalize_text(value: str) -> str:
     return str(value).lower().strip()
 
 
+EDUCATION_LEVELS = {
+    "5th": 1,
+    "8th": 2,
+    "10th": 3,
+    "12th": 4,
+    "diploma": 5,
+    "graduate": 6,
+    "postgraduate": 7
+}
+
+
+def normalize_education(value: str) -> str:
+    value = normalize_text(value)
+
+    aliases = {
+        "5th pass": "5th",
+        "class 5": "5th",
+
+        "8th pass": "8th",
+        "class 8": "8th",
+
+        "10th pass": "10th",
+        "class 10": "10th",
+        "sslc": "10th",
+
+        "12th pass": "12th",
+        "class 12": "12th",
+        "puc": "12th",
+        "2nd puc": "12th",
+
+        "degree": "graduate",
+        "graduation": "graduate",
+
+        "post graduate": "postgraduate",
+        "post-graduate": "postgraduate"
+    }
+
+    return aliases.get(value, value)
+
+
 def check_education_eligibility(
     profile: Dict,
     qualification: Dict
 ) -> bool:
-    user_education = normalize_text(
+
+    user_education = normalize_education(
         profile.get("education_level", "")
     )
 
-    required_education = normalize_text(
+    required_education = normalize_education(
         qualification.get("minimum_education", "")
     )
 
+    # ITI is vocational, so require ITI specifically.
+    if required_education == "iti":
+        return user_education == "iti"
+
+    user_level = EDUCATION_LEVELS.get(
+        user_education
+    )
+
+    required_level = EDUCATION_LEVELS.get(
+        required_education
+    )
+
+    if (
+        user_level is not None
+        and required_level is not None
+    ):
+        return user_level >= required_level
+
+    # Fallback for unknown values.
     return user_education == required_education
 
 
