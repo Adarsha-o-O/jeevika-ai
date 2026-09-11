@@ -8,6 +8,11 @@ from app.models.beneficiary import Beneficiary
 from app.models.recommendation import Recommendation
 from app.ml.livelihood_mapper import map_livelihood
 
+from app.schemas.recommendation import (
+    RecommendationResponse,
+    SavedRecommendationResponse
+)
+
 
 router = APIRouter(
     prefix="/recommendations",
@@ -15,7 +20,10 @@ router = APIRouter(
 )
 
 
-@router.post("/{beneficiary_id}")
+@router.post(
+    "/{beneficiary_id}",
+    response_model=RecommendationResponse
+)
 def generate_recommendations(
     beneficiary_id: int,
     db: Session = Depends(get_db)
@@ -84,7 +92,10 @@ def generate_recommendations(
         **response_data
     }
 
-@router.get("/saved/{beneficiary_id}")
+@router.get(
+    "/saved/{beneficiary_id}",
+    response_model=SavedRecommendationResponse
+)
 def get_saved_recommendations(
     beneficiary_id: int,
     db: Session = Depends(get_db)
