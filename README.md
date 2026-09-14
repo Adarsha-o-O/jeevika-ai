@@ -814,3 +814,32 @@ The project demonstrates how beneficiary profiling, explainable recommendation s
   <strong>Jeevika AI</strong><br>
   Empowering livelihood decisions through skills, opportunity and explainable technology.
 </p>
+
+---
+
+## 🌐 Live Deployment
+
+Jeevika AI is deployed using a cloud-based architecture:
+
+- **Frontend:** https://jeevika-ai-sooty.vercel.app
+- **Backend API:** https://jeevika-ai-api.onrender.com
+- **API Documentation:** https://jeevika-ai-api.onrender.com/docs
+- **Health Check:** https://jeevika-ai-api.onrender.com/health
+
+### Deployment Architecture
+
+```text
+User
+  ↓
+Vercel
+Frontend
+  ↓
+Render
+FastAPI Backend
+  ↓
+Neon
+PostgreSQL Database
+```
+
+> The backend uses Render's free service tier, so the first request after a period of inactivity may take longer while the service starts.
+
