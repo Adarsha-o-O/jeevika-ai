@@ -63,7 +63,7 @@
     <input
       type="number"
       id="beneficiaryId"
-      value="4"
+      value="2"
     />
 
     <label>Language</label>
@@ -213,7 +213,7 @@ async function sendQuery() {
 
   const response =
     await fetch(
-      `http://127.0.0.1:8000/assistant/query/${beneficiaryId}`,
+      `https://jeevika-ai-api.onrender.com/assistant/query/${beneficiaryId}`,
       {
         method: "POST",
 
