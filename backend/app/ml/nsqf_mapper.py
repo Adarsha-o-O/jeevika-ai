@@ -51,7 +51,7 @@ def map_nsqf_courses(
             .strip()
         )
 
-        matching_qualifications = []
+        matching_rows = []
 
         for qualification in qualifications:
 
@@ -63,13 +63,30 @@ def map_nsqf_courses(
             )
 
             if occupation_name == nsqf_occupation:
-
-                eligibility = evaluate_eligibility(
-                    profile,
+                matching_rows.append(
                     qualification
                 )
 
-                qualification_result = {
+        grouped = {}
+
+        for qualification in matching_rows:
+
+            code = qualification.get(
+                "qualification_code",
+                ""
+            )
+
+            group_key = (
+                code
+                or qualification.get(
+                    "qualification_name",
+                    ""
+                )
+            )
+
+            if group_key not in grouped:
+
+                grouped[group_key] = {
                     "qualification_name":
                         qualification.get(
                             "qualification_name",
@@ -83,22 +100,7 @@ def map_nsqf_courses(
                         ),
 
                     "qualification_code":
-                        qualification.get(
-                            "qualification_code",
-                            ""
-                        ),
-
-                    "minimum_education":
-                        qualification.get(
-                            "minimum_education",
-                            ""
-                        ),
-
-                    "experience_required":
-                        qualification.get(
-                            "experience_required",
-                            ""
-                        ),
+                        code,
 
                     "duration_hours":
                         qualification.get(
@@ -106,30 +108,87 @@ def map_nsqf_courses(
                             ""
                         ),
 
-                    "education_eligible":
-                        eligibility[
-                            "education_eligible"
-                        ],
-
-                    "experience_eligible":
-                        eligibility[
-                            "experience_eligible"
-                        ],
-
-                    "overall_eligible":
-                        eligibility[
-                            "overall_eligible"
-                        ],
-
-                    "eligibility_message":
-                        eligibility[
-                            "eligibility_message"
-                        ]
+                    "eligibility_routes": []
                 }
 
-                matching_qualifications.append(
-                    qualification_result
+            eligibility = evaluate_eligibility(
+                profile,
+                qualification
+            )
+
+            route = {
+                "minimum_education":
+                    qualification.get(
+                        "minimum_education",
+                        ""
+                    ),
+
+                "experience_required":
+                    qualification.get(
+                        "experience_required",
+                        ""
+                    ),
+
+                "education_eligible":
+                    eligibility[
+                        "education_eligible"
+                    ],
+
+                "experience_eligible":
+                    eligibility[
+                        "experience_eligible"
+                    ],
+
+                "overall_eligible":
+                    eligibility[
+                        "overall_eligible"
+                    ],
+
+                "eligibility_message":
+                    eligibility[
+                        "eligibility_message"
+                    ]
+            }
+
+            grouped[group_key][
+                "eligibility_routes"
+            ].append(route)
+
+        matching_qualifications = []
+
+        for qualification in grouped.values():
+
+            routes = qualification[
+                "eligibility_routes"
+            ]
+
+            overall_eligible = any(
+                route["overall_eligible"]
+                for route in routes
+            )
+
+            if overall_eligible:
+                message = (
+                    "Beneficiary meets at least "
+                    "one eligibility route."
                 )
+            else:
+                message = (
+                    "Beneficiary does not currently "
+                    "meet any eligibility route."
+                )
+
+            qualification[
+                "overall_eligible"
+            ] = overall_eligible
+
+            qualification[
+                "eligibility_message"
+            ] = message
+
+            matching_qualifications.append(
+                qualification
+            )
 
         enriched_recommendation = {
             **recommendation,

@@ -1,40 +1,6 @@
 from typing import Dict, List
 
-
-def detect_skill_gap(
-    profile: Dict,
-    occupation: Dict
-) -> Dict:
-    """
-    Compare beneficiary skills with occupation requirements
-    and return matched and missing skills.
-    """
-
-    user_skills = {
-        skill.lower().strip()
-        for skill in profile.get("existing_skills", [])
-    }
-
-    required_skills = {
-        skill.lower().strip()
-        for skill in occupation.get("skills", [])
-    }
-
-    matched_skills = sorted(
-        user_skills.intersection(required_skills)
-    )
-
-    missing_skills = sorted(
-        required_skills.difference(user_skills)
-    )
-
-    return {
-        "occupation": occupation.get("occupation"),
-        "sector": occupation.get("sector"),
-        "matched_skills": matched_skills,
-        "missing_skills": missing_skills,
-        "skill_gap_count": len(missing_skills)
-    }
+from app.ml.text_matcher import normalize_skill
 
 
 def add_skill_gaps(
@@ -42,9 +8,6 @@ def add_skill_gaps(
     recommendations: List[Dict],
     occupations: List[Dict]
 ) -> List[Dict]:
-    """
-    Add skill-gap information to livelihood recommendations.
-    """
 
     occupation_lookup = {
         item["occupation"]: item
@@ -64,21 +27,40 @@ def add_skill_gaps(
         if occupation is None:
             continue
 
-        gap = detect_skill_gap(
-            profile,
-            occupation
-        )
+        required_skills = sorted({
+            normalize_skill(skill)
+            for skill in occupation.get(
+                "skills",
+                []
+            )
+        })
+
+        # Reuse skills already matched by scoring_engine
+        matched_skills = {
+            normalize_skill(skill)
+            for skill in recommendation.get(
+                "matched_skills",
+                []
+            )
+        }
+
+        missing_skills = [
+            skill
+            for skill in required_skills
+            if skill not in matched_skills
+        ]
 
         enriched_recommendation = {
             **recommendation,
-            "required_skills": occupation.get(
-                "skills",
-                []
-            ),
-            "skill_gap": gap["missing_skills"],
-            "skill_gap_count": gap[
-                "skill_gap_count"
-            ]
+
+            "required_skills":
+                required_skills,
+
+            "skill_gap":
+                missing_skills,
+
+            "skill_gap_count":
+                len(missing_skills)
         }
 
         enriched_results.append(

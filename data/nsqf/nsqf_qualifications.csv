@@ -1,3 +1,13 @@
-qualification_name,sector,occupation,nsqf_level,qualification_code,minimum_education,experience_required,duration_hours
-Four Wheeler Service Technician,Automotive,Automotive Service Technician,4,ASC/Q1402,10th,2 years,480
-Data Entry Operator,IT-ITeS,Data Entry Operator,3,SSC/N3022,10th,No Experience,450
+﻿qualification_name,sector,occupation,nsqf_level,qualification_code,minimum_education,experience_required,duration_hours
+Two Wheeler Service Technician,Automotive,Two-Wheeler Mechanic,4,ASC/Q1411,10th,2 years,480
+Four Wheeler Service Technician,Automotive,Four-Wheeler Mechanic (Light Motor Vehicle),4,ASC/Q1402,10th,2 years,480
+Self Employed Tailor,Apparel & Textiles,Tailor (Apparel Making),3,AMHQ1947,9th,No Experience,420
+Self Employed Tailor,Apparel & Textiles,Tailor (Apparel Making),3,AMHQ1947,8th,1 year,420
+Self Employed Tailor,Apparel & Textiles,Tailor (Apparel Making),3,AMHQ1947,5th,4 years,420
+Retail Sales Associate,Retail,Retail Sales Associate,3,QG-03-OR-00410-2023-V1.1-RASCI,10th,No Experience,360
+Retail Sales Associate,Retail,Retail Sales Associate,3,QG-03-OR-00410-2023-V1.1-RASCI,8th,2 years,360
+Retail Sales Associate,Retail,Retail Sales Associate,3,QG-03-OR-00410-2023-V1.1-RASCI,5th,5 years,360
+Domestic Data Entry Operator,IT-ITeS,Data Entry Operator,3,SSC/N3022,10th,No Experience,450
+Domestic Data Entry Operator,IT-ITeS,Data Entry Operator,3,SSC/N3022,8th,2 years,450
+Certified Data Entry and Office Assistant (Upskilling),IT-ITeS,Office Assistant,3,2022/ITES/NIELIT/06337,10th,No Experience,210
+Certified Data Entry and Office Assistant (Upskilling),IT-ITeS,Office Assistant,3,2022/ITES/NIELIT/06337,8th,1 year,210

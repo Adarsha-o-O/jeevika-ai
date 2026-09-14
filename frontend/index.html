@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jeevika AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #dff7ee, transparent 35%),
+        radial-gradient(circle at top right, #e4ecff, transparent 30%),
+        #f5f7fb;
+      color: #172033;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+    }
+
+    .sidebar {
+      background: #10261f;
+      color: white;
+      padding: 26px 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .brand-sub {
+      opacity: 0.7;
+      font-size: 13px;
+      margin-bottom: 32px;
+    }
+
+    .nav-item {
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .nav-item.active {
+      background: #1f8f66;
+    }
+
+    .main {
+      padding: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    input,
+    select,
+    button {
+      border: 1px solid #d5dbe7;
+      border-radius: 10px;
+      padding: 11px 13px;
+      font-size: 14px;
+    }
+
+    button {
+      cursor: pointer;
+      background: #1f8f66;
+      color: white;
+      border: none;
+      font-weight: 700;
+    }
+
+    button.secondary {
+      background: #24334d;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(220,225,235,0.8);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 12px 35px rgba(30, 45, 70, 0.08);
+    }
+
+    .profile-card {
+      grid-column: span 4;
+    }
+
+    .voice-card {
+      grid-column: span 8;
+    }
+
+    .recommendations-card {
+      grid-column: span 12;
+    }
+
+    .section-title {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .profile-row {
+      margin-bottom: 11px;
+    }
+
+    .profile-label {
+      font-size: 12px;
+      color: #718096;
+    }
+
+    .profile-value {
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .voice-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .transcript,
+    .assistant-response {
+      margin-top: 14px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 52px;
+    }
+
+    .recommendation {
+      border: 1px solid #e5e9f0;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      background: #fbfcfe;
+    }
+
+    .recommendation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .occupation {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .sector {
+      color: #657086;
+      margin-top: 3px;
+    }
+
+    .score {
+      background: #e6f6ef;
+      color: #146a4c;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .meter {
+      height: 10px;
+      background: #e9edf3;
+      border-radius: 999px;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #28a875, #4d79ff);
+    }
+
+    .subgrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+      margin-top: 15px;
+    }
+
+    .mini-card {
+      background: white;
+      border: 1px solid #e7ebf1;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .mini-title {
+      font-weight: 800;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #edf2ff;
+      padding: 6px 9px;
+      margin: 3px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    .tag.warning {
+      background: #fff3e6;
+    }
+
+    .tag.good {
+      background: #e5f8ef;
+    }
+
+    .empty {
+      color: #7c8799;
+      font-style: italic;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #5b6678;
+    }
+
+    @media (max-width: 950px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .profile-card,
+      .voice-card,
+      .recommendations-card {
+        grid-column: span 12;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .main {
+        padding: 16px;
+      }
+
+      .subgrid {
+        grid-template-columns: 1fr;
+      }
+
+      .voice-box {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="brand">Jeevika AI</div>
+    <div class="brand-sub">
+      Livelihood Intelligence Platform
+    </div>
+
+    <div class="nav-item active">Dashboard</div>
+    <div class="nav-item">Beneficiary</div>
+    <div class="nav-item">Recommendations</div>
+    <div class="nav-item">Voice Assistant</div>
+    <div class="nav-item">NSQF & Skills</div>
+    <div class="nav-item">Schemes</div>
+    <div class="nav-item">Opportunities</div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Jeevika AI Dashboard</h1>
+        <div class="status">
+          AI-driven livelihood mapping and skilling recommendation
+        </div>
+      </div>
+
+      <div class="controls">
+        <input
+          id="beneficiaryId"
+          type="number"
+          value="4"
+          placeholder="Beneficiary ID"
+        />
+
+        <select id="language">
+          <option value="English">English</option>
+          <option value="Kannada">Kannada</option>
+          <option value="Hindi">Hindi</option>
+        </select>
+
+        <button onclick="loadDashboard()">
+          Load Dashboard
+        </button>
+      </div>
+    </div>
+
+
+    <div class="grid">
+
+      <section class="card profile-card">
+        <div class="section-title">
+          Beneficiary Profile
+        </div>
+
+        <div id="profileContent">
+          <div class="empty">
+            Load a beneficiary to view profile.
+          </div>
+        </div>
+      </section>
+
+
+      <section class="card voice-card">
+        <div class="section-title">
+          Voice Assistant
+        </div>
+
+        <div class="voice-box">
+          <button onclick="startListening()">
+            🎤 Speak
+          </button>
+
+          <button
+            class="secondary"
+            onclick="sendVoiceQuery()"
+          >
+            Ask Jeevika AI
+          </button>
+        </div>
+
+        <div
+          id="transcript"
+          class="transcript"
+        >
+          Waiting for voice input...
+        </div>
+
+        <div
+          id="assistantResponse"
+          class="assistant-response"
+        >
+          Assistant response will appear here.
+        </div>
+      </section>
+
+
+      <section class="card recommendations-card">
+        <div class="section-title">
+          Livelihood Recommendations
+        </div>
+
+        <div id="recommendations">
+          <div class="empty">
+            Load the dashboard to generate recommendations.
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+</div>
+
+
+<script>
+
+const API_BASE = "http://127.0.0.1:8000";
+
+let spokenText = "";
+
+
+function getBeneficiaryId() {
+  return document.getElementById(
+    "beneficiaryId"
+  ).value;
+}
+
+
+function getSelectedLanguage() {
+  return document.getElementById(
+    "language"
+  ).value;
+}
+
+
+function getSpeechLanguage() {
+  const language =
+    getSelectedLanguage();
+
+  if (language === "Kannada") {
+    return "kn-IN";
+  }
+
+  if (language === "Hindi") {
+    return "hi-IN";
+  }
+
+  return "en-IN";
+}
+
+
+async function loadDashboard() {
+
+  const id = getBeneficiaryId();
+
+  try {
+
+    const profileResponse =
+      await fetch(
+        `${API_BASE}/beneficiaries/${id}`
+      );
+
+    if (!profileResponse.ok) {
+      throw new Error(
+        "Beneficiary not found"
+      );
+    }
+
+    const profile =
+      await profileResponse.json();
+
+    renderProfile(profile);
+
+
+    const recommendationResponse =
+      await fetch(
+        `${API_BASE}/recommendations/${id}`,
+        {
+          method: "POST"
+        }
+      );
+
+    if (!recommendationResponse.ok) {
+      throw new Error(
+        "Could not generate recommendations"
+      );
+    }
+
+    const data =
+      await recommendationResponse.json();
+
+    renderRecommendations(
+      data.recommendations || []
+    );
+
+  }
+  catch (error) {
+
+    alert(error.message);
+
+  }
+}
+
+
+function renderProfile(profile) {
+
+  const skills =
+    profile.existing_skills || [];
+
+  const interests =
+    profile.interests || [];
+
+  document.getElementById(
+    "profileContent"
+  ).innerHTML = `
+
+    <div class="profile-row">
+      <div class="profile-label">Name</div>
+      <div class="profile-value">
+        ${profile.name || "-"}
+      </div>
+    </div>
+
+    <div class="profile-row">
+      <div class="profile-label">Location</div>
+      <div class="profile-value">
+        ${profile.district || "-"},
+        ${profile.state || "-"}
+      </div>
+    </div>
+
+    <div class="profile-row">
+      <div class="profile-label">Education</div>
+      <div class="profile-value">
+        ${profile.education_level || "-"}
+      </div>
+    </div>
+
+    <div class="profile-row">
+      <div class="profile-label">
+        Current Occupation
+      </div>
+      <div class="profile-value">
+        ${profile.current_occupation || "Not specified"}
+      </div>
+    </div>
+
+    <div class="profile-row">
+      <div class="profile-label">
+        Experience
+      </div>
+      <div class="profile-value">
+        ${profile.experience_years || 0} years
+      </div>
+    </div>
+
+    <div class="profile-row">
+      <div class="profile-label">Skills</div>
+      <div>
+        ${
+          skills.length
+          ? skills.map(
+              item =>
+              `<span class="tag">${item}</span>`
+            ).join("")
+          : `<span class="empty">None</span>`
+        }
+      </div>
+    </div>
+
+    <div class="profile-row">
+      <div class="profile-label">Interests</div>
+      <div>
+        ${
+          interests.length
+          ? interests.map(
+              item =>
+              `<span class="tag">${item}</span>`
+            ).join("")
+          : `<span class="empty">None</span>`
+        }
+      </div>
+    </div>
+  `;
+}
+
+
+function renderRecommendations(items) {
+
+  const container =
+    document.getElementById(
+      "recommendations"
+    );
+
+  if (!items.length) {
+
+    container.innerHTML =
+      `<div class="empty">
+        No suitable recommendations found.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML =
+    items.map(
+      renderRecommendation
+    ).join("");
+}
+
+
+function renderRecommendation(item) {
+
+  const skillGap =
+    item.skill_gap || [];
+
+  const matchedSkills =
+    item.matched_skills || [];
+
+  const matchedInterests =
+    item.matched_interests || [];
+
+  const qualifications =
+    item.nsqf_qualifications || [];
+
+  const schemes =
+    item.government_schemes || [];
+
+  const opportunities =
+    item.local_opportunities || [];
+
+
+  return `
+
+    <div class="recommendation">
+
+      <div class="recommendation-header">
+
+        <div>
+          <div class="occupation">
+            ${item.occupation}
+          </div>
+
+          <div class="sector">
+            ${item.sector}
+          </div>
+        </div>
+
+        <div class="score">
+          ${item.match_score}% Match
+        </div>
+
+      </div>
+
+
+      <div class="meter">
+        <div
+          class="meter-fill"
+          style="width:${item.match_score}%"
+        ></div>
+      </div>
+
+
+      <div>
+        ${item.recommendation_explanation || ""}
+      </div>
+
+
+      <div class="subgrid">
+
+        <div class="mini-card">
+          <div class="mini-title">
+            Matched Skills
+          </div>
+
+          ${
+            matchedSkills.length
+            ? matchedSkills.map(
+                skill =>
+                `<span class="tag good">
+                  ${skill}
+                </span>`
+              ).join("")
+            : `<span class="empty">
+                No direct skill match
+              </span>`
+          }
+        </div>
+
+
+        <div class="mini-card">
+          <div class="mini-title">
+            Skill Gaps
+          </div>
+
+          ${
+            skillGap.length
+            ? skillGap.map(
+                skill =>
+                `<span class="tag warning">
+                  ${skill}
+                </span>`
+              ).join("")
+            : `<span class="empty">
+                No major skill gap
+              </span>`
+          }
+        </div>
+
+
+        <div class="mini-card">
+          <div class="mini-title">
+            Interests Matched
+          </div>
+
+          ${
+            matchedInterests.length
+            ? matchedInterests.map(
+                interest =>
+                `<span class="tag">
+                  ${interest}
+                </span>`
+              ).join("")
+            : `<span class="empty">
+                No direct interest match
+              </span>`
+          }
+        </div>
+
+
+        <div class="mini-card">
+          <div class="mini-title">
+            NSQF Qualification
+          </div>
+
+          ${
+            qualifications.length
+            ? qualifications.map(
+              q => `
+
+                <div style="margin-bottom:10px">
+
+                  <strong>
+                    ${q.qualification_name}
+                  </strong>
+
+                  <div>
+                    Level:
+                    ${q.nsqf_level}
+                  </div>
+
+                  <div>
+                    Code:
+                    ${q.qualification_code}
+                  </div>
+
+                  <div>
+                    Duration:
+                    ${q.duration_hours} hours
+                  </div>
+
+                  <div>
+                    Eligible:
+                    ${
+                      q.overall_eligible
+                      ? "Yes"
+                      : "Not yet"
+                    }
+                  </div>
+
+                </div>
+
+              `
+            ).join("")
+            : `<span class="empty">
+                No mapped NSQF qualification yet
+              </span>`
+          }
+        </div>
+
+
+        <div class="mini-card">
+          <div class="mini-title">
+            Government Schemes
+          </div>
+
+          ${
+            schemes.length
+            ? schemes.map(
+              scheme => `
+
+                <div style="margin-bottom:10px">
+
+                  <strong>
+                    ${scheme.scheme_name}
+                  </strong>
+
+                  <div>
+                    ${scheme.benefit || ""}
+                  </div>
+
+                </div>
+
+              `
+            ).join("")
+            : `<span class="empty">
+                Scheme data will appear here
+              </span>`
+          }
+        </div>
+
+
+        <div class="mini-card">
+          <div class="mini-title">
+            Local Opportunities
+          </div>
+
+          ${
+            opportunities.length
+            ? opportunities.map(
+              opportunity => `
+
+                <div style="margin-bottom:10px">
+
+                  <strong>
+                    ${opportunity.opportunity_name}
+                  </strong>
+
+                  <div>
+                    ${opportunity.provider || ""}
+                  </div>
+
+                </div>
+
+              `
+            ).join("")
+            : `<span class="empty">
+                Local opportunities will appear here
+              </span>`
+          }
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+function startListening() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    alert(
+      "Speech recognition is not supported in this browser."
+    );
+
+    return;
+  }
+
+  const recognition =
+    new SpeechRecognition();
+
+  recognition.lang =
+    getSpeechLanguage();
+
+  recognition.interimResults =
+    false;
+
+  recognition.continuous =
+    false;
+
+  recognition.start();
+
+  document.getElementById(
+    "transcript"
+  ).innerText =
+    "Listening...";
+
+
+  recognition.onresult =
+    function(event) {
+
+      spokenText =
+        event.results[0][0]
+          .transcript;
+
+      document.getElementById(
+        "transcript"
+      ).innerText =
+        "You said: "
+        + spokenText;
+    };
+
+
+  recognition.onerror =
+    function(event) {
+
+      document.getElementById(
+        "transcript"
+      ).innerText =
+        "Voice error: "
+        + event.error;
+    };
+
+}
+
+
+async function sendVoiceQuery() {
+
+  if (!spokenText) {
+
+    alert(
+      "Please speak first."
+    );
+
+    return;
+  }
+
+
+  const id =
+    getBeneficiaryId();
+
+  const language =
+    getSelectedLanguage();
+
+
+  try {
+
+    const response =
+      await fetch(
+        `${API_BASE}/assistant/query/${id}`,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            query: spokenText,
+            language: language
+          })
+        }
+      );
+
+
+    if (!response.ok) {
+      throw new Error(
+        "Assistant request failed"
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    document.getElementById(
+      "assistantResponse"
+    ).innerText =
+      data.assistant_response;
+
+
+    speakResponse(
+      data.assistant_response,
+      language
+    );
+
+
+    if (
+      data.top_recommendations
+      &&
+      data.top_recommendations.length
+    ) {
+
+      renderRecommendations(
+        data.top_recommendations
+      );
+
+    }
+
+  }
+  catch (error) {
+
+    document.getElementById(
+      "assistantResponse"
+    ).innerText =
+      error.message;
+
+  }
+
+}
+
+
+function speakResponse(
+  text,
+  language
+) {
+
+  const speech =
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+  if (language === "Kannada") {
+    speech.lang = "kn-IN";
+  }
+  else if (language === "Hindi") {
+    speech.lang = "hi-IN";
+  }
+  else {
+    speech.lang = "en-IN";
+  }
+
+  window.speechSynthesis.cancel();
+
+  window.speechSynthesis.speak(
+    speech
+  );
+}
+
+</script>
+
+</body>
+</html>
