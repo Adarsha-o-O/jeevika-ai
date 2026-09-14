@@ -360,52 +360,30 @@ The dataset includes official reference URLs wherever available so programme det
 # System Architecture
 
 ```mermaid
-flowchart TD
+graph TD
+    A["Beneficiary / User"] --> B["Web Dashboard"]
+    A --> C["Voice Interface"]
 
-    A[Beneficiary / User]
-    B[Web Dashboard]
-    C[Voice Interface]
-
-    D[FastAPI Backend]
-
-    E[Beneficiary Service]
-    F[Livelihood Recommendation Engine]
-    G[Skill Gap Engine]
-    H[NSQF Mapper]
-    I[Eligibility Engine]
-    J[Government Scheme Mapper]
-    K[Opportunity Mapper]
-
-    L[(SQLite Database)]
-
-    M[(Occupation Dataset)]
-    N[(NSQF Dataset)]
-    O[(Government Scheme Dataset)]
-    P[(Opportunity Dataset)]
-
-    A --> B
-    A --> C
-
-    B --> D
+    B --> D["FastAPI Backend"]
     C --> D
 
-    D --> E
-    D --> F
+    D --> E["Beneficiary Service"]
+    D --> F["Livelihood Recommendation Engine"]
 
-    E --> L
+    E --> L["SQLite Database"]
 
-    F --> M
-    F --> G
-    G --> H
-    H --> N
-    H --> I
-    I --> J
-    J --> O
-    J --> K
-    K --> P
+    F --> M["Occupation Dataset"]
+    F --> G["Skill Gap Engine"]
 
-    F --> D
-    D --> B
+    G --> H["NSQF Mapper"]
+    H --> N["NSQF Dataset"]
+    H --> I["Eligibility Engine"]
+
+    I --> J["Government Scheme Mapper"]
+    J --> O["Government Scheme Dataset"]
+    J --> K["Opportunity Mapper"]
+
+    K --> P["Opportunity Dataset"]
 ```
 
 ---
