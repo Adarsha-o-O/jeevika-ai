@@ -77,6 +77,7 @@ def get_beneficiary(
         "existing_skills": json.loads(record.existing_skills or "[]"),
         "interests": json.loads(record.interests or "[]"),
         "preferred_language": record.preferred_language,
+        "experience_years": record.experience_years or 0,
         "income_target": record.income_target,
         "willing_to_relocate": record.willing_to_relocate
     }
