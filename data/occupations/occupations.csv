@@ -1,56 +1,125 @@
-occupation,sector,minimum_education,skills,interests
-Automotive Service Technician,Automotive,10th|12th|Diploma,driving|mechanical work|tools,automobiles|mechanical work
-Tractor Mechanic,Agriculture,8th|10th|12th,farming|mechanical work|tools,agriculture|mechanical work
-Electrician,Electrical,10th|12th|ITI,electrical work|wiring|tools,electrical|technical work
-Tailor,Apparel,5th|8th|10th|12th,stitching|sewing,fashion|clothing|design
-Data Entry Operator,IT-ITES,10th|12th|Diploma,typing|computer basics|data entry,computers|office work
-Plumber,Plumbing,8th|10th|12th,plumbing|pipe fitting|tools,repair work|technical work|construction
-Welder,Manufacturing,8th|10th|ITI,welding|metal work|tools,manufacturing|metal work|technical work
-Retail Sales Associate,Retail,10th|12th,communication|customer service|sales,retail|sales|customer service
-Farm Worker,Agriculture,5th|8th|10th,farming|crop handling|field work,agriculture|farming
-Dairy Farm Worker,Agriculture,5th|8th|10th,animal care|milk handling|farming,dairy|animals|agriculture
-Poultry Farm Worker,Agriculture,5th|8th|10th,animal care|feeding|farm maintenance,poultry|animals|agriculture
-Horticulture Worker,Agriculture,5th|8th|10th,plant care|gardening|field work,plants|gardening|agriculture
-Irrigation Technician,Agriculture,8th|10th|ITI,pipe fitting|pump maintenance|tools,agriculture|technical work|water systems
-Two Wheeler Service Technician,Automotive,10th|12th|ITI,mechanical work|tools|vehicle repair,motorcycles|automobiles|mechanical work
-Auto Electrician,Automotive,10th|12th|ITI,electrical work|wiring|vehicle repair,automobiles|electrical|technical work
-Tyre Technician,Automotive,8th|10th,tyre repair|tools|vehicle maintenance,automobiles|repair work
-Sewing Machine Operator,Apparel,5th|8th|10th,sewing|stitching|machine operation,clothing|fashion
-Embroidery Worker,Apparel,5th|8th|10th,embroidery|stitching|design,clothing|design|handicrafts
-Carpenter,Construction,8th|10th|ITI,wood work|measurement|tools,construction|wood work|craft
-Mason,Construction,8th|10th,masonry|measurement|construction work,construction|building work
-Painter,Construction,8th|10th,painting|surface preparation|tools,construction|painting|design
-Construction Helper,Construction,5th|8th,construction work|material handling|tools,construction|building work
-Solar Panel Technician,Electrical,10th|12th|ITI,electrical work|wiring|installation,renewable energy|electrical|technical work
-Electrical Helper,Electrical,8th|10th,wiring|tools|electrical basics,electrical|technical work
-CNC Machine Operator,Manufacturing,10th|12th|ITI,machine operation|measurement|tools,manufacturing|machines|technical work
-Machine Operator,Manufacturing,8th|10th|ITI,machine operation|tools|quality checking,manufacturing|machines
-Fitter,Manufacturing,10th|12th|ITI,fitting|measurement|tools,manufacturing|mechanical work
-Packaging Worker,Manufacturing,5th|8th|10th,packing|sorting|quality checking,manufacturing|warehouse work
-Warehouse Associate,Logistics,8th|10th|12th,packing|inventory handling|material handling,logistics|warehouse work
-Delivery Associate,Logistics,8th|10th|12th,driving|navigation|customer service,delivery|travel|logistics
-Inventory Assistant,Logistics,10th|12th,inventory handling|computer basics|record keeping,warehouse work|office work|logistics
-Computer Operator,IT-ITES,10th|12th|Diploma,computer basics|typing|office software,computers|office work
-Customer Support Executive,IT-ITES,12th|Diploma,communication|computer basics|customer service,customer service|computers|office work
-Office Assistant,Administration,10th|12th,record keeping|computer basics|communication,office work|administration
-Receptionist,Administration,10th|12th,communication|customer service|computer basics,office work|customer service
-Security Guard,Security,8th|10th|12th,observation|communication|physical fitness,security|public service
-Housekeeping Attendant,Tourism,5th|8th|10th,cleaning|housekeeping|customer service,hospitality|service work
-Food Service Assistant,Tourism,8th|10th|12th,food handling|customer service|cleaning,hospitality|food service
-Cook,Tourism,8th|10th|12th,cooking|food preparation|kitchen hygiene,food|cooking|hospitality
-Front Office Associate,Tourism,12th|Diploma,communication|computer basics|customer service,hospitality|office work|customer service
-Beauty Therapist,Beauty and Wellness,10th|12th,beauty services|customer service|personal care,beauty|wellness|personal care
-Hair Stylist,Beauty and Wellness,8th|10th|12th,hair cutting|hair styling|customer service,beauty|fashion|personal care
-Healthcare Assistant,Healthcare,10th|12th,patient care|communication|basic healthcare,healthcare|helping people|service work
-Home Health Aide,Healthcare,8th|10th|12th,patient care|personal care|communication,healthcare|helping people
-Telecom Technician,Telecom,10th|12th|ITI,wiring|installation|tools,telecom|technical work|electronics
-Mobile Phone Repair Technician,Electronics,10th|12th|ITI,electronics repair|tools|diagnostics,electronics|mobile phones|technical work
-Field Technician,Electronics,10th|12th|ITI,installation|repair|tools,electronics|technical work|field work
-CCTV Technician,Electronics,10th|12th|ITI,wiring|installation|computer basics,electronics|security|technical work
-Sales Executive,Retail,10th|12th,communication|sales|customer service,sales|customer service|retail
-Store Assistant,Retail,8th|10th|12th,customer service|inventory handling|sales,retail|customer service
-Cashier,Retail,10th|12th,numeracy|customer service|computer basics,retail|office work|customer service
-Baker,Food Processing,8th|10th|12th,baking|food preparation|food hygiene,food|baking|cooking
-Food Processing Worker,Food Processing,5th|8th|10th,food handling|packing|quality checking,food|manufacturing
-Handicraft Artisan,Handicrafts,5th|8th|10th,craft work|design|hand tools,handicrafts|design|creative work
-Pottery Artisan,Handicrafts,5th|8th|10th,pottery|craft work|design,handicrafts|creative work|design
+﻿occupation,sector,minimum_education,skills,interests,description,employment_type,source_url
+Farmer (Crop Cultivation),Agriculture,5th|8th|10th,farming|agriculture|tools|crop management,agriculture|farming|outdoor work,Grows and manages food or cash crops on owned or leased land.,Self Employment,https://www.agriskillcouncil.in
+Dairy Farmer,Agriculture,5th|8th|10th,farming|animal care|dairy management|agriculture,agriculture|animals|farming,Rears milch animals and manages milk production and sale.,Self Employment,https://www.agriskillcouncil.in
+Poultry Farmer,Agriculture,8th|10th,farming|animal care|poultry management|agriculture,agriculture|animals|farming,Raises poultry birds for eggs or meat and manages feed and health.,Self Employment,https://www.agriskillcouncil.in
+Fish Farmer (Fisheries Worker),Agriculture,5th|8th|10th,farming|fisheries|pond management|agriculture,agriculture|fisheries|outdoor work,Rears fish or shrimp in ponds/tanks and manages harvesting and sale.,Self Employment,https://www.ncs.gov.in
+Horticulture Worker,Agriculture,8th|10th,farming|horticulture|tools|agriculture,agriculture|gardening|farming,"Cultivates fruits, vegetables, flowers and manages nursery operations.",Job|Self Employment,https://www.agriskillcouncil.in
+Agricultural Equipment Operator (Tractor Operator),Agriculture,8th|10th|ITI,tractor operation|machinery operation|farming|tools,agriculture|machines|farming,"Operates tractors and farm machinery for ploughing, sowing and harvesting.",Job|Self Employment,https://www.ncs.gov.in
+Beekeeper (Apiculture),Agriculture,5th|8th,farming|beekeeping|agriculture,agriculture|farming|outdoor work,Maintains bee colonies for honey production and pollination services.,Self Employment,https://www.kviconline.gov.in
+Agricultural Labourer,Agriculture,5th|8th,farming|tools|agriculture|physical labour,agriculture|farming|outdoor work,"Performs sowing, weeding, harvesting and other farm work on wages.",Job,https://www.ncs.gov.in
+Two-Wheeler Mechanic,Automotive,8th|10th|ITI,mechanical work|automobiles|tools|vehicle repair|diagnostics,automobiles|repair work|technical work,Services and repairs motorcycles and scooters.,Job|Self Employment,https://www.asci.org.in
+Four-Wheeler Mechanic (Light Motor Vehicle),Automotive,10th|ITI,mechanical work|automobiles|tools|vehicle repair|diagnostics,automobiles|repair work|technical work,Services and repairs cars and light motor vehicles.,Job|Self Employment,https://www.asci.org.in
+Heavy Vehicle Mechanic,Automotive,10th|ITI,mechanical work|automobiles|tools|vehicle repair|diagnostics,automobiles|repair work|technical work,"Repairs and maintains trucks, buses and other heavy commercial vehicles.",Job,https://www.asci.org.in
+Auto Electrician,Automotive,8th|10th|ITI,electrical work|wiring|automobiles|tools|diagnostics,automobiles|electrical work|technical work,"Repairs vehicle wiring, batteries, starters and electrical systems.",Job|Self Employment,https://www.asci.org.in
+Commercial Vehicle Driver,Automotive,8th|10th,driving|vehicle handling|road safety,automobiles|driving|outdoor work,"Drives cars, taxis, autos or commercial vehicles for passengers or goods.",Job|Self Employment,https://www.ncs.gov.in
+Auto Body Repair Technician (Denting-Painting),Automotive,8th|10th|ITI,mechanical work|tools|automobiles|painting|repair work,automobiles|repair work|technical work,Repairs vehicle body dents and carries out surface painting.,Job|Self Employment,https://www.asci.org.in
+Mason (Building Construction),Construction,5th|8th|10th|ITI,masonry|construction work|tools|physical labour,construction|technical work|outdoor work,"Builds and repairs walls, foundations and structures using bricks, blocks and cement.",Job|Self Employment,https://csdcindia.org
+Bar Bender and Steel Fixer,Construction,5th|8th|10th,bar bending|construction work|tools|physical labour,construction|technical work|outdoor work,"Cuts, bends and fixes steel reinforcement bars for concrete structures.",Job,https://csdcindia.org
+Carpenter (Construction),Construction,8th|10th|ITI,carpentry|tools|construction work|woodwork,construction|technical work|design,"Makes and installs wooden doors, windows, furniture and fittings at construction sites.",Job|Self Employment,https://csdcindia.org
+Construction Painter,Construction,8th|10th,painting|tools|construction work,construction|design|technical work,"Applies paint, primer and finishing coats on buildings and structures.",Job|Self Employment,https://csdcindia.org
+Plumber,Construction,8th|10th|ITI,plumbing|pipe fitting|tools|technical work,plumbing|technical work|repair work,"Installs and repairs water supply, drainage and sanitary pipelines.",Job|Self Employment,https://csdcindia.org
+Tile and Marble Worker,Construction,8th|10th,tile laying|construction work|tools,construction|technical work|design,"Lays tiles, marble and stone flooring and wall cladding.",Job|Self Employment,https://csdcindia.org
+Scaffolder,Construction,8th|10th,scaffolding|construction work|tools|physical labour,construction|technical work|outdoor work,Erects and dismantles scaffolding structures for construction work.,Job,https://csdcindia.org
+Construction Site Supervisor (Assistant),Construction,10th|12th|Diploma,site supervision|construction work|planning|teamwork,construction|management|technical work,"Assists in supervising labour, materials and daily progress at construction sites.",Job,https://csdcindia.org
+Sanitary Fitter,Construction,8th|10th|ITI,plumbing|pipe fitting|tools,plumbing|technical work|repair work,"Installs sanitary ware such as taps, wash basins, toilets and fittings.",Job|Self Employment,https://csdcindia.org
+Electrician (Domestic),Electrical,8th|10th|ITI,electrical work|wiring|tools|technical work,electrical work|technical work|repair work,"Installs and repairs household electrical wiring, switches and fittings.",Job|Self Employment,https://www.ncs.gov.in
+Industrial Electrician,Electrical,10th|ITI,electrical work|wiring|machinery operation|technical work,electrical work|technical work|machines,Maintains and repairs electrical systems and machinery in factories.,Job,https://www.ncs.gov.in
+Electrical Wireman,Electrical,8th|10th|ITI,electrical work|wiring|tools,electrical work|technical work,Carries out house and building wiring as per safety standards.,Job|Self Employment,https://www.nimi.gov.in
+Motor Rewinding Technician,Electrical,8th|10th|ITI,electrical work|motor repair|tools|technical work,electrical work|repair work|technical work,Repairs and rewinds electric motors and pumps.,Job|Self Employment,https://www.ncs.gov.in
+Mobile Phone Repair Technician,Electronics,8th|10th|ITI,electronics repair|tools|diagnostics|technical work,electronics|repair work|technical work,Diagnoses and repairs faults in mobile phones and accessories.,Job|Self Employment,https://iesc.in
+Electronics Hardware Repair Technician,Electronics,10th|ITI,electronics repair|tools|diagnostics|technical work,electronics|repair work|technical work,Repairs electronic circuit boards and hardware devices.,Job|Self Employment,https://iesc.in
+Home Appliance Repair Technician,Electronics,8th|10th|ITI,electronics repair|electrical work|tools|technical work,electronics|repair work|technical work,"Repairs televisions, refrigerators, washing machines and other home appliances.",Job|Self Employment,https://iesc.in
+CCTV Installation Technician,Electronics,10th|ITI,electronics repair|wiring|installation|technical work,electronics|technical work|security,Installs and configures CCTV cameras and surveillance systems.,Job|Self Employment,https://iesc.in
+Electronics Assembly Technician,Electronics,8th|10th|ITI,electronics repair|assembly work|tools|technical work,electronics|technical work|manufacturing,Assembles and tests electronic components on production lines.,Job,https://iesc.in
+Telecom Tower Technician,Telecom,10th|ITI,technical work|tools|electrical work|maintenance,technical work|electronics|outdoor work,Installs and maintains telecom tower equipment and connections.,Job,https://www.tsscindia.com
+Optical Fiber Cable Technician,Telecom,10th|ITI,technical work|cable installation|tools,technical work|electronics|outdoor work,Lays and splices optical fiber cables for internet and telecom networks.,Job,https://www.tsscindia.com
+Mobile Recharge and SIM Retailer,Telecom,8th|10th,customer service|sales|computer basics,sales|customer service|business,"Runs a small retail outlet for mobile recharge, SIM cards and bill payments.",Self Employment,https://www.tsscindia.com
+Telecom Customer Service Executive,Telecom,10th|12th,customer service|communication|computer basics,customer service|communication|office work,Handles customer queries and complaints for telecom service providers.,Job,https://www.tsscindia.com
+Tailor (Apparel Making),Apparel & Textiles,5th|8th|10th,sewing|stitching|tailoring|design,sewing|design|stitching,Stitches and alters clothing based on customer measurements and designs.,Job|Self Employment,https://apparelsc.com
+Sewing Machine Operator,Apparel & Textiles,5th|8th|10th,sewing|stitching|machine operation,sewing|stitching|manufacturing,Operates industrial sewing machines in garment production units.,Job,https://apparelsc.com
+Embroidery Worker,Apparel & Textiles,5th|8th,embroidery|sewing|design|handwork,design|sewing|handicrafts,Creates hand or machine embroidery designs on fabric and garments.,Job|Self Employment,https://apparelsc.com
+Handloom Weaver,Apparel & Textiles,5th|8th,weaving|handloom operation|design,handicrafts|design|textiles,Weaves cloth and textiles using traditional handlooms.,Self Employment,https://handicrafts.nic.in
+Garment Quality Checker,Apparel & Textiles,8th|10th,quality control|attention to detail|sewing,manufacturing|textiles|technical work,Inspects finished garments for stitching and fabric defects before packing.,Job,https://apparelsc.com
+Fashion Designer Assistant,Apparel & Textiles,10th|12th|Diploma,design|sewing|sketching|creativity,design|fashion|creativity,"Assists designers with sketches, pattern making and sample garments.",Job,https://apparelsc.com
+Textile Dyeing Worker,Apparel & Textiles,8th|10th,dyeing|textile processing|tools,textiles|manufacturing|technical work,Dyes and processes fabric and yarn in textile units.,Job,https://apparelsc.com
+Retail Sales Associate,Retail,8th|10th|12th,customer service|sales|communication,sales|customer service|retail,"Assists customers, manages stock display and handles sales in a retail store.",Job,https://www.rasci.in
+Cashier,Retail,10th|12th,cash handling|customer service|computer basics,customer service|retail|office work,"Handles billing, cash and digital payments at a retail counter.",Job,https://www.rasci.in
+Shop Owner (Kirana Store),Retail,8th|10th,sales|customer service|inventory management,business|sales|retail,Runs a small neighbourhood grocery or general store.,Self Employment,https://www.ncs.gov.in
+Visual Merchandiser,Retail,10th|12th|Diploma,design|product display|creativity,design|retail|creativity,Arranges product displays and store layout to attract customers.,Job,https://www.rasci.in
+Supermarket Stock Assistant,Retail,8th|10th,inventory management|physical labour|teamwork,retail|logistics|teamwork,Manages stock replenishment and shelf arrangement in supermarkets.,Job,https://www.rasci.in
+Delivery Executive,Logistics,8th|10th|12th,driving|customer service|navigation,logistics|driving|customer service,Delivers parcels and goods to customers using two-wheelers or small vehicles.,Job|Self Employment,https://www.lsc-india.com
+Warehouse Worker,Logistics,8th|10th,inventory management|physical labour|teamwork,logistics|teamwork|manufacturing,"Loads, unloads and organizes goods in a warehouse.",Job,https://www.lsc-india.com
+Forklift Operator,Logistics,8th|10th|ITI,machinery operation|tools|inventory management,logistics|machines|technical work,Operates forklifts to move heavy goods within warehouses.,Job,https://www.lsc-india.com
+Packaging Worker,Logistics,5th|8th,packaging|physical labour|attention to detail,logistics|manufacturing|teamwork,Packs and labels goods for storage and dispatch.,Job,https://www.lsc-india.com
+Logistics Supervisor (Assistant),Logistics,10th|12th|Diploma,inventory management|planning|teamwork|computer basics,logistics|management|technical work,"Assists in coordinating warehouse operations, dispatch and stock records.",Job,https://www.lsc-india.com
+Machine Operator (Manufacturing),Manufacturing,8th|10th|ITI,machinery operation|tools|technical work,manufacturing|machines|technical work,Operates production machinery in a factory setting.,Job,https://www.ncs.gov.in
+Welder,Manufacturing,8th|10th|ITI,welding|tools|technical work,manufacturing|technical work|repair work,Joins metal parts using welding equipment as per specifications.,Job|Self Employment,https://www.nimi.gov.in
+Fitter,Manufacturing,8th|10th|ITI,mechanical work|tools|assembly work|technical work,manufacturing|technical work|machines,"Assembles, fits and adjusts mechanical parts and machinery.",Job,https://www.nimi.gov.in
+CNC Machine Operator,Manufacturing,10th|ITI,machinery operation|computer basics|technical work,manufacturing|machines|technical work,Operates computer-controlled machines for precision manufacturing.,Job,https://www.nimi.gov.in
+Quality Control Inspector,Manufacturing,10th|12th|ITI,quality control|attention to detail|measurement tools,manufacturing|technical work|office work,Checks manufactured products against quality standards.,Job,https://www.ncs.gov.in
+Production Line Worker,Manufacturing,8th|10th,assembly work|physical labour|teamwork,manufacturing|teamwork|technical work,Performs assembly and packing tasks on a factory production line.,Job,https://www.ncs.gov.in
+Food Processing Machine Operator,Food Processing,8th|10th|ITI,machinery operation|food handling|quality control,food processing|manufacturing|technical work,"Operates machines used for cleaning, grading and processing food items.",Job,https://www.ficsi.in
+Bakery Worker,Food Processing,8th|10th,cooking|baking|food handling,cooking|food processing|business,"Prepares bread, cakes and bakery products in a bakery unit.",Job|Self Employment,https://www.ficsi.in
+Dairy Processing Technician,Food Processing,10th|ITI,dairy processing|machinery operation|quality control,food processing|manufacturing|technical work,"Processes milk into dairy products such as curd, ghee and paneer.",Job|Self Employment,https://www.ficsi.in
+Food Packaging Worker,Food Processing,5th|8th,packaging|food handling|attention to detail,food processing|manufacturing|teamwork,Packs and labels processed food products for sale.,Job,https://www.ficsi.in
+Fruit and Vegetable Processing Worker,Food Processing,8th|10th,food handling|machinery operation|quality control,food processing|agriculture|manufacturing,"Sorts, cleans and processes fruits and vegetables into preserved products.",Job|Self Employment,https://www.ficsi.in
+Tour Guide,Tourism,10th|12th|Diploma,communication|local knowledge|customer service,tourism|communication|travel,Guides tourists around local attractions and shares historical/cultural information.,Job|Self Employment,https://www.thsc.in
+Travel Agency Assistant,Tourism,10th|12th,customer service|computer basics|communication,tourism|travel|office work,"Assists customers with travel bookings, itineraries and documentation.",Job,https://www.thsc.in
+Homestay Operator,Tourism,8th|10th|12th,hospitality|customer service|cooking,tourism|hospitality|business,Manages a homestay accommodation for tourists including food and lodging.,Self Employment,https://www.thsc.in
+Hotel Housekeeping Staff,Hospitality,8th|10th,cleaning|hospitality|attention to detail,hospitality|cleaning|service,Maintains cleanliness and upkeep of hotel rooms and premises.,Job,https://www.thsc.in
+Waiter/Steward,Hospitality,8th|10th|12th,customer service|hospitality|communication,hospitality|customer service|food service,Serves food and beverages to guests in restaurants and hotels.,Job,https://www.thsc.in
+Cook (Hospitality),Hospitality,8th|10th|ITI,cooking|food handling|hygiene,cooking|hospitality|food processing,"Prepares meals in restaurants, hotels or catering establishments.",Job|Self Employment,https://www.thsc.in
+Front Office Assistant (Hotel),Hospitality,10th|12th,customer service|computer basics|communication,hospitality|customer service|office work,"Manages guest check-in, check-out and front desk enquiries at hotels.",Job,https://www.thsc.in
+Baker (Hospitality),Hospitality,8th|10th|ITI,cooking|baking|food handling,cooking|hospitality|food processing,"Prepares baked items for hotels, restaurants and catering services.",Job|Self Employment,https://www.thsc.in
+General Duty Assistant (Healthcare),Healthcare Support,10th|12th,healthcare|patient care|hygiene,healthcare|service|patient care,Assists nurses and doctors in basic patient care in hospitals.,Job,https://www.healthcare-ssc.in
+Home Health Aide,Healthcare Support,8th|10th|12th,healthcare|patient care|hygiene,healthcare|patient care|service,Provides basic care and support to elderly or ill persons at home.,Job|Self Employment,https://www.healthcare-ssc.in
+Ambulance Driver-cum-Attendant,Healthcare Support,10th|12th,driving|healthcare|patient care,healthcare|driving|service,Drives ambulances and provides basic assistance to patients during transport.,Job,https://www.healthcare-ssc.in
+Physiotherapy Aide,Healthcare Support,10th|12th,healthcare|patient care|assisting therapy,healthcare|patient care|service,Assists physiotherapists in preparing patients and equipment for therapy sessions.,Job,https://www.healthcare-ssc.in
+Medical Lab Assistant,Healthcare Support,12th|Diploma,healthcare|lab testing|attention to detail,healthcare|science|technical work,Assists in collecting samples and conducting basic laboratory tests.,Job,https://www.healthcare-ssc.in
+Community Health Worker,Healthcare Support,8th|10th|12th,healthcare|communication|community outreach,healthcare|service|community work,"Provides basic health awareness, guidance and referral services in local communities.",Job,https://www.healthcare-ssc.in
+Beautician,Beauty and Wellness,8th|10th|12th,beauty services|customer service|hygiene,beauty and wellness|design|service,"Provides skin care, grooming and beauty treatments to clients.",Job|Self Employment,https://www.bwssc.in
+Hair Stylist,Beauty and Wellness,8th|10th|12th,hair styling|customer service|tools,beauty and wellness|design|service,"Cuts, styles and treats hair for clients at a salon.",Job|Self Employment,https://www.bwssc.in
+Spa Therapist,Beauty and Wellness,10th|12th,massage therapy|customer service|hygiene,beauty and wellness|service|healthcare,Provides massage and wellness therapy services to clients.,Job|Self Employment,https://www.bwssc.in
+Makeup Artist,Beauty and Wellness,8th|10th|12th,makeup application|design|customer service,beauty and wellness|design|creativity,"Applies makeup for clients for events, weddings and functions.",Job|Self Employment,https://www.bwssc.in
+Yoga Instructor,Beauty and Wellness,10th|12th|Diploma,yoga|communication|wellness coaching,healthcare|beauty and wellness|fitness,Teaches yoga and wellness practices to individuals or groups.,Job|Self Employment,https://www.bwssc.in
+Data Entry Operator,IT-ITeS,10th|12th,computer basics|typing|attention to detail,computers|office work|data entry,Enters and manages data into computer systems and databases.,Job,https://www.sscnasscom.com
+Computer Hardware Technician,IT-ITeS,10th|12th|ITI,computer basics|electronics repair|tools|diagnostics,computers|electronics|technical work,"Assembles, repairs and maintains computer hardware and peripherals.",Job|Self Employment,https://www.sscnasscom.com
+BPO/Call Center Executive,IT-ITeS,12th|Graduate,communication|customer service|computer basics,customer service|communication|office work,Handles customer support calls and queries for businesses.,Job,https://www.sscnasscom.com
+Basic Web Developer,IT-ITeS,12th|Diploma|Graduate,computer basics|web development|design|technical work,computers|design|technical work,Builds and maintains simple websites for small businesses.,Job|Self Employment,https://www.sscnasscom.com
+Digital Marketing Assistant,IT-ITeS,12th|Diploma|Graduate,computer basics|social media|sales|communication,computers|marketing|sales,Assists in promoting products and services through online and social media platforms.,Job|Self Employment,https://www.sscnasscom.com
+Computer Teacher/Trainer,IT-ITeS,12th|Diploma|Graduate,computer basics|teaching|communication,computers|teaching|education,Teaches basic computer skills to students or beneficiaries at training centres.,Job|Self Employment,https://www.sscnasscom.com
+Office Assistant,Office Administration,10th|12th,computer basics|typing|office work|communication,office work|computers|administration,"Handles filing, correspondence and general administrative tasks in an office.",Job,https://www.ncs.gov.in
+Receptionist,Office Administration,10th|12th,customer service|communication|computer basics,office work|customer service|administration,"Manages front desk enquiries, calls and visitor coordination.",Job,https://www.ncs.gov.in
+Accounts Assistant,Office Administration,12th|Diploma|Graduate,computer basics|bookkeeping|accounts|attention to detail,office work|accounts|computers,"Maintains basic accounts, invoices and financial records for an office.",Job,https://www.ncs.gov.in
+Store Keeper,Office Administration,10th|12th,inventory management|record keeping|computer basics,office work|logistics|administration,Maintains stock records and manages storeroom inventory.,Job,https://www.ncs.gov.in
+Pottery Maker,Handicrafts,5th|8th,pottery|handwork|design,handicrafts|design|art,"Shapes and fires clay into pots, utensils and decorative items.",Self Employment,https://www.kviconline.gov.in
+Bamboo and Cane Craftsman,Handicrafts,5th|8th,handicrafts|handwork|design|tools,handicrafts|design|art,"Makes baskets, furniture and decorative items from bamboo and cane.",Self Employment,https://handicrafts.nic.in
+Wood Carving Artisan,Handicrafts,5th|8th,wood carving|handwork|design|tools,handicrafts|design|art,Carves decorative and functional items from wood.,Self Employment,https://handicrafts.nic.in
+Jewelry Making Artisan (Handicraft),Handicrafts,5th|8th|10th,jewelry making|handwork|design|tools,handicrafts|design|art,Creates handmade jewelry using traditional techniques and materials.,Self Employment,https://www.gjsci.org
+Leather Craft Worker,Handicrafts,5th|8th,leather work|handwork|design|tools,handicrafts|design|art,"Makes footwear, bags and accessories from leather.",Self Employment,https://handicrafts.nic.in
+Blacksmith,Traditional Occupations,5th|8th,metal work|tools|handwork,handicrafts|technical work|art,Forges and shapes iron and metal tools and implements.,Self Employment,https://www.kviconline.gov.in
+Basket Weaver (Traditional),Traditional Occupations,5th|8th,weaving|handwork|design,handicrafts|art|design,Weaves baskets and household items from natural fibers.,Self Employment,https://handicrafts.nic.in
+Traditional Barber (Nai),Traditional Occupations,5th|8th,hair cutting|customer service|tools,beauty and wellness|service|business,"Provides haircutting and grooming services, often as a traditional family occupation.",Self Employment,https://www.bwssc.in
+Solar Panel Installation Technician,Renewable Energy,10th|ITI,electrical work|installation|tools|technical work,electrical work|technical work|renewable energy,Installs and maintains rooftop and ground-mounted solar panel systems.,Job|Self Employment,https://psscindia.in
+Solar Water Heater Technician,Renewable Energy,10th|ITI,installation|plumbing|tools|technical work,renewable energy|technical work|repair work,Installs and services solar water heating systems.,Job|Self Employment,https://psscindia.in
+Biogas Plant Operator,Renewable Energy,8th|10th,plant operation|agriculture|technical work,renewable energy|agriculture|technical work,Operates and maintains small biogas plants for fuel and manure production.,Self Employment,https://psscindia.in
+Bicycle Repair Mechanic,Repair and Maintenance,5th|8th,mechanical work|tools|repair work,repair work|technical work|business,Repairs and services bicycles for local customers.,Self Employment,https://www.ncs.gov.in
+AC and Refrigeration Repair Technician,Repair and Maintenance,8th|10th|ITI,electrical work|mechanical work|tools|diagnostics,repair work|technical work|electronics,Installs and repairs air conditioners and refrigeration units.,Job|Self Employment,https://www.ncs.gov.in
+Generator/DG Set Mechanic,Repair and Maintenance,8th|10th|ITI,mechanical work|electrical work|tools|diagnostics,repair work|technical work|electrical work,Services and repairs diesel generator sets.,Job|Self Employment,https://www.ncs.gov.in
+General Equipment Repair Technician,Repair and Maintenance,8th|10th|ITI,mechanical work|tools|diagnostics|repair work,repair work|technical work|machines,Repairs household and small industrial equipment and tools.,Job|Self Employment,https://www.ncs.gov.in
+Security Guard,Security,8th|10th,security|vigilance|physical fitness,security|service|discipline,"Guards premises, checks visitors and maintains security records.",Job,https://www.ncs.gov.in
+CCTV Control Room Operator,Security,10th|12th,security|computer basics|attention to detail,security|electronics|office work,Monitors CCTV feeds and reports security incidents from a control room.,Job,https://www.ncs.gov.in
+Fire Safety Assistant,Security,10th|12th,fire safety|physical fitness|emergency response,security|service|technical work,"Assists in fire safety inspections, drills and emergency response at a site.",Job,https://www.ncs.gov.in
+Domestic Housekeeping Worker,Domestic and Facility Services,5th|8th,cleaning|housekeeping|hygiene,cleaning|service|domestic work,Performs cleaning and household chores for private homes.,Job,https://www.ncs.gov.in
+Cook (Domestic),Domestic and Facility Services,5th|8th|10th,cooking|food handling|hygiene,cooking|domestic work|service,Prepares daily meals for households or small establishments.,Job|Self Employment,https://www.ncs.gov.in
+Gardener/Landscaper,Domestic and Facility Services,5th|8th,gardening|landscaping|tools,gardening|outdoor work|agriculture,"Maintains gardens, lawns and landscaped areas for homes or institutions.",Job|Self Employment,https://www.ncs.gov.in
+Facility Cleaner (Commercial),Domestic and Facility Services,5th|8th,cleaning|housekeeping|hygiene,cleaning|service|teamwork,"Cleans and maintains offices, malls and commercial facilities.",Job,https://www.ncs.gov.in
+Pest Control Technician,Domestic and Facility Services,8th|10th,pest control|tools|safety procedures,technical work|service|outdoor work,Applies pest control treatments in homes and commercial premises.,Job|Self Employment,https://www.ncs.gov.in
+Tailoring Business Owner,Self Employment Livelihoods,5th|8th|10th,sewing|stitching|business management|customer service,sewing|business|design,Runs an independent tailoring shop serving local customers.,Self Employment,https://pmkvyofficial.org
+Mobile Repair Shop Owner,Self Employment Livelihoods,8th|10th|ITI,electronics repair|tools|business management|customer service,electronics|business|repair work,Owns and runs a shop repairing mobile phones and accessories.,Self Employment,https://pmkvyofficial.org
+Beauty Parlour Owner,Self Employment Livelihoods,8th|10th|12th,beauty services|business management|customer service,beauty and wellness|business|service,Owns and operates a beauty parlour offering grooming services.,Self Employment,https://pmkvyofficial.org
+Small Food Stall/Catering Business Owner,Self Employment Livelihoods,8th|10th,cooking|business management|customer service|food handling,cooking|business|food processing,Runs a small food stall or catering service for local customers and events.,Self Employment,https://pmkvyofficial.org
+Handicraft Business Owner,Self Employment Livelihoods,5th|8th|10th,handicrafts|design|business management,handicrafts|business|art,Produces and sells handmade handicraft products directly or through markets.,Self Employment,https://www.kviconline.gov.in
+Poultry Farming Business Owner,Self Employment Livelihoods,8th|10th,farming|animal care|business management,agriculture|business|animals,Runs a small to medium scale poultry farming enterprise.,Self Employment,https://www.agriskillcouncil.in
+Dairy Business Owner (Milk Collection and Selling),Self Employment Livelihoods,8th|10th,dairy management|business management|customer service,agriculture|business|animals,"Collects, processes and sells milk and dairy products locally.",Self Employment,https://www.agriskillcouncil.in
+Driving/Taxi Service Owner,Self Employment Livelihoods,8th|10th|12th,driving|business management|customer service,driving|business|automobiles,"Owns and operates a vehicle for taxi, auto or goods transport services.",Self Employment,https://www.ncs.gov.in
