@@ -551,17 +551,6 @@ Final eligibility and programme information should always be confirmed with the 
 
 ---
 
-## Team Innovatrix
-
-- **U. Adarsha**
-- **D.S. Ullas**
-- **Rishi N**
-- **Ganesh H.R**
-- **Shreya B Gowda**
-- **Pratheeksha R**
-
----
-
 ## Smart India Hackathon 2026
 
 | Field | Details |
