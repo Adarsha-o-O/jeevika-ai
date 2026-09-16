@@ -44,7 +44,7 @@ The current implementation is a **working MVP / functional prototype**. It demon
 ## Live Prototype
 
 <div align="center">
-  <img src="docs/jeevika-dashboard.png" alt="Jeevika AI deployed dashboard" width="330"/>
+  <img src="docs/jeevika-dashboard.jpeg" alt="Jeevika AI deployed dashboard" width="330"/>
   <br/>
   <sub>Current deployed Jeevika AI dashboard using a demo beneficiary profile.</sub>
 </div>
