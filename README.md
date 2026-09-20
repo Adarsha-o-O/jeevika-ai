@@ -1,343 +1,439 @@
-<div align="center">
-
 # Jeevika AI
 
-### AI-Driven Voice Assistant for Livelihood Mapping and NSQF-Aligned Skilling Recommendations
+> **AI-Driven Voice Assistant for Livelihood Mapping and NSQF-Aligned Skilling Recommendations for SC Communities under the GIA component of PM-AJAY**
 
-**Smart India Hackathon 2026 · PS ID: SIH26097 · Team Innovatrix**
+**Smart India Hackathon 2026 — SIH26097**  
+**Team:** Innovatrix  
+**Ministry:** Ministry of Social Justice and Empowerment (MoSJE)  
+**Theme:** Agriculture, FoodTech & Rural Development  
+**Category:** Software  
+**Status:** Functional Cloud-Deployed MVP
 
-[![Live Frontend](https://img.shields.io/badge/Live%20Frontend-Vercel-000000?logo=vercel&logoColor=white)](https://jeevika-ai-sooty.vercel.app)
-[![Backend API](https://img.shields.io/badge/Backend%20API-Render-46E3B7?logo=render&logoColor=111111)](https://jeevika-ai-api.onrender.com)
-[![API Docs](https://img.shields.io/badge/API%20Docs-Swagger-85EA2D?logo=swagger&logoColor=111111)](https://jeevika-ai-api.onrender.com/docs)
-[![Database](https://img.shields.io/badge/Database-Neon%20PostgreSQL-00E599?logo=postgresql&logoColor=white)](https://neon.tech)
-[![Python](https://img.shields.io/badge/Python-Backend-3776AB?logo=python&logoColor=white)](https://www.python.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-API-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+---
 
-**Live Demo:** https://jeevika-ai-sooty.vercel.app  
-**Backend:** https://jeevika-ai-api.onrender.com  
-**Swagger / OpenAPI:** https://jeevika-ai-api.onrender.com/docs  
-**Repository:** https://github.com/Adarsha-o-O/jeevika-ai
+## Live Project
 
-</div>
+- **Frontend:** https://jeevika-ai-sooty.vercel.app
+- **Backend API:** https://jeevika-ai-api.onrender.com
+- **API Docs:** https://jeevika-ai-api.onrender.com/docs
+- **GitHub:** https://github.com/Adarsha-o-O/jeevika-ai
+
+> The Render free-tier backend may require a short cold start after inactivity.
 
 ---
 
 ## Overview
 
-**Jeevika AI** is a deployed functional prototype built for the Smart India Hackathon problem statement:
+Jeevika AI is an **explainable multilingual livelihood decision-support platform** that converts a beneficiary profile into a practical livelihood pathway.
 
-> **AI-Driven Voice Assistant for Livelihood Mapping and NSQF-Aligned Skilling Recommendations for SC Communities under the GIA component of PM-AJAY.**
+```text
+Beneficiary Profile
+        ↓
+Livelihood Recommendation
+        ↓
+Matched Skills
+        ↓
+Skill-Gap Analysis
+        ↓
+NSQF Qualification Mapping
+        ↓
+Eligibility / Verification Guidance
+        ↓
+Government Scheme Relevance
+        ↓
+Verified Opportunity Sources
+        ↓
+Multilingual Assistant Guidance
+```
 
-The system converts a beneficiary profile into an **explainable livelihood recommendation** and connects that recommendation with:
-
-- matched skills
-- skill gaps
-- NSQF-aligned qualifications, where verified mapping is available
-- qualification eligibility information
-- relevant government schemes
-- voice-based recommendation interaction
-
-The current implementation is a **working MVP / functional prototype**. It demonstrates the complete recommendation flow from beneficiary profile to livelihood guidance, but it is **not presented as a government-scale production system**.
-
----
-
-## Live Prototype
-
-<div align="center">
-  <img src="docs/jeevika-dashboard.jpeg" alt="Jeevika AI deployed dashboard" width="330"/>
-  <br/>
-  <sub>Current deployed Jeevika AI dashboard using a demo beneficiary profile.</sub>
-</div>
+Jeevika is not intended to replace official government portals. It acts as a **decision-support and navigation layer** across fragmented livelihood, skilling, qualification, scheme and opportunity ecosystems.
 
 ---
 
 ## Problem
 
-Livelihood guidance is often fragmented.
+Beneficiaries may have useful skills, informal work experience and interests but still struggle to answer:
 
-A beneficiary may need to separately identify:
+- Which livelihoods fit my profile?
+- Why is a livelihood suitable for me?
+- Which skills am I missing?
+- Which NSQF pathway is relevant?
+- Which government schemes should I explore?
+- Where can I find verified training, apprenticeship or employment opportunities?
 
-- suitable livelihood options
-- existing strengths
-- missing skills
-- relevant NSQF qualifications
-- qualification eligibility
-- supporting government schemes
+The core challenge is **fragmentation** across multiple systems.
 
-Jeevika AI brings these components into one explainable workflow.
-
----
-
-## Solution
-
-Jeevika AI uses a beneficiary's:
-
-- education
-- current occupation
-- existing skills
-- interests
-- work experience
-- district and state
-- preferred language
-
-to rank relevant livelihood options and explain the result.
-
-### Recommendation Flow
-
-```mermaid
-flowchart LR
-    A[Beneficiary Profile] --> B[Profile Normalization]
-    B --> C[Occupation Matching]
-    C --> D[Recommendation Scoring]
-    D --> E[Skill Gap Detection]
-    E --> F[NSQF Mapping]
-    F --> G[Eligibility Evaluation]
-    G --> H[Government Scheme Mapping]
-    H --> I[Opportunity Mapping]
-    I --> J[Explainable Recommendation]
-```
+Jeevika brings these steps into one explainable workflow.
 
 ---
 
-## What the Prototype Does
+## Key Features
 
-### Beneficiary Profile
+### Manual Onboarding
 
-Stores and retrieves structured beneficiary information including education, skills, interests, occupation, experience and location.
+A single-page beneficiary form captures:
 
-### Explainable Livelihood Recommendations
+- Name
+- Age
+- Gender
+- State
+- District
+- Village
+- Education level
+- Current occupation
+- Existing skills
+- Interests
+- Experience
+- Income target
+- Willingness to relocate
 
-Ranks occupations against the beneficiary profile and returns:
+### Guided Voice Onboarding
 
-- occupation name
-- sector
-- match percentage
-- matched skills
-- skill gaps
-- explanation of the recommendation
-
-### Skill Gap Analysis
-
-For every recommended occupation:
-
-```text
-Required Skills
-      -
-Matched Beneficiary Skills
-      =
-Skill Gaps
-```
-
-This makes the result actionable instead of returning only a job title.
-
-### NSQF Mapping
-
-Where a verified mapping exists, Jeevika AI can display:
-
-- qualification name
-- NSQF level
-- qualification code
-- duration
-- eligibility status
-
-Example from the current prototype:
+Browser-based voice onboarding uses the **Web Speech API**.
 
 ```text
-Two Wheeler Service Technician
-NSQF Level: 4
-Qualification Code: ASC/Q1411
-Duration: 480 hours
+Speak Question
+     ↓
+Recognise Answer
+     ↓
+Preview
+     ↓
+Confirm / Retry / Skip
+     ↓
+Next Question
 ```
 
-### Government Scheme Mapping
+The guided flow covers approximately 13 profile questions.
 
-The current curated scheme dataset includes programmes such as:
+### Multilingual Support
 
-- Pradhan Mantri Kaushal Vikas Yojana (PMKVY)
-- National Apprenticeship Promotion Scheme (NAPS)
-- Pradhan Mantri Employment Generation Programme (PMEGP)
-- Deen Dayal Upadhyaya Grameen Kaushalya Yojana (DDU-GKY)
-- Pradhan Mantri Mudra Yojana (PMMY)
-
-Scheme information should always be rechecked against official sources because programme rules can change.
-
-### Voice Interaction
-
-The browser interface supports voice input/output through browser Web Speech capabilities.
-
-The current prototype is designed for simple recommendation-related queries and supports language selection for:
+Current languages:
 
 - English
 - Kannada
 - Hindi
 
-> This is not described as a full conversational multilingual LLM. Voice capability depends partly on browser speech support.
+Language selection affects UI labels, onboarding prompts, assistant responses, speech recognition and speech synthesis.
 
----
+### Explainable Livelihood Recommendation
 
-## Recommendation Methodology
+The current engine is **rules/data-driven and explainable**, not a trained black-box ML model.
 
-The current system uses an **explainable profile-based ranking engine**, not a black-box prediction model.
-
-| Matching Component | Contribution |
+| Component | Weight |
 |---|---:|
-| Education compatibility | 20% |
-| Skill matching | Up to 40% |
-| Interest matching | Up to 30% |
-| Current occupation relevance | Up to 10% |
-| **Maximum** | **100%** |
+| Education compatibility | 15 |
+| Required skill coverage | 35 |
+| Interest alignment | 15 |
+| Current occupation relevance | 25 |
+| Related experience | 10 |
+| **Total** | **100** |
 
-Text normalization, aliases and similarity matching are used to improve matching between related terms.
+The score represents **profile fit**, not probability of livelihood success.
 
-Examples:
+Each recommendation can include:
+
+- Occupation and sector
+- Match score
+- Matched skills
+- Matched interests
+- Recommendation reasons
+- Required skills
+- Skill gaps
+- NSQF pathways
+- Government schemes
+- Verified opportunity sources
+
+### Skill-Gap Analysis
+
+Jeevika compares required occupation skills against beneficiary skills.
 
 ```text
-car repair          → mechanical work
-farm work           → farming
-computer knowledge  → computer basics
-customer handling   → customer service
+Required Skills
+- diagnostics
+- mechanical work
+- tools
+
+Existing Skills
+- mechanical work
+
+Skill Gap
+- diagnostics
+- tools
 ```
 
 ---
 
-## Data Coverage
+## NSQF Intelligence
 
-### Occupation Dataset
+The NSQF layer can provide:
 
-Current curated coverage:
+- Qualification name
+- NSQF level
+- Qualification code
+- Duration
+- Exact / related pathway
+- Eligibility routes
+- Education requirement
+- Experience requirement
+- Eligibility status
+- Validity status
+- Official source
 
-- **124 occupations**
-- **24 sectors**
+### Mapping Types
 
-Occupation records may contain:
+- Exact Pathway
+- Related Pathway
 
-- occupation name
-- sector
-- minimum education
-- required skills
-- relevant interests
-- description
-- employment type
-- source reference
+### Eligibility States
 
-### NSQF Dataset
+- Eligible
+- Not Currently Eligible
+- Needs Verification
 
-The project intentionally uses a **verified subset** of NSQF mappings rather than assigning unverified qualifications to every occupation.
+When the current beneficiary profile cannot establish an official condition, Jeevika uses **Needs Verification** rather than fabricating certainty.
 
-Current mapped examples include:
+### Validity States
 
-- Two-Wheeler Mechanic
-- Four-Wheeler Mechanic
-- Tailor
-- Retail Sales Associate
-- Data Entry Operator
-- Office Assistant
+- Current
+- Expired
+- Not Active Yet
+- Validity Unconfirmed
 
-### Government Scheme Dataset
-
-Government schemes are maintained separately so that policy-related information can be reviewed and updated independently.
+Expired records are not presented as current active guidance.
 
 ---
 
-## Production Architecture
+## Government Scheme Intelligence
+
+The scheme layer ranks schemes by **relevance**, rather than attaching the same schemes to every occupation.
+
+Current curated scheme records include:
+
+- PMKVY
+- NAPS
+- PMEGP
+- DDU-GKY
+- PM SVANidhi
+- PMMY / MUDRA
+
+Relevance labels:
+
+- Highly Relevant
+- Relevant
+- Worth Checking
+
+Each scheme result can show:
+
+- Why Jeevika suggested it
+- Potential benefit
+- What still needs verification
+- Application mode
+- Official source
+- Information verification date
+
+> **Scheme relevance is not official eligibility.** Final eligibility must be verified with the respective authority.
+
+---
+
+## Verified Opportunity Intelligence
+
+Jeevika uses verified official discovery sources rather than fabricated local openings.
+
+Current verified source records include:
+
+- Karnataka SkillConnect
+- National Career Service
+- Apprenticeship India
+- Skill India Digital Hub
+
+The system distinguishes:
+
+- District Source
+- State Source
+- National Source
+
+Opportunity relevance can consider location, occupation, sector, apprenticeship suitability, skill gaps and NSQF pathways.
+
+> A verified opportunity source does not guarantee that a live vacancy currently exists.
+
+---
+
+## Jeevika Assistant
+
+The dashboard includes an intent-aware assistant supporting text and voice.
+
+It understands requests related to:
+
+- Recommendation
+- Why a livelihood was recommended
+- Skills to learn
+- NSQF pathways
+- Eligibility
+- Government schemes
+- Alternatives
+- Opportunities
+- Profile information
+
+Example questions:
+
+```text
+Why is this livelihood suitable for me?
+What skills should I learn?
+Which NSQF course is suitable for me?
+Am I eligible?
+Which schemes are relevant?
+Where can I apply?
+Show me other options.
+```
+
+---
+
+## Current MVP Metrics
+
+| Metric | Current Status |
+|---|---:|
+| Livelihood roles | **124** |
+| Supported languages | **3** |
+| Curated regression profiles passed | **10 / 10** |
+| Curated government scheme records | **6** |
+| Verified opportunity-source records | **4** |
+| Frontend | **Live** |
+| Backend | **Live** |
+| Database persistence | **PostgreSQL** |
+
+> **10/10 curated regression profiles passed** is a regression-test result, not a claim of 100% real-world recommendation accuracy.
+
+---
+
+## Technical Architecture
 
 ```mermaid
-flowchart TB
-    U[Beneficiary / Demo User]
+flowchart TD
+    A[Beneficiary] --> B{Input Mode}
+    B -->|Manual| C[Single-Page Profile Form]
+    B -->|Voice| D[Guided Voice Onboarding]
 
-    subgraph V[Vercel]
-        F[Static Frontend<br/>HTML + CSS + JavaScript]
-    end
+    C --> E[Frontend - HTML/CSS/JavaScript]
+    D --> E
 
-    subgraph R[Render]
-        API[FastAPI Backend]
-        REC[Recommendation Engine]
-        VOICE[Assistant Endpoint]
-    end
+    E --> F[FastAPI Backend]
+    F --> G[Profile Validation]
+    G --> H[Livelihood Recommendation Engine]
+    H --> I[Skill-Gap Analysis]
+    I --> J[NSQF Mapping + Eligibility Routes]
+    J --> K[Government Scheme Relevance]
+    K --> L[Verified Opportunity Discovery]
+    L --> M[Enriched Recommendation Result]
 
-    subgraph N[Neon]
-        DB[(PostgreSQL Database)]
-    end
+    M --> N[Dashboard]
+    M --> O[Jeevika Assistant]
 
-    subgraph DATA[Curated Reference Data]
-        OCC[Occupation Dataset]
-        NSQF[NSQF Dataset]
-        SCH[Government Scheme Dataset]
-        OPP[Opportunity Dataset]
-    end
-
-    U --> F
-    F --> API
-    F --> VOICE
-    API --> DB
-    API --> REC
-    VOICE --> REC
-    REC --> OCC
-    REC --> NSQF
-    REC --> SCH
-    REC --> OPP
+    F <--> P[(Neon PostgreSQL)]
 ```
 
-### Deployment Summary
+---
 
-| Layer | Current Deployment |
-|---|---|
-| Frontend | Vercel |
-| Backend API | Render |
-| Production Database | Neon PostgreSQL |
-| Reference datasets | CSV files in repository |
-| API documentation | Swagger / OpenAPI |
-| Version control | Git + GitHub |
-| Production branch | `main` |
+## Recommendation Pipeline
+
+```text
+1. Receive beneficiary profile
+2. Validate profile
+3. Store / retrieve beneficiary
+4. Rank livelihood occupations
+5. Generate recommendation explanation
+6. Identify matched skills and skill gaps
+7. Map NSQF qualification pathways
+8. Evaluate NSQF eligibility routes
+9. Attach relevant government schemes
+10. Attach verified opportunity sources
+11. Return enriched recommendation payload
+12. Display recommendation on dashboard
+13. Answer follow-up questions through Jeevika Assistant
+```
 
 ---
 
 ## Technology Stack
 
-| Area | Technology |
-|---|---|
-| Backend language | Python |
-| API framework | FastAPI |
-| ORM / DB layer | SQLAlchemy |
-| Production database | Neon PostgreSQL |
-| Local database fallback | SQLite |
-| Recommendation logic | Explainable profile scoring + fuzzy / alias matching |
-| Reference data | CSV |
-| Frontend | HTML, CSS, JavaScript |
-| Voice | Browser Web Speech API |
-| API communication | REST / JSON |
-| API documentation | Swagger / OpenAPI |
-| Frontend hosting | Vercel |
-| Backend hosting | Render |
-| Repository hosting | GitHub |
+### Frontend
+
+- HTML
+- CSS
+- JavaScript
+- Web Speech API
+- Vercel
+
+### Backend
+
+- Python
+- FastAPI
+- Render
+
+### Database
+
+- PostgreSQL
+- Neon PostgreSQL
+
+### Version Control
+
+- Git
+- GitHub
 
 ---
 
-## API
+## API Overview
 
-Base production URL:
+```http
+POST /beneficiaries/
+GET  /beneficiaries/{beneficiary_id}
 
-```text
-https://jeevika-ai-api.onrender.com
+POST /recommendations/{beneficiary_id}
+GET  /recommendations/saved/{beneficiary_id}
+
+POST /assistant/query/{beneficiary_id}
+
+GET  /health
+GET  /
 ```
 
-Interactive documentation:
+Representative beneficiary creation response:
 
-```text
-https://jeevika-ai-api.onrender.com/docs
+```json
+{
+  "message": "Beneficiary created successfully",
+  "beneficiary_id": 1
+}
 ```
 
-### Main Endpoints
+The beneficiary ID is used internally and is not intended to be a primary user-facing element.
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| `GET` | `/` | Backend root |
-| `GET` | `/health` | Service health check |
-| `POST` | `/beneficiaries/` | Create a beneficiary |
-| `GET` | `/beneficiaries/{beneficiary_id}` | Retrieve beneficiary profile |
-| `POST` | `/recommendations/{beneficiary_id}` | Generate livelihood recommendations |
-| `GET` | `/recommendations/saved/{beneficiary_id}` | Retrieve saved recommendations |
-| `POST` | `/assistant/query/{beneficiary_id}` | Voice / assistant recommendation query |
+---
+
+## Beneficiary Profile Schema
+
+```json
+{
+  "name": "Ravi Kumar",
+  "age": 20,
+  "gender": "Male",
+  "state": "Karnataka",
+  "district": "Shivamogga",
+  "village": "Vijayanagara",
+  "education_level": "10th",
+  "current_occupation": "Mechanic Helper",
+  "existing_skills": [
+    "mechanical work",
+    "electrical work"
+  ],
+  "interests": [
+    "automobiles"
+  ],
+  "preferred_language": "Kannada",
+  "experience_years": 0.5,
+  "income_target": 0,
+  "willing_to_relocate": false
+}
+```
 
 ---
 
@@ -347,78 +443,71 @@ https://jeevika-ai-api.onrender.com/docs
 jeevika-ai/
 │
 ├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── assistant.py
-│   │   │   ├── beneficiaries.py
-│   │   │   └── recommendations.py
-│   │   │
-│   │   ├── database/
-│   │   │   └── database.py
-│   │   │
-│   │   ├── ml/
-│   │   │   ├── eligibility_engine.py
-│   │   │   ├── livelihood_mapper.py
-│   │   │   ├── nsqf_mapper.py
-│   │   │   ├── opportunity_mapper.py
-│   │   │   ├── scheme_mapper.py
-│   │   │   ├── scoring_engine.py
-│   │   │   ├── skill_recommender.py
-│   │   │   └── text_matcher.py
-│   │   │
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   └── main.py
-│   │
-│   └── requirements.txt
-│
-├── data/
-│   ├── occupations/
-│   ├── nsqf/
-│   ├── schemes/
-│   ├── opportunities/
-│   └── test/
+│   └── app/
+│       ├── main.py
+│       ├── ml/
+│       │   ├── livelihood_mapper.py
+│       │   ├── eligibility_engine.py
+│       │   ├── nsqf_mapper.py
+│       │   ├── scheme_mapper.py
+│       │   └── opportunity_mapper.py
+│       └── schemas/
+│           └── recommendation.py
 │
 ├── frontend/
 │   ├── index.html
-│   └── voice.html
+│   ├── i18n.js
+│   └── assets/
+│       └── jeevika-logo.png
 │
-├── docs/
-│   └── jeevika-dashboard.png
+├── data/
+│   ├── occupations/
+│   │   └── occupations.csv
+│   ├── nsqf/
+│   │   └── nsqf_qualifications.csv
+│   ├── schemes/
+│   │   └── government_schemes.csv
+│   ├── opportunities/
+│   │   └── local_opportunities.csv
+│   └── test/
+│       ├── test_livelihood_mapper.py
+│       ├── test_scoring_v2.py
+│       ├── test_nsqf_mapping_v2.py
+│       ├── test_scheme_mapper_v2.py
+│       ├── test_opportunity_mapper_v2.py
+│       └── validate_recommendations.py
 │
 └── README.md
 ```
 
 ---
 
-## Local Development
+## Local Setup
 
-The deployed system already uses the production Render API and Neon database. These steps are for development/testing.
-
-### 1. Clone
+### Clone
 
 ```bash
 git clone https://github.com/Adarsha-o-O/jeevika-ai.git
 cd jeevika-ai
 ```
 
-### 2. Backend Environment
+### Backend
 
 ```bash
 cd backend
 python -m venv venv
 ```
 
-Git Bash:
+Windows:
 
 ```bash
-source venv/Scripts/activate
+venv\Scripts\activate
 ```
 
-Windows Command Prompt:
+Linux/macOS:
 
-```cmd
-venv\Scripts\activate
+```bash
+source venv/bin/activate
 ```
 
 Install dependencies:
@@ -427,19 +516,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-### 3. Database
-
-The backend reads the production database connection from:
-
-```text
-DATABASE_URL
-```
-
-If `DATABASE_URL` is not provided, the current backend configuration falls back to local SQLite for development.
-
-**Never commit database credentials to GitHub.**
-
-### 4. Run Backend Locally
+Run:
 
 ```bash
 uvicorn app.main:app --reload
@@ -451,13 +528,15 @@ Local API:
 http://127.0.0.1:8000
 ```
 
-Local Swagger:
+Swagger:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-### 5. Run Frontend Locally
+### Frontend
+
+In another terminal:
 
 ```bash
 cd frontend
@@ -470,105 +549,297 @@ Open:
 http://localhost:5500
 ```
 
-> The current frontend source is configured to call the deployed Render API.  
-> If you want a fully local frontend-to-backend workflow, change the frontend API base URL to `http://127.0.0.1:8000` during local development.
-
 ---
 
-## Validation
+## Testing
 
-The recommendation pipeline includes a regression-style validation suite covering ten representative beneficiary profiles.
+Run from the repository root.
 
-Run:
+### Opportunity Intelligence
+
+```bash
+python -u data/test/test_opportunity_mapper_v2.py
+```
+
+### Scheme Intelligence
+
+```bash
+python -u data/test/test_scheme_mapper_v2.py
+```
+
+### NSQF Mapping
+
+```bash
+python -u data/test/test_nsqf_mapping_v2.py
+```
+
+### Livelihood Mapper
+
+```bash
+python -u data/test/test_livelihood_mapper.py
+```
+
+### Recommendation Regression Suite
 
 ```bash
 python -u data/test/validate_recommendations.py
 ```
 
-Current test-suite result:
+Current curated validation result:
 
 ```text
-PASS  : 10/10
-CHECK : 0/10
-FAIL  : 0/10
+PASS: 10 / 10
+CHECK: 0
+FAIL: 0
 ```
-
-This means the current curated test profiles produced recommendations in the expected categories.
-
-> **Important:** this result is a regression / functional validation result. It is **not** presented as universal model accuracy.
 
 ---
 
-## Current Deployment Status
+## Validation & Robustness
 
-| Component | Status |
-|---|---|
-| Beneficiary APIs | ✅ Working |
-| Recommendation engine | ✅ Working |
-| Skill-gap analysis | ✅ Working |
-| NSQF mapping | ✅ Working where verified mapping exists |
-| Eligibility evaluation | ✅ Working |
-| Government scheme mapping | ✅ Working |
-| Opportunity-mapping architecture | ✅ Implemented |
-| Dashboard | ✅ Deployed |
-| Voice interface | ✅ Functional prototype |
-| Neon PostgreSQL integration | ✅ Deployed |
-| Render backend | ✅ Deployed |
-| Vercel frontend | ✅ Deployed |
-| Main-branch integration | ✅ Complete |
-| Production CORS | ✅ Restricted to deployed frontend |
+Current validation includes checks for:
+
+- Age
+- Experience
+- Income
+- Meaningful names and locations
+- Occupation
+- Skills
+- Interests
+- List-size limits
+- Plausibility between age and experience
+
+Manual and voice onboarding use the same final profile validation before submission.
+
+---
+
+## Security
+
+### Current MVP Controls
+
+- HTTPS through cloud hosting
+- Controlled CORS origins
+- Frontend validation
+- Backend validation
+- Safe external links
+- Persistent structured database storage
+- Internal beneficiary ID hidden from normal UI
+
+### Production Security Roadmap
+
+A government-scale deployment should add:
+
+- Government identity / SSO
+- Role-based access control
+- Field-worker/admin roles
+- Sensitive-field encryption
+- Audit logs
+- API gateway
+- Rate limiting
+- Secrets management
+- Consent management
+- Data-retention policy
+- Monitoring and alerting
+- Backup / disaster recovery
+- Government-approved hosting where required
+
+These are roadmap items, not claims about the current MVP.
+
+---
+
+## Scalability
+
+The application separates frontend, API, database, recommendation logic and reference datasets.
+
+Potential production scaling:
+
+- Stateless API replicas
+- Load balancing
+- Managed PostgreSQL
+- Caching
+- Background workers
+- Containerization
+- Monitoring
+- CI/CD
+- Dataset synchronization
+
+The current deployment demonstrates cloud feasibility; nationwide concurrency has not yet been load-tested.
 
 ---
 
 ## Current Limitations
 
-The project is intentionally presented as a **functional prototype / MVP**.
-
-Current limitations include:
-
-1. **NSQF coverage is partial.** Only verified mappings are shown.
-2. **Local opportunities are time-sensitive.** Records should be verified before being treated as active.
-3. **The current beneficiary-ID workflow is demo/admin oriented.** A real beneficiary-facing deployment would require simpler onboarding and identity handling.
-4. **Voice interaction is limited to the current recommendation workflow.** It is not a full conversational multilingual NLU system.
-5. **Browser support affects speech input/output.**
-6. **Authentication and role-based access are not yet implemented.**
-7. **Government-scale deployment would require additional monitoring, audit controls, security hardening and field validation.**
+1. **Recommendation engine** — Explainable rules/data-driven system; not a trained black-box ML model.
+2. **Occupation coverage** — 124 roles; not exhaustive.
+3. **NSQF coverage** — Useful but not complete for every occupation.
+4. **Scheme coverage** — Curated verified set; not every government scheme.
+5. **Official eligibility** — Relevance/pre-screening guidance does not guarantee final eligibility.
+6. **Opportunities** — Primarily verified discovery portals rather than claims of live vacancies.
+7. **Voice** — Browser speech support varies.
+8. **Security** — More hardening is required for government production deployment.
+9. **Field validation** — Large-scale beneficiary pilots have not yet been completed.
 
 ---
 
-## Responsible Use
+## Roadmap
 
-Jeevika AI is a **decision-support prototype**.
+### Next Milestone — Personalized Livelihood Action Plan
 
-Its recommendations should be treated as guidance, not as:
+```text
+Recommended Livelihood
+       ↓
+Skills to Strengthen
+       ↓
+NSQF / Training Pathway
+       ↓
+Eligibility Actions
+       ↓
+Government Support
+       ↓
+Verified Opportunity Sources
+       ↓
+Immediate Next Step
+```
 
-- guaranteed employment
-- guaranteed NSQF eligibility
-- guaranteed scheme eligibility
-- guaranteed financial assistance
+### Future Work
 
-Final eligibility and programme information should always be confirmed with the respective authorised organisation or official government source.
+- Wider NSQF coverage
+- More verified scheme records
+- More state-specific opportunity sources
+- Additional Indian languages
+- Beneficiary field pilot
+- Counsellor dashboard
+- Assisted field-worker mode
+- Government SSO
+- Role-based access control
+- Audit and monitoring
+- Government-system integration
+- Dataset synchronization
+- Programme analytics
 
 ---
 
-## Smart India Hackathon 2026
+## SIH Demo Flow
 
-| Field | Details |
-|---|---|
-| Problem Statement ID | **SIH26097** |
-| Category | **Software** |
-| Theme | **Agriculture, FoodTech & Rural Development** |
-| Problem Statement | **AI-Driven Voice Assistant for Livelihood Mapping and NSQF-Aligned Skilling Recommendations for SC Communities under GIA component of PM-AJAY** |
-| Team | **Innovatrix** |
+```text
+1. Choose language
+2. Create beneficiary profile
+3. Generate recommendations
+4. Expand the top recommendation
+5. Explain why it was recommended
+6. Show matched skills and skill gaps
+7. Show NSQF pathway
+8. Show government scheme relevance
+9. Show verified opportunity sources
+10. Ask Jeevika Assistant: "Where can I apply?"
+```
 
 ---
 
-<div align="center">
+## Design Principles
 
-### Jeevika AI
+### Explainability
 
-**Profile → Recommendation → Skill Gap → NSQF → Schemes → Voice Guidance**
+Recommendations should show understandable reasons.
 
-Built as a deployed functional prototype for Smart India Hackathon 2026.
+### Verification
 
-</div>
+When information is insufficient, Jeevika should say **Needs Verification** rather than invent certainty.
+
+### Source Transparency
+
+Official qualification, scheme and opportunity sources are surfaced where possible.
+
+### Human Agency
+
+Jeevika supports beneficiary and counsellor decisions; it does not make career decisions on behalf of users.
+
+---
+
+## Claim Discipline
+
+### Correct
+
+> 10/10 curated regression profiles passed.
+
+### Incorrect
+
+> 100% model accuracy.
+
+---
+
+### Correct
+
+> This scheme is highly relevant to the current pathway.
+
+### Incorrect
+
+> The beneficiary is officially approved for the scheme.
+
+---
+
+### Correct
+
+> Verified opportunity source.
+
+### Incorrect
+
+> A live vacancy definitely exists.
+
+---
+
+### Correct
+
+> Functional cloud-deployed MVP.
+
+### Incorrect
+
+> Production-ready nationwide government platform.
+
+---
+
+## Official Ecosystems Referenced
+
+Jeevika references official ecosystems such as:
+
+- PM-AJAY
+- Ministry of Social Justice and Empowerment
+- NCVET / National Qualification Register
+- Skill India Digital
+- National Career Service
+- Apprenticeship India
+- Karnataka SkillConnect
+
+Jeevika acts as an explainable navigation and decision-support layer over these ecosystems.
+
+---
+
+## Team Innovatrix
+
+- U. Adarsha
+- D.S. Ullas
+- Rishi N
+- Ganesh H.R
+- Shreya B Gowda
+- Pratheeksha R
+
+---
+
+## Links
+
+- **Live App:** https://jeevika-ai-sooty.vercel.app
+- **Backend:** https://jeevika-ai-api.onrender.com
+- **API Docs:** https://jeevika-ai-api.onrender.com/docs
+- **GitHub:** https://github.com/Adarsha-o-O/jeevika-ai
+
+---
+
+## Final Note
+
+Jeevika AI is currently a **functional cloud-deployed MVP**.
+
+Its key strength is the integration of:
+
+**Profile → Livelihood → Skills → NSQF → Schemes → Verified Opportunities**
+
+into one multilingual, explainable and actionable beneficiary journey.
