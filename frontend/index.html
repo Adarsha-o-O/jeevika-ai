@@ -3,175 +3,321 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
   <title>Jeevika AI</title>
+  <link rel="icon" type="image/png" href="assets/jeevika-logo.png" />
+  <link rel="apple-touch-icon" href="assets/jeevika-logo.png" />
 
   <style>
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+
+    :root {
+      --green-950: #10261f;
+      --green-700: #146a4c;
+      --green-600: #1f8f66;
+      --green-500: #28a875;
+      --blue-500: #4d79ff;
+      --ink-900: #172033;
+      --ink-700: #465269;
+      --ink-500: #718096;
+      --line: #dfe5ee;
+      --surface: rgba(255,255,255,0.94);
+      --surface-soft: #f7f9fc;
+      --shadow: 0 16px 40px rgba(28, 45, 70, 0.09);
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      font-family: Inter, Arial, sans-serif;
+      font-family: Inter, "Noto Sans Kannada", "Noto Sans Devanagari", "Segoe UI", Arial, sans-serif;
       background:
         radial-gradient(circle at top left, #dff7ee, transparent 35%),
         radial-gradient(circle at top right, #e4ecff, transparent 30%),
         #f5f7fb;
-      color: #172033;
+      color: var(--ink-900);
     }
+
+    button, input, select { font: inherit; }
 
     .app-shell {
       min-height: 100vh;
       display: grid;
       grid-template-columns: 260px 1fr;
+      transition: grid-template-columns .24s ease;
     }
 
     .sidebar {
-      background: #10261f;
-      color: white;
-      padding: 26px 20px;
+      background: var(--green-950);
+      color: #fff;
+      padding: 20px 16px;
       position: sticky;
       top: 0;
       height: 100vh;
+      overflow-y: auto;
+      transition: transform .24s ease, opacity .18s ease, padding .24s ease;
     }
 
-    .brand {
-      font-size: 28px;
-      font-weight: 800;
+    .app-shell.sidebar-collapsed {
+      grid-template-columns: 0 1fr;
+    }
+
+    .app-shell.sidebar-collapsed .sidebar {
+      transform: translateX(-100%);
+      opacity: 0;
+      pointer-events: none;
+      padding-left: 0;
+      padding-right: 0;
+      overflow: hidden;
+    }
+
+    .nav-toggle {
+      position: fixed;
+      z-index: 1200;
+      top: 18px;
+      left: 228px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #20324d;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 8px 24px rgba(14, 30, 50, .18);
+      font-size: 24px;
+      line-height: 1;
+      transition: left .24s ease, transform .16s ease, background .16s ease;
+    }
+
+    .nav-toggle:hover {
+      background: var(--green-600);
+      filter: none;
+    }
+
+    .nav-toggle.collapsed {
+      left: 14px;
+    }
+
+    .sidebar-brand {
+      margin-bottom: 13px;
+    }
+
+    .sidebar-logo-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 112px;
+      padding: 8px;
       margin-bottom: 8px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.97);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 10px 28px rgba(0,0,0,.12);
+    }
+
+    .sidebar-logo {
+      width: min(168px, 100%);
+      max-height: 100px;
+      object-fit: contain;
+      display: block;
     }
 
     .brand-sub {
-      opacity: 0.7;
-      font-size: 13px;
-      margin-bottom: 32px;
+      opacity: .76;
+      font-size: 12px;
+      line-height: 1.4;
+      text-align: center;
+      margin: 0;
     }
 
     .nav-item {
-      padding: 12px 14px;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      background: rgba(255,255,255,0.05);
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 0;
+      border-radius: 9px;
+      margin-bottom: 6px;
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      text-align: left;
+      cursor: pointer;
+      transition: .16s ease;
     }
 
-    .nav-item.active {
-      background: #1f8f66;
-    }
+    .nav-item:hover,
+    .nav-item.active { background: var(--green-600); }
 
-    .main {
-      padding: 28px;
-    }
+    .main { padding: 20px; min-width: 0; }
 
     .topbar {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      gap: 15px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
-    .topbar h1 {
-      margin: 0;
-      font-size: 30px;
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
     }
+
+    .header-logo-wrap {
+      width: 48px;
+      height: 48px;
+      flex: 0 0 48px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 13px;
+      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(220,225,235,.9);
+      box-shadow: 0 8px 22px rgba(28,45,70,.08);
+    }
+
+    .header-logo {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .topbar h1 { margin: 0; font-size: 27px; line-height: 1.1; }
+    .status { margin-top: 4px; font-size: 12px; color: #5b6678; }
 
     .controls {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
     }
 
-    input,
-    select,
-    button {
+    .control-label {
+      font-size: 12px;
+      color: var(--ink-500);
+      font-weight: 700;
+      margin-right: -4px;
+    }
+
+    input, select, button {
       border: 1px solid #d5dbe7;
       border-radius: 10px;
-      padding: 11px 13px;
-      font-size: 14px;
+      padding: 9px 11px;
+      font-size: 13px;
     }
+
+    input, select { background: #fff; color: var(--ink-900); }
 
     button {
       cursor: pointer;
-      background: #1f8f66;
-      color: white;
+      background: var(--green-600);
+      color: #fff;
       border: none;
       font-weight: 700;
     }
 
-    button.secondary {
-      background: #24334d;
-    }
+    button:hover { filter: brightness(.97); }
+    button:disabled { opacity: .65; cursor: wait; }
+    button.secondary { background: #24334d; }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
+      gap: 14px;
+      align-items: start;
     }
 
     .card {
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(220,225,235,0.8);
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 12px 35px rgba(30, 45, 70, 0.08);
+      background: var(--surface);
+      border: 1px solid rgba(220,225,235,.85);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      scroll-margin-top: 24px;
     }
 
-    .profile-card {
-      grid-column: span 4;
-    }
-
-    .voice-card {
-      grid-column: span 8;
-    }
-
-    .recommendations-card {
-      grid-column: span 12;
-    }
+    .profile-card { grid-column: span 4; }
+    .voice-card { grid-column: span 8; }
+    .recommendations-card { grid-column: span 12; }
 
     .section-title {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 800;
-      margin-bottom: 15px;
-    }
-
-    .profile-row {
       margin-bottom: 11px;
     }
 
-    .profile-label {
-      font-size: 12px;
-      color: #718096;
-    }
-
-    .profile-value {
-      font-weight: 700;
-      margin-top: 2px;
-    }
+    .profile-row { margin-bottom: 9px; }
+    .profile-label { font-size: 12px; color: var(--ink-500); }
+    .profile-value { font-weight: 700; margin-top: 2px; line-height: 1.45; }
 
     .voice-box {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
     }
 
-    .transcript,
-    .assistant-response {
-      margin-top: 14px;
+    .assistant-compose {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .assistant-compose input {
+      width: 100%;
+      min-width: 0;
+      background: #fff;
+    }
+
+    .assistant-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 9px;
+    }
+
+    .assistant-chip {
+      background: #eef7f3;
+      color: #17684d;
+      border: 1px solid #d7ebe2;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .assistant-chip:hover {
+      background: #e2f2eb;
+      filter: none;
+    }
+
+    .transcript, .assistant-response {
+      margin-top: 10px;
       background: #f1f5f9;
-      border-radius: 12px;
-      padding: 14px;
-      min-height: 52px;
+      border-radius: 10px;
+      padding: 11px 12px;
+      min-height: 44px;
+      line-height: 1.55;
     }
 
     .recommendation {
       border: 1px solid #e5e9f0;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 16px;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
       background: #fbfcfe;
     }
+
+    .recommendation:last-child { margin-bottom: 0; }
 
     .recommendation-header {
       display: flex;
@@ -181,848 +327,3769 @@
       flex-wrap: wrap;
     }
 
-    .occupation {
-      font-size: 21px;
-      font-weight: 800;
-    }
-
-    .sector {
-      color: #657086;
-      margin-top: 3px;
-    }
+    .occupation { font-size: 19px; font-weight: 800; }
+    .sector { color: #657086; margin-top: 3px; }
 
     .score {
       background: #e6f6ef;
-      color: #146a4c;
-      padding: 8px 12px;
+      color: var(--green-700);
+      padding: 7px 10px;
       border-radius: 999px;
       font-weight: 800;
+      white-space: nowrap;
     }
 
     .meter {
       height: 10px;
       background: #e9edf3;
       border-radius: 999px;
-      margin: 14px 0;
+      margin: 10px 0;
       overflow: hidden;
     }
 
-    .meter-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #28a875, #4d79ff);
+    .meter-fill { height: 100%; background: linear-gradient(90deg, var(--green-500), var(--blue-500)); }
+    .recommendation-explanation { line-height: 1.55; color: #334056; }
+
+
+    .recommendation-rank {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #edf4ff;
+      color: #284c86;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .recommendation.compact {
+      padding: 12px 14px;
+      background: #fff;
+    }
+
+    .recommendation.compact .meter {
+      margin: 9px 0 7px;
+      height: 7px;
+    }
+
+    .recommendation-details {
+      margin-top: 9px;
+      animation: recommendationReveal .2s ease;
+    }
+
+    @keyframes recommendationReveal {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .recommendation-actions {
+      margin-top: 9px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .recommendation-toggle,
+    .recommendations-more-button {
+      border: 1px solid #cfe5dc;
+      background: #eef8f4;
+      color: var(--green-700);
+      border-radius: 10px;
+      padding: 8px 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+
+    .recommendation-toggle:hover,
+    .recommendations-more-button:hover {
+      background: #e2f2eb;
+      border-color: #add5c5;
+      transform: translateY(-1px);
+    }
+
+    .recommendations-more-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .recommendations-more-button {
+      min-width: 230px;
+      background: #fff;
     }
 
     .subgrid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
-      margin-top: 15px;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .mini-card {
-      background: white;
+      background: #fff;
       border: 1px solid #e7ebf1;
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: 10px;
+      padding: 11px;
+      transition: box-shadow .2s ease, border-color .2s ease;
     }
 
-    .mini-title {
-      font-weight: 800;
-      margin-bottom: 8px;
-      font-size: 14px;
+    .mini-card.section-focus {
+      border-color: var(--green-500);
+      box-shadow: 0 0 0 3px rgba(40,168,117,.12);
     }
+
+    .mini-title { font-weight: 800; margin-bottom: 6px; font-size: 13px; }
 
     .tag {
       display: inline-block;
       background: #edf2ff;
-      padding: 6px 9px;
-      margin: 3px;
+      padding: 5px 8px;
+      margin: 2px;
       border-radius: 999px;
       font-size: 12px;
     }
 
-    .tag.warning {
-      background: #fff3e6;
+    .tag.warning { background: #fff3e6; }
+    .tag.good { background: #e5f8ef; }
+    .empty { color: #7c8799; font-style: italic; }
+
+    .scheme-item, .qualification-item, .opportunity-item { margin-bottom: 8px; line-height: 1.4; }
+    .scheme-item:last-child, .qualification-item:last-child, .opportunity-item:last-child { margin-bottom: 0; }
+
+    .language-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(31,143,102,.18), transparent 35%),
+        radial-gradient(circle at 85% 20%, rgba(77,121,255,.16), transparent 32%),
+        linear-gradient(145deg, #f4faf7, #f5f7fb);
     }
 
-    .tag.good {
-      background: #e5f8ef;
+    .language-gate-hidden { display: none; }
+
+    .language-gate-card {
+      width: min(720px, 100%);
+      background: rgba(255,255,255,.97);
+      border: 1px solid rgba(215,224,233,.9);
+      border-radius: 28px;
+      padding: 26px;
+      box-shadow: 0 30px 80px rgba(20,40,60,.13);
+      text-align: center;
     }
 
-    .empty {
-      color: #7c8799;
-      font-style: italic;
+    .gate-brand-logo {
+      display: block;
+      width: 118px;
+      height: 118px;
+      object-fit: contain;
+      margin: 0 auto 14px;
     }
 
-    .status {
-      margin-top: 10px;
+    .onboarding-brand-logo {
+      display: block;
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      margin-bottom: 6px;
+    }
+
+    .language-gate-card h1 {
+      margin: 0;
+      font-size: clamp(28px, 5vw, 42px);
+      color: #14233b;
+    }
+
+    .language-gate-card p {
+      margin: 10px auto 22px;
+      max-width: 520px;
+      color: #657086;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .language-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .language-option {
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #dce5e1;
+      border-radius: 18px;
+      background: #fff;
+      color: #14233b;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+
+    .language-option:hover {
+      transform: translateY(-3px);
+      border-color: var(--green-600);
+      box-shadow: 0 14px 30px rgba(31,143,102,.12);
+    }
+
+    .language-option strong { font-size: 21px; }
+    .language-option span { color: #718096; font-size: 13px; }
+
+
+
+    .onboarding-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(31,143,102,.16), transparent 34%),
+        radial-gradient(circle at 90% 15%, rgba(77,121,255,.13), transparent 30%),
+        #f5f7fb;
+      overflow-y: auto;
+    }
+
+    .onboarding-hidden { display: none; }
+
+    .onboarding-card {
+      width: min(900px, 100%);
+      background: rgba(255,255,255,.98);
+      border: 1px solid rgba(215,224,233,.9);
+      border-radius: 26px;
+      box-shadow: 0 30px 90px rgba(20,40,60,.14);
+      padding: 34px;
+      margin: auto;
+    }
+
+    .onboarding-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .onboarding-header h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 36px);
+    }
+
+    .onboarding-header p {
+      margin: 6px 0 0;
+      color: var(--ink-500);
+      line-height: 1.6;
+      max-width: 620px;
+    }
+
+    .step-badge {
+      flex: 0 0 auto;
+      background: #e7f6ef;
+      color: var(--green-700);
+      border-radius: 999px;
+      padding: 9px 13px;
       font-size: 13px;
-      color: #5b6678;
+      font-weight: 800;
+    }
+
+    .onboarding-progress {
+      height: 7px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #edf1f6;
+      margin-bottom: 20px;
+    }
+
+    .onboarding-progress-fill {
+      height: 100%;
+      width: 25%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--green-500), var(--blue-500));
+      transition: width .22s ease;
+    }
+
+    .onboarding-step { display: none; }
+    .onboarding-step.active { display: block; }
+
+    .step-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #344057;
+    }
+
+    .field small {
+      color: var(--ink-500);
+      line-height: 1.45;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid #d5dbe7;
+      border-radius: 12px;
+      padding: 12px 13px;
+      background: #fff;
+      color: var(--ink-900);
+      font: inherit;
+      outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    .field textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--green-500);
+      box-shadow: 0 0 0 3px rgba(40,168,117,.11);
+    }
+
+    .choice-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 14px;
+      border: 1px solid #dce3eb;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .choice input { margin: 0; }
+
+    .onboarding-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .onboarding-actions .right-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    .onboarding-status {
+      margin-top: 16px;
+      min-height: 22px;
+      font-size: 13px;
+      color: var(--green-700);
+      font-weight: 700;
+    }
+
+    .field input.invalid,
+    .field select.invalid,
+    .field textarea.invalid {
+      border-color: #c95b5b;
+      box-shadow: 0 0 0 3px rgba(201,91,91,.09);
+    }
+
+    .field-error {
+      margin-top: 6px;
+      color: #a33a3a;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .onboarding-status.validation-error {
+      color: #a33a3a;
+    }
+
+    .recommendation-guidance {
+      border: 1px solid #dce7e2;
+      background: linear-gradient(180deg, #f7fcfa, #f3f7fb);
+      border-radius: 16px;
+      padding: 18px;
+      color: var(--ink-700);
+      line-height: 1.55;
+    }
+
+    .recommendation-guidance strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink-900);
+      font-size: 16px;
+    }
+
+    .recommendation-guidance ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+    }
+
+    .recommendation-guidance button {
+      margin-top: 14px;
+    }
+
+    .low-confidence-note {
+      margin-bottom: 14px;
+      border: 1px solid #eadfb8;
+      background: #fffaf0;
+      border-radius: 14px;
+      padding: 13px 15px;
+      color: #755d1d;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .new-profile-button {
+      background: #24334d;
+    }
+
+
+
+    .onboarding-mode-switch {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 0 0 24px;
+    }
+
+    .onboarding-mode-button {
+      min-height: 64px;
+      padding: 12px 16px;
+      border: 1px solid #dce4ec;
+      background: #fff;
+      color: var(--ink-900);
+      border-radius: 14px;
+      font-weight: 800;
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .onboarding-mode-button.active {
+      color: var(--green-700);
+      border-color: rgba(31,143,102,.48);
+      background: #edf9f4;
+      box-shadow: 0 0 0 3px rgba(31,143,102,.08);
+    }
+
+    .onboarding-panel-hidden { display: none !important; }
+
+    .voice-onboarding-panel {
+      border: 1px solid #e2e8ef;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fbfefd, #f7f9fc);
+      padding: 22px;
+    }
+
+    .voice-panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .voice-panel-heading h3 {
+      margin: 0 0 7px;
+      font-size: 20px;
+    }
+
+    .voice-panel-heading p {
+      margin: 0;
+      color: var(--ink-500);
+      line-height: 1.55;
+    }
+
+    .voice-question-counter {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #e7f6ef;
+      color: var(--green-700);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .voice-question-card {
+      background: #fff;
+      border: 1px solid #e0e7ee;
+      border-radius: 16px;
+      padding: 20px;
+      min-height: 132px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .voice-question {
+      font-size: clamp(20px, 3vw, 27px);
+      font-weight: 800;
+      line-height: 1.45;
+      color: #17233a;
+    }
+
+    .voice-question-hint {
+      margin-top: 9px;
+      color: var(--ink-500);
+      font-size: 13px;
+    }
+
+    .voice-answer-block {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid #dfe8e4;
+      background: #f0faf6;
+    }
+
+    .voice-answer-hidden { display: none; }
+
+    .voice-answer-label {
+      color: var(--green-700);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .voice-answer-preview {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .voice-onboarding-status {
+      min-height: 24px;
+      margin-top: 14px;
+      color: var(--ink-700);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .voice-onboarding-status.error { color: #a33a3a; }
+    .voice-onboarding-status.success { color: var(--green-700); }
+
+    .voice-onboarding-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .voice-onboarding-actions button {
+      min-height: 46px;
+    }
+
+    .voice-action-light {
+      background: #eef2f7;
+      color: #28354c;
+    }
+
+    .voice-review {
+      margin-top: 8px;
+    }
+
+    .voice-review h3 {
+      margin: 0 0 5px;
+      font-size: 22px;
+    }
+
+    .voice-review-note {
+      color: var(--ink-500);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .voice-review-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .voice-review-item {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #e2e8ef;
+      min-width: 0;
+    }
+
+    .voice-review-label {
+      font-size: 11px;
+      color: var(--ink-500);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .voice-review-value {
+      font-weight: 700;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+
+    @media (max-width: 950px) {
+      .app-shell,
+      .app-shell.sidebar-collapsed { grid-template-columns: 1fr; }
+
+      .sidebar {
+        position: fixed;
+        z-index: 1100;
+        inset: 0 auto 0 0;
+        width: min(82vw, 300px);
+        height: 100vh;
+        display: block;
+        padding: 72px 18px 22px;
+        overflow-y: auto;
+        box-shadow: 18px 0 40px rgba(12, 32, 27, .22);
+      }
+
+      .app-shell.sidebar-collapsed .sidebar {
+        transform: translateX(-105%);
+        opacity: 1;
+        padding: 72px 18px 22px;
+      }
+
+      .brand-sub { display: block; }
+      .sidebar-brand { margin-bottom: 14px; }
+      .sidebar-logo-panel { min-height: 96px; }
+      .sidebar-logo { max-height: 86px; width: 148px; }
+      .nav-item { min-width: 0; width: 100%; margin-bottom: 6px; }
+
+      .nav-toggle,
+      .nav-toggle.collapsed {
+        left: 14px;
+        top: 14px;
+      }
+
+      .profile-card, .voice-card, .recommendations-card { grid-column: span 12; }
+    }
+
+    @media (max-width: 650px) {
+      .main { padding: 12px; }
+      .subgrid { grid-template-columns: 1fr; }
+      .voice-box { grid-template-columns: 1fr; }
+      .assistant-compose { grid-template-columns: 1fr; }
+      .controls { width: 100%; justify-content: stretch; }
+      .controls input, .controls select, .controls button { flex: 1 1 140px; }
+      .language-gate-card { padding: 26px 18px; }
+      .gate-brand-logo { width: 96px; height: 96px; margin-bottom: 10px; }
+      .language-options { grid-template-columns: 1fr; }
+      .language-option { min-height: 92px; }
+      .onboarding-card { padding: 20px 16px; }
+      .onboarding-brand-logo { width: 76px; height: 76px; }
+      .topbar { gap: 10px; margin-bottom: 12px; }
+      .topbar-brand { gap: 8px; }
+      .header-logo-wrap { width: 42px; height: 42px; flex-basis: 42px; }
+      .header-logo { width: 40px; height: 40px; }
+      .topbar h1 { font-size: 24px; }
+      .card { padding: 14px; }
+      .recommendation { padding: 12px; }
+      .onboarding-header { flex-direction: column; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .onboarding-actions { flex-direction: column; }
+      .onboarding-actions .right-actions { margin-left: 0; width: 100%; }
+      .onboarding-actions button { flex: 1; }
+      .onboarding-mode-switch { grid-template-columns: 1fr; }
+      .voice-panel-heading { flex-direction: column; }
+      .voice-review-grid { grid-template-columns: 1fr; }
+    }
+  
+    /* ============================================================
+       JEEVIKA AI — PRODUCTION BRAND / LOGO SYSTEM
+       One source asset, one sizing system, predictable placement.
+       ============================================================ */
+
+    :root {
+      --brand-logo-entry-frame: 138px;
+      --brand-logo-entry-image: 120px;
+
+      --brand-logo-onboarding-frame-w: 112px;
+      --brand-logo-onboarding-frame-h: 96px;
+      --brand-logo-onboarding-image: 88px;
+
+      --brand-logo-sidebar-image: 164px;
+
+      --brand-logo-header-frame-w: 132px;
+      --brand-logo-header-frame-h: 62px;
+      --brand-logo-header-image-w: 116px;
+      --brand-logo-header-image-h: 56px;
+
+      --brand-radius: 16px;
+    }
+
+    .brand-logo-frame {
+      display: grid;
+      place-items: center;
+      box-sizing: border-box;
+      flex: 0 0 auto;
+    }
+
+    .brand-logo-frame img {
+      display: block;
+      object-fit: contain;
+      object-position: center;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    /* Sidebar: primary persistent brand location. */
+    .sidebar-brand {
+      margin-bottom: 14px;
+    }
+
+    .sidebar-logo-panel {
+      width: 100%;
+      min-height: 116px;
+      padding: 8px 10px;
+      margin: 0 0 8px;
+      border-radius: var(--brand-radius);
+      background: #ffffff;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 10px 28px rgba(0,0,0,.12);
+    }
+
+    .sidebar-logo {
+      width: min(var(--brand-logo-sidebar-image), 100%);
+      height: auto;
+      max-height: 100px;
+      margin: 0;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    /* Sidebar toggle sits precisely on the sidebar edge (260px). */
+    .nav-toggle {
+      left: 240px;
+    }
+
+    /* Dashboard header: use the real wordmark once, not a tiny squeezed logo. */
+    .topbar {
+      align-items: center;
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .header-logo-wrap {
+      width: var(--brand-logo-header-frame-w);
+      height: var(--brand-logo-header-frame-h);
+      flex: 0 0 var(--brand-logo-header-frame-w);
+      padding: 3px 6px;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(220,225,235,.9);
+      box-shadow: 0 8px 22px rgba(28,45,70,.07);
+    }
+
+    .header-logo {
+      width: var(--brand-logo-header-image-w);
+      height: var(--brand-logo-header-image-h);
+      margin: 0;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .topbar-copy {
+      min-width: 0;
+    }
+
+    .topbar-copy .status {
+      margin: 0;
+      max-width: 360px;
+      line-height: 1.45;
+    }
+
+    /* First-visit language screen: logo centered on the visual axis. */
+    .gate-brand-logo-frame {
+      width: var(--brand-logo-entry-frame);
+      height: var(--brand-logo-entry-frame);
+      margin: 0 auto 12px;
+      border-radius: 22px;
+      background: transparent;
+    }
+
+    .gate-brand-logo {
+      width: var(--brand-logo-entry-image);
+      height: var(--brand-logo-entry-image);
+      margin: 0;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    /* Onboarding: logo is part of the header lock-up, not floating above text. */
+    .onboarding-header {
+      align-items: center;
+      gap: 20px;
+    }
+
+    .onboarding-brand-group {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex: 1 1 auto;
+    }
+
+    .onboarding-brand-logo-frame {
+      width: var(--brand-logo-onboarding-frame-w);
+      height: var(--brand-logo-onboarding-frame-h);
+      flex: 0 0 var(--brand-logo-onboarding-frame-w);
+      padding: 3px 7px;
+      border-radius: var(--brand-radius);
+      background: rgba(255,255,255,.9);
+    }
+
+    .onboarding-brand-logo {
+      width: var(--brand-logo-onboarding-image);
+      height: var(--brand-logo-onboarding-image);
+      margin: 0;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .onboarding-heading-copy {
+      min-width: 0;
+    }
+
+    .onboarding-heading-copy h2 {
+      margin: 0;
+    }
+
+    .onboarding-heading-copy p {
+      margin: 6px 0 0;
+    }
+
+    .step-badge {
+      align-self: flex-start;
+      margin-top: 4px;
+    }
+
+    /* Avoid oversized unused top space while keeping the brand visible. */
+    .onboarding-card {
+      padding: 30px;
     }
 
     @media (max-width: 950px) {
-      .app-shell {
-        grid-template-columns: 1fr;
+      .sidebar-logo-panel {
+        min-height: 104px;
       }
 
-      .sidebar {
-        display: none;
+      .sidebar-logo {
+        width: min(150px, 100%);
+        max-height: 90px;
       }
 
-      .profile-card,
-      .voice-card,
-      .recommendations-card {
-        grid-column: span 12;
+      .nav-toggle,
+      .nav-toggle.collapsed {
+        left: 14px;
       }
     }
 
     @media (max-width: 650px) {
-      .main {
-        padding: 16px;
+      :root {
+        --brand-logo-entry-frame: 110px;
+        --brand-logo-entry-image: 94px;
+
+        --brand-logo-onboarding-frame-w: 82px;
+        --brand-logo-onboarding-frame-h: 72px;
+        --brand-logo-onboarding-image: 66px;
+
+        --brand-logo-header-frame-w: 108px;
+        --brand-logo-header-frame-h: 52px;
+        --brand-logo-header-image-w: 94px;
+        --brand-logo-header-image-h: 46px;
       }
 
-      .subgrid {
-        grid-template-columns: 1fr;
+      .gate-brand-logo-frame {
+        margin-bottom: 8px;
       }
 
-      .voice-box {
-        grid-template-columns: 1fr;
+      .onboarding-card {
+        padding: 18px 16px;
+      }
+
+      .onboarding-header {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .onboarding-brand-group {
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .onboarding-brand-logo-frame {
+        padding: 2px 5px;
+      }
+
+      .onboarding-heading-copy h2 {
+        font-size: clamp(23px, 6vw, 30px);
+        line-height: 1.16;
+      }
+
+      .onboarding-heading-copy p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .step-badge {
+        padding: 7px 9px;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+
+      .topbar {
+        align-items: center;
+      }
+
+      .topbar-brand {
+        gap: 8px;
+      }
+
+      .topbar-copy .status {
+        font-size: 11px;
+        max-width: 190px;
+      }
+
+      .header-logo-wrap {
+        padding: 2px 5px;
       }
     }
+
+    @media (max-width: 430px) {
+      .onboarding-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+      }
+
+      .onboarding-brand-group {
+        display: grid;
+        grid-template-columns: 70px minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .onboarding-brand-logo-frame {
+        width: 70px;
+        height: 64px;
+        flex-basis: 70px;
+      }
+
+      .onboarding-brand-logo {
+        width: 58px;
+        height: 58px;
+      }
+
+      .topbar-brand {
+        width: 100%;
+      }
+
+      .header-logo-wrap {
+        width: 102px;
+        height: 50px;
+        flex-basis: 102px;
+      }
+
+      .header-logo {
+        width: 90px;
+        height: 44px;
+      }
+
+      .topbar-copy .status {
+        max-width: none;
+      }
+    }
+
+  
+    /* ============================================================
+       MANUAL ONBOARDING — SINGLE PAGE UX
+       Typing users see one structured form. Voice keeps the guided
+       question-by-question flow with progress feedback.
+       ============================================================ */
+
+    .manual-onboarding-panel .onboarding-step {
+      display: block;
+      padding: 18px;
+      margin-bottom: 14px;
+      border: 1px solid #e2e8ef;
+      border-radius: 16px;
+      background: #fbfcfe;
+    }
+
+    .manual-onboarding-panel .onboarding-step:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .manual-onboarding-panel .step-title {
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e8edf3;
+      color: #1b2a40;
+      font-size: 17px;
+    }
+
+    .manual-onboarding-panel .form-grid {
+      gap: 12px 14px;
+    }
+
+    .manual-onboarding-panel .field textarea {
+      min-height: 82px;
+    }
+
+    .manual-submit-actions {
+      margin-top: 18px;
+      justify-content: flex-end;
+    }
+
+    .manual-submit-actions .right-actions {
+      width: auto;
+      margin-left: auto;
+    }
+
+    .manual-submit-actions #createProfileButton {
+      min-height: 46px;
+      padding: 11px 18px;
+    }
+
+    /* In manual mode these are intentionally hidden by JS.
+       Voice mode restores them and uses them for question progress. */
+    #onboardingStepBadge[hidden],
+    #onboardingProgress[hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 650px) {
+      .manual-onboarding-panel .onboarding-step {
+        padding: 14px;
+        margin-bottom: 10px;
+        border-radius: 14px;
+      }
+
+      .manual-onboarding-panel .step-title {
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+      }
+
+      .manual-submit-actions,
+      .manual-submit-actions .right-actions {
+        width: 100%;
+      }
+
+      .manual-submit-actions #createProfileButton {
+        width: 100%;
+      }
+    }
+
+  
+    /* ============================================================
+       NSQF GUIDANCE — VERIFIED PATHWAY UI
+       ============================================================ */
+
+    .qualification-item {
+      margin-bottom: 10px;
+      padding: 12px;
+      border: 1px solid #e1e7ee;
+      border-radius: 12px;
+      background: #fbfcfe;
+    }
+
+    .qualification-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .qualification-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .qualification-name {
+      font-weight: 850;
+      color: #1c2940;
+      line-height: 1.35;
+    }
+
+    .qualification-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .qualification-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 900;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .qualification-badge.exact {
+      color: #17684d;
+      background: #e8f7f0;
+      border-color: #cde9dc;
+    }
+
+    .qualification-badge.related {
+      color: #31589b;
+      background: #edf3ff;
+      border-color: #d7e3fb;
+    }
+
+    .qualification-badge.eligible {
+      color: #17684d;
+      background: #e5f8ef;
+      border-color: #ccebdc;
+    }
+
+    .qualification-badge.verify {
+      color: #865f08;
+      background: #fff7df;
+      border-color: #f0dfab;
+    }
+
+    .qualification-badge.not-eligible {
+      color: #9a4141;
+      background: #fff0f0;
+      border-color: #efcccc;
+    }
+
+    .qualification-badge.validity {
+      color: #465269;
+      background: #f2f5f8;
+      border-color: #dfe5eb;
+    }
+
+    .qualification-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px 10px;
+      margin-top: 8px;
+      color: #4f5d72;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .qualification-meta strong {
+      color: #27364e;
+      font-weight: 800;
+    }
+
+    .qualification-message {
+      margin-top: 9px;
+      padding: 8px 9px;
+      border-radius: 9px;
+      background: #f5f8fb;
+      color: #536177;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .qualification-source {
+      margin-top: 9px;
+    }
+
+    .qualification-source a {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--green-700);
+      font-size: 11px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .qualification-source a:hover {
+      text-decoration: underline;
+    }
+
+    .qualification-routes {
+      margin-top: 9px;
+      border-top: 1px solid #e7ebf1;
+      padding-top: 8px;
+    }
+
+    .qualification-routes summary {
+      cursor: pointer;
+      color: #33465f;
+      font-size: 11px;
+      font-weight: 850;
+      user-select: none;
+    }
+
+    .qualification-routes-list {
+      display: grid;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .qualification-route {
+      padding: 8px 9px;
+      border-radius: 9px;
+      background: #fff;
+      border: 1px solid #e7ebf1;
+      font-size: 11px;
+      line-height: 1.45;
+      color: #556277;
+    }
+
+    .qualification-route-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .qualification-route-status {
+      font-weight: 850;
+    }
+
+    .qualification-route-status.eligible {
+      color: #17684d;
+    }
+
+    .qualification-route-status.verify {
+      color: #865f08;
+    }
+
+    .qualification-route-status.not-eligible {
+      color: #9a4141;
+    }
+
+    .nsqf-empty-state {
+      display: block;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 650px) {
+      .qualification-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .qualification-title-row {
+        gap: 7px;
+      }
+    }
+
   </style>
+
+  <script src="i18n.js"></script>
 </head>
 
 <body>
-
-<div class="app-shell">
-
-  <aside class="sidebar">
-    <div class="brand">Jeevika AI</div>
-    <div class="brand-sub">
-      Livelihood Intelligence Platform
-    </div>
-
-    <div class="nav-item active">Dashboard</div>
-    <div class="nav-item">Beneficiary</div>
-    <div class="nav-item">Recommendations</div>
-    <div class="nav-item">Voice Assistant</div>
-    <div class="nav-item">NSQF & Skills</div>
-    <div class="nav-item">Schemes</div>
-    <div class="nav-item">Opportunities</div>
-  </aside>
-
-  <main class="main">
-
-    <div class="topbar">
-      <div>
-        <h1>Jeevika AI Dashboard</h1>
-        <div class="status">
-          AI-driven livelihood mapping and skilling recommendation
-        </div>
+  <div id="languageGate" class="language-gate language-gate-hidden" role="dialog" aria-modal="true">
+    <div class="language-gate-card">
+      <div class="brand-logo-frame gate-brand-logo-frame">
+        <img class="gate-brand-logo" src="assets/jeevika-logo.png" alt="Jeevika AI" />
       </div>
+      <h1 data-i18n="language_title">Choose your language</h1>
+      <p data-i18n="language_subtitle">Jeevika AI will continue in your selected language.</p>
 
-      <div class="controls">
-        <input
-          id="beneficiaryId"
-          type="number"
-          value="4"
-          placeholder="Beneficiary ID"
-        />
+      <div class="language-options">
+        <button class="language-option" onclick="selectJeevikaLanguage('en')">
+          <strong>English</strong>
+          <span data-i18n="continue_english">Continue in English</span>
+        </button>
 
-        <select id="language">
-          <option value="English">English</option>
-          <option value="Kannada">Kannada</option>
-          <option value="Hindi">Hindi</option>
-        </select>
+        <button class="language-option" onclick="selectJeevikaLanguage('kn')">
+          <strong>ಕನ್ನಡ</strong>
+          <span data-i18n="continue_kannada">ಕನ್ನಡದಲ್ಲಿ ಮುಂದುವರಿಯಿರಿ</span>
+        </button>
 
-        <button onclick="loadDashboard()">
-          Load Dashboard
+        <button class="language-option" onclick="selectJeevikaLanguage('hi')">
+          <strong>हिन्दी</strong>
+          <span data-i18n="continue_hindi">हिन्दी में जारी रखें</span>
         </button>
       </div>
     </div>
+  </div>
 
 
-    <div class="grid">
 
-      <section class="card profile-card">
-        <div class="section-title">
-          Beneficiary Profile
-        </div>
-
-        <div id="profileContent">
-          <div class="empty">
-            Load a beneficiary to view profile.
+  <div id="onboardingGate" class="onboarding-gate onboarding-hidden" role="dialog" aria-modal="true">
+    <div class="onboarding-card">
+      <div class="onboarding-header">
+        <div class="onboarding-brand-group">
+          <div class="brand-logo-frame onboarding-brand-logo-frame">
+            <img class="onboarding-brand-logo" src="assets/jeevika-logo.png" alt="Jeevika AI" />
+          </div>
+          <div class="onboarding-heading-copy">
+            <h2 data-i18n="onboarding_title">Let's build your profile</h2>
+            <p data-i18n="onboarding_subtitle">Answer a few simple questions so Jeevika can suggest suitable livelihood pathways.</p>
           </div>
         </div>
-      </section>
+        <div id="onboardingStepBadge" class="step-badge">Step 1 of 4</div>
+      </div>
 
+      <div id="onboardingProgress" class="onboarding-progress" aria-hidden="true">
+        <div id="onboardingProgressFill" class="onboarding-progress-fill"></div>
+      </div>
 
-      <section class="card voice-card">
-        <div class="section-title">
-          Voice Assistant
-        </div>
+      <div class="onboarding-mode-switch" role="group" aria-label="Profile input method">
+        <button id="manualModeButton" type="button" class="onboarding-mode-button active" onclick="setOnboardingMode('manual')">
+          ⌨ <span data-i18n="onboarding_manual_mode">Enter Details</span>
+        </button>
+        <button id="voiceModeButton" type="button" class="onboarding-mode-button" onclick="setOnboardingMode('voice')">
+          🎙 <span data-i18n="onboarding_voice_mode">Tell Jeevika by Voice</span>
+        </button>
+      </div>
 
-        <div class="voice-box">
-          <button onclick="startListening()">
-            🎤 Speak
-          </button>
+      <div id="manualOnboardingPanel" class="manual-onboarding-panel">
+      <form id="onboardingForm" onsubmit="submitBeneficiaryProfile(event)">
+        <section class="onboarding-step active" data-step="1" aria-labelledby="manualSectionBasic">
+          <div id="manualSectionBasic" class="step-title" data-i18n="step_personal">Basic Information</div>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="profileName" data-i18n="full_name">Full Name</label>
+              <input id="profileName" type="text" autocomplete="name" maxlength="80" required />
+            </div>
 
-          <button
-            class="secondary"
-            onclick="sendVoiceQuery()"
-          >
-            Ask Jeevika AI
-          </button>
-        </div>
+            <div class="field">
+              <label for="profileAge" data-i18n="age">Age</label>
+              <input id="profileAge" type="number" min="18" max="100" inputmode="numeric" required />
+            </div>
 
-        <div
-          id="transcript"
-          class="transcript"
-        >
-          Waiting for voice input...
-        </div>
+            <div class="field">
+              <label for="profileGender" data-i18n="gender">Gender</label>
+              <select id="profileGender" required>
+                <option value="" data-i18n="select_gender">Select gender</option>
+                <option value="Male" data-i18n="male">Male</option>
+                <option value="Female" data-i18n="female">Female</option>
+                <option value="Other" data-i18n="other">Other</option>
+              </select>
+            </div>
 
-        <div
-          id="assistantResponse"
-          class="assistant-response"
-        >
-          Assistant response will appear here.
-        </div>
-      </section>
+            <div class="field">
+              <label for="profileState" data-i18n="state">State</label>
+              <input id="profileState" type="text" autocomplete="address-level1" maxlength="60" required />
+            </div>
 
+            <div class="field">
+              <label for="profileDistrict" data-i18n="district">District</label>
+              <input id="profileDistrict" type="text" autocomplete="address-level2" maxlength="60" required />
+            </div>
 
-      <section class="card recommendations-card">
-        <div class="section-title">
-          Livelihood Recommendations
-        </div>
+            <div class="field full">
+              <label for="profileVillage"><span data-i18n="village">Village / Town</span> <span class="empty">(<span data-i18n="optional">Optional</span>)</span></label>
+              <input id="profileVillage" type="text" maxlength="80" />
+            </div>
+          </div>
+        </section>
 
-        <div id="recommendations">
-          <div class="empty">
-            Load the dashboard to generate recommendations.
+        <section class="onboarding-step" data-step="2" aria-labelledby="manualSectionWork">
+          <div id="manualSectionWork" class="step-title" data-i18n="step_background">Education & Work</div>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="profileEducation" data-i18n="education_level">Highest Education</label>
+              <select id="profileEducation" required>
+                <option value="" data-i18n="select_education">Select education level</option>
+                <option value="No formal schooling" data-i18n="edu_no_school">No formal schooling</option>
+                <option value="Primary" data-i18n="edu_primary">Primary school</option>
+                <option value="8th" data-i18n="edu_8th">8th Standard</option>
+                <option value="10th" data-i18n="edu_10th">10th Standard</option>
+                <option value="12th" data-i18n="edu_12th">12th Standard</option>
+                <option value="ITI" data-i18n="edu_iti">ITI</option>
+                <option value="Diploma" data-i18n="edu_diploma">Diploma</option>
+                <option value="Graduate" data-i18n="edu_graduate">Graduate</option>
+                <option value="Postgraduate" data-i18n="edu_postgraduate">Postgraduate</option>
+              </select>
+            </div>
+
+            <div class="field full">
+              <label for="profileOccupation" data-i18n="current_occupation_field">Current Occupation</label>
+              <input id="profileOccupation" type="text" maxlength="100" data-i18n-placeholder="occupation_placeholder" placeholder="Example: Two-Wheeler Mechanic" />
+            </div>
+
+            <div class="field">
+              <label for="profileExperience" data-i18n="experience_years_field">Years of Experience</label>
+              <input id="profileExperience" type="number" min="0" max="80" step="0.5" value="0" />
+            </div>
+          </div>
+        </section>
+
+        <section class="onboarding-step" data-step="3" aria-labelledby="manualSectionSkills">
+          <div id="manualSectionSkills" class="step-title" data-i18n="step_skills">Skills & Interests</div>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="profileSkills" data-i18n="existing_skills_field">Existing Skills</label>
+              <textarea id="profileSkills" maxlength="500" data-i18n-placeholder="skills_placeholder" placeholder="Example: vehicle repair, electrical work, tool handling"></textarea>
+              <small data-i18n="skills_help">Enter skills separated by commas.</small>
+            </div>
+
+            <div class="field full">
+              <label for="profileInterests" data-i18n="interests_field">Work Interests</label>
+              <textarea id="profileInterests" maxlength="500" data-i18n-placeholder="interests_placeholder" placeholder="Example: automobile servicing, mechanical work"></textarea>
+              <small data-i18n="interests_help">Enter interests separated by commas.</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="onboarding-step" data-step="4" aria-labelledby="manualSectionGoals">
+          <div id="manualSectionGoals" class="step-title" data-i18n="step_goals">Goals & Preferences</div>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="profileIncome" data-i18n="income_target_field">Monthly Income Goal</label>
+              <input id="profileIncome" type="number" min="0" max="1000000" step="500" value="0" inputmode="numeric" />
+              <small data-i18n="income_target_help">Enter an approximate amount in rupees. You can leave it as 0 if unsure.</small>
+            </div>
+
+            <div class="field full">
+              <label data-i18n="relocation_field">Are you willing to relocate for work or training?</label>
+              <div class="choice-row">
+                <label class="choice"><input type="radio" name="relocation" value="false" checked /> <span data-i18n="relocate_no">No</span></label>
+                <label class="choice"><input type="radio" name="relocation" value="true" /> <span data-i18n="relocate_yes">Yes</span></label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div id="onboardingStatus" class="onboarding-status"></div>
+
+        <div class="onboarding-actions manual-submit-actions">
+          <div class="right-actions">
+            <button id="createProfileButton" type="submit" data-i18n="create_profile">Create Profile & Find Recommendations</button>
           </div>
         </div>
-      </section>
+      </form>
+      </div>
 
+      <div id="voiceOnboardingPanel" class="voice-onboarding-panel onboarding-panel-hidden">
+        <div id="voiceInterviewPanel">
+          <div class="voice-panel-heading">
+            <div>
+              <h3 data-i18n="voice_onboarding_title">Voice-guided profile setup</h3>
+              <p data-i18n="voice_onboarding_subtitle">Jeevika will ask one question at a time. Answer naturally in your selected language.</p>
+            </div>
+            <div id="voiceQuestionCounter" class="voice-question-counter">Question 1 of 13</div>
+          </div>
+
+          <div class="voice-question-card">
+            <div id="voiceQuestion" class="voice-question" data-i18n="vq_name">What is your full name?</div>
+            <div id="voiceQuestionHint" class="voice-question-hint"></div>
+          </div>
+
+          <div id="voiceAnswerBlock" class="voice-answer-block voice-answer-hidden">
+            <div class="voice-answer-label" data-i18n="voice_answer_heard">I heard:</div>
+            <div id="voiceAnswerPreview" class="voice-answer-preview"></div>
+          </div>
+
+          <div id="voiceOnboardingStatus" class="voice-onboarding-status" data-i18n="voice_waiting_answer">Press Start Voice Setup when you are ready.</div>
+
+          <div class="voice-onboarding-actions">
+            <button id="voiceStartButton" type="button" onclick="startVoiceOnboarding()">🎙 <span data-i18n="voice_start">Start Voice Setup</span></button>
+            <button id="voiceRetryButton" type="button" class="secondary" onclick="retryVoiceQuestion()" style="display:none" data-i18n="voice_retry">Speak Again</button>
+            <button id="voiceSkipButton" type="button" class="voice-action-light" onclick="skipVoiceQuestion()" style="display:none" data-i18n="voice_skip">Skip</button>
+            <button id="voiceConfirmButton" type="button" onclick="confirmVoiceAnswer()" style="display:none" data-i18n="voice_confirm_next">Confirm & Continue</button>
+          </div>
+        </div>
+
+        <div id="voiceReviewPanel" class="voice-review onboarding-panel-hidden">
+          <h3 data-i18n="voice_interview_complete">Your profile details are ready</h3>
+          <div class="voice-review-note" data-i18n="voice_interview_complete_help">Review the captured details or create your profile and get recommendations.</div>
+          <div id="voiceReviewGrid" class="voice-review-grid"></div>
+          <div id="voiceCreateStatus" class="onboarding-status"></div>
+          <div class="voice-onboarding-actions">
+            <button type="button" class="voice-action-light" onclick="editVoiceDetailsManually()" data-i18n="voice_edit_manually">Review / Edit Details</button>
+            <button id="voiceCreateProfileButton" type="button" onclick="createProfileFromVoice()" data-i18n="voice_create_profile">Create Profile & Find Recommendations</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-  </main>
-</div>
+  </div>
 
 
-<script>
+  <button
+    id="navToggle"
+    class="nav-toggle"
+    type="button"
+    onclick="toggleSidebar()"
+    aria-controls="mainNavigation"
+    aria-expanded="true"
+    data-i18n-aria-label="hide_navigation"
+    title="Hide navigation"
+  >‹</button>
 
-const API_BASE = "https://jeevika-ai-api.onrender.com";
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar" id="mainNavigation">
+      <div class="sidebar-brand">
+        <div class="sidebar-logo-panel brand-logo-frame">
+          <img class="sidebar-logo" src="assets/jeevika-logo.png" alt="Jeevika AI" />
+        </div>
+        <div class="brand-sub" data-i18n="brand_subtitle">Livelihood Guidance Platform</div>
+      </div>
 
-let spokenText = "";
+      <button class="nav-item active" data-nav="dashboard" onclick="navigateTo('dashboard')" data-i18n="nav_dashboard">Dashboard</button>
+      <button class="nav-item" data-nav="profile" onclick="navigateTo('profile')" data-i18n="nav_profile">My Profile</button>
+      <button class="nav-item" data-nav="recommendations" onclick="navigateTo('recommendations')" data-i18n="nav_recommendations">Recommendations</button>
+      <button class="nav-item" data-nav="voice" onclick="navigateTo('voice')" data-i18n="nav_voice">Jeevika Assistant</button>
+      <button class="nav-item" data-nav="nsqf" onclick="navigateTo('nsqf')" data-i18n="nav_nsqf">NSQF & Skills</button>
+      <button class="nav-item" data-nav="schemes" onclick="navigateTo('schemes')" data-i18n="nav_schemes">Government Schemes</button>
+      <button class="nav-item" data-nav="opportunities" onclick="navigateTo('opportunities')" data-i18n="nav_opportunities">Opportunities</button>
+    </aside>
 
+    <main class="main" id="dashboardTop">
+      <div class="topbar">
+        <div class="topbar-brand">
+          <div class="header-logo-wrap brand-logo-frame" aria-hidden="true">
+            <img class="header-logo" src="assets/jeevika-logo.png" alt="" />
+          </div>
+          <div class="topbar-copy">
+            <h1 class="sr-only" data-i18n="dashboard_title">Jeevika AI</h1>
+            <div class="status" data-i18n="dashboard_subtitle">Personalized livelihood and skilling guidance</div>
+          </div>
+        </div>
 
-function getBeneficiaryId() {
-  return document.getElementById(
-    "beneficiaryId"
-  ).value;
-}
+        <div class="controls">
+          <span class="control-label" data-i18n="change_language">Language</span>
+          <select id="language" onchange="handleLanguageChange(this.value)" aria-label="Language">
+            <option value="English">English</option>
+            <option value="Kannada">ಕನ್ನಡ</option>
+            <option value="Hindi">हिन्दी</option>
+          </select>
 
+          <button class="new-profile-button" onclick="startNewProfile()" data-i18n="new_profile">New Profile</button>
+        </div>
+      </div>
 
-function getSelectedLanguage() {
-  return document.getElementById(
-    "language"
-  ).value;
-}
+      <div class="grid">
+        <section class="card profile-card" id="profileCard">
+          <div class="section-title" data-i18n="beneficiary_profile">Beneficiary Profile</div>
+          <div id="profileContent">
+            <div class="empty" data-i18n="dashboard_loading">Preparing your personalized recommendations...</div>
+          </div>
+        </section>
 
+        <section class="card voice-card" id="voiceCard">
+          <div class="section-title" data-i18n="voice_assistant">Jeevika Assistant</div>
 
-function getSpeechLanguage() {
-  const language =
-    getSelectedLanguage();
+          <div class="assistant-compose">
+            <button onclick="startListening()">🎤 <span data-i18n="speak">Speak</span></button>
 
-  if (language === "Kannada") {
-    return "kn-IN";
-  }
+            <input
+              id="assistantTextInput"
+              type="text"
+              autocomplete="off"
+              data-i18n-placeholder="assistant_input_placeholder"
+              placeholder="Ask about livelihoods, skills, NSQF or schemes..."
+              onkeydown="if(event.key === 'Enter') submitAssistantQuery()"
+            />
 
-  if (language === "Hindi") {
-    return "hi-IN";
-  }
+            <button class="secondary" onclick="submitAssistantQuery()">
+              <span data-i18n="ask_jeevika">Ask Jeevika</span>
+            </button>
+          </div>
 
-  return "en-IN";
-}
+          <div class="assistant-quick-actions" aria-label="Quick questions">
+            <button class="assistant-chip" onclick="askQuickQuestion('recommendation')" data-i18n="quick_best">Best livelihood</button>
+            <button class="assistant-chip" onclick="askQuickQuestion('why')" data-i18n="quick_why">Why this?</button>
+            <button class="assistant-chip" onclick="askQuickQuestion('skills')" data-i18n="quick_skills">Skills to learn</button>
+            <button class="assistant-chip" onclick="askQuickQuestion('nsqf')" data-i18n="quick_nsqf">NSQF course</button>
+            <button class="assistant-chip" onclick="askQuickQuestion('schemes')" data-i18n="quick_schemes">Schemes</button>
+            <button class="assistant-chip" onclick="askQuickQuestion('alternative')" data-i18n="quick_alternatives">Other options</button>
+          </div>
 
+          <div id="transcript" class="transcript" data-i18n="waiting_voice">Waiting for voice input...</div>
+          <div id="assistantResponse" class="assistant-response" data-i18n="assistant_placeholder">Jeevika's response will appear here.</div>
+        </section>
 
-async function loadDashboard() {
+        <section class="card recommendations-card" id="recommendationsCard">
+          <div class="section-title" data-i18n="livelihood_recommendations">Livelihood Recommendations</div>
+          <div id="recommendations">
+            <div class="empty" data-i18n="dashboard_loading">Preparing your personalized recommendations...</div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
 
-  const id = getBeneficiaryId();
+  <script>
+    const API_BASE = "https://jeevika-ai-api.onrender.com";
 
-  try {
+    let spokenText = "";
+    let currentProfile = null;
+    let currentRecommendations = [];
+    let visibleRecommendationCount = 3;
+    let expandedRecommendationIndexes = new Set([0]);
+    let activeBeneficiaryId = localStorage.getItem("jeevikaBeneficiaryId") || "";
+    let onboardingStep = 1;
+    const ONBOARDING_TOTAL_STEPS = 4;
 
-    const profileResponse =
-      await fetch(
-        `${API_BASE}/beneficiaries/${id}`
-      );
+    let onboardingMode = "manual";
+    let voiceQuestionIndex = 0;
+    let voiceRecognition = null;
+    let pendingVoiceAnswer = null;
+    let voiceInterviewStarted = false;
+    let voiceInterviewComplete = false;
 
-    if (!profileResponse.ok) {
-      throw new Error(
-        "Beneficiary not found"
-      );
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
-    const profile =
-      await profileResponse.json();
-
-    renderProfile(profile);
-
-
-    const recommendationResponse =
-      await fetch(
-        `${API_BASE}/recommendations/${id}`,
-        {
-          method: "POST"
-        }
-      );
-
-    if (!recommendationResponse.ok) {
-      throw new Error(
-        "Could not generate recommendations"
-      );
+    function translatedValue(value) {
+      return escapeHtml(translateValue(value));
     }
 
-    const data =
-      await recommendationResponse.json();
+    function handleLanguageChange(value) {
+      const map = { English: "en", Kannada: "kn", Hindi: "hi" };
+      applyLanguage(map[value] || "en");
+    }
 
-    renderRecommendations(
-      data.recommendations || []
-    );
+    function getBeneficiaryId() {
+      return activeBeneficiaryId;
+    }
 
-  }
-  catch (error) {
+    function getSelectedLanguage() {
+      return getBackendLanguage();
+    }
 
-    alert(error.message);
+    function getSpeechLanguage() {
+      return getSpeechLocale();
+    }
 
-  }
-}
+    function splitList(value) {
+      return String(value || "")
+        .split(/[,\n]/)
+        .map(item => item.trim())
+        .filter(Boolean);
+    }
 
+    const SHORT_VOCATIONAL_TERMS = new Set([
+      "ai", "ml", "it", "cnc", "cad", "cam", "ac", "hvac", "sql", "gst", "tally", "c", "c++"
+    ]);
 
-function renderProfile(profile) {
+    const CANONICAL_OCCUPATION_ALIASES = [
+      {
+        canonical: "Two-Wheeler Mechanic",
+        aliases: [
+          "two wheeler mechanic", "two-wheeler mechanic", "bike mechanic", "motorcycle mechanic",
+          "scooter mechanic", "ದ್ವಿಚಕ್ರ ವಾಹನ ಮೆಕ್ಯಾನಿಕ್", "ಬೈಕ್ ಮೆಕ್ಯಾನಿಕ್",
+          "दोपहिया वाहन मैकेनिक", "बाइक मैकेनिक"
+        ]
+      },
+      {
+        canonical: "Four-Wheeler Mechanic (Light Motor Vehicle)",
+        aliases: [
+          "four wheeler mechanic", "four-wheeler mechanic", "car mechanic", "lmv mechanic",
+          "ನಾಲ್ಕು ಚಕ್ರ ವಾಹನ ಮೆಕ್ಯಾನಿಕ್", "ಕಾರ್ ಮೆಕ್ಯಾನಿಕ್",
+          "चार पहिया वाहन मैकेनिक", "कार मैकेनिक"
+        ]
+      },
+      {
+        canonical: "Auto Body Repair Technician (Denting/Painting)",
+        aliases: [
+          "auto body repair technician", "denting painting", "denting and painting", "body repair technician",
+          "ಆಟೋ ಬಾಡಿ ರಿಪೇರಿ", "ಡೆಂಟಿಂಗ್ ಪೇಂಟಿಂಗ್",
+          "ऑटो बॉडी रिपेयर", "डेंटिंग पेंटिंग"
+        ]
+      },
+      {
+        canonical: "Electrical Wireman",
+        aliases: [
+          "electrical wireman", "wireman", "electrician", "ವೈರ್‌ಮನ್", "ಎಲೆಕ್ಟ್ರಿಷಿಯನ್",
+          "वायरमैन", "इलेक्ट्रीशियन"
+        ]
+      }
+    ];
 
-  const skills =
-    profile.existing_skills || [];
+    const CANONICAL_TERM_ALIASES = [
+      { canonical: "vehicle repair", aliases: ["vehicle repair", "bike repair", "motorcycle repair", "ವಾಹನ ದುರಸ್ತಿ", "ಬೈಕ್ ದುರಸ್ತಿ", "वाहन मरम्मत", "बाइक मरम्मत"] },
+      { canonical: "mechanical work", aliases: ["mechanical work", "mechanical repair", "mechanics", "ಯಾಂತ್ರಿಕ ಕೆಲಸ", "ಮೆಕ್ಯಾನಿಕಲ್ ಕೆಲಸ", "यांत्रिक कार्य", "मैकेनिकल काम"] },
+      { canonical: "tool handling", aliases: ["tool handling", "tools handling", "hand tools", "ಉಪಕರಣ ಬಳಕೆ", "ಟೂಲ್ ಹ್ಯಾಂಡ್ಲಿಂಗ್", "उपकरण संचालन", "टूल हैंडलिंग"] },
+      { canonical: "electrical work", aliases: ["electrical work", "electric work", "wiring work", "ವಿದ್ಯುತ್ ಕೆಲಸ", "ವೈರಿಂಗ್ ಕೆಲಸ", "विद्युत कार्य", "वायरिंग कार्य"] },
+      { canonical: "basic electrical work", aliases: ["basic electrical work", "basic wiring", "ಮೂಲಭೂತ ವಿದ್ಯುತ್ ಕೆಲಸ", "मूल विद्युत कार्य"] },
+      { canonical: "diagnostics", aliases: ["diagnostics", "fault finding", "troubleshooting", "ದೋಷ ಪತ್ತೆ", "दोष पहचान"] },
+      { canonical: "automobiles", aliases: ["automobiles", "automobile", "vehicles", "cars", "bikes", "ವಾಹನಗಳು", "ಆಟೋಮೊಬೈಲ್", "वाहन", "ऑटोमोबाइल"] },
+      { canonical: "automobile servicing", aliases: ["automobile servicing", "vehicle servicing", "bike servicing", "car servicing", "ವಾಹನ ಸರ್ವಿಸಿಂಗ್", "ಆಟೋಮೊಬೈಲ್ ಸರ್ವಿಸಿಂಗ್", "वाहन सर्विसिंग", "ऑटोमोबाइल सर्विसिंग"] },
+      { canonical: "wiring", aliases: ["wiring", "wire fitting", "ವೈರಿಂಗ್", "वायरिंग"] },
+      { canonical: "welding", aliases: ["welding", "welder work", "ವೆಲ್ಡಿಂಗ್", "वेल्डिंग"] },
+      { canonical: "tailoring", aliases: ["tailoring", "stitching", "sewing", "ಹೊಲಿಗೆ", "ಟೈಲರಿಂಗ್", "सिलाई", "टेलरिंग"] },
+      { canonical: "plumbing", aliases: ["plumbing", "pipe fitting", "ಪ್ಲಂಬಿಂಗ್", "प्लंबिंग"] },
+      { canonical: "agriculture", aliases: ["agriculture", "farming", "farm work", "ಕೃಷಿ", "खेती", "कृषि"] }
+    ];
 
-  const interests =
-    profile.interests || [];
+    function normalizeWhitespace(value) {
+      return String(value || "").replace(/\s+/g, " ").trim();
+    }
 
-  document.getElementById(
-    "profileContent"
-  ).innerHTML = `
+    function normalizedLookup(value) {
+      return normalizeWhitespace(value).toLocaleLowerCase();
+    }
 
-    <div class="profile-row">
-      <div class="profile-label">Name</div>
-      <div class="profile-value">
-        ${profile.name || "-"}
-      </div>
-    </div>
+    function canonicalFromGroups(value, groups) {
+      const key = normalizedLookup(value);
+      for (const group of groups) {
+        if (group.aliases.some(alias => normalizedLookup(alias) === key)) return group.canonical;
+      }
+      return normalizeWhitespace(value);
+    }
 
-    <div class="profile-row">
-      <div class="profile-label">Location</div>
-      <div class="profile-value">
-        ${profile.district || "-"},
-        ${profile.state || "-"}
-      </div>
-    </div>
+    function canonicalizeOccupation(value) {
+      return canonicalFromGroups(value, CANONICAL_OCCUPATION_ALIASES);
+    }
 
-    <div class="profile-row">
-      <div class="profile-label">Education</div>
-      <div class="profile-value">
-        ${profile.education_level || "-"}
-      </div>
-    </div>
+    function canonicalizeVocationalTerm(value) {
+      return canonicalFromGroups(value, CANONICAL_TERM_ALIASES);
+    }
 
-    <div class="profile-row">
-      <div class="profile-label">
-        Current Occupation
-      </div>
-      <div class="profile-value">
-        ${profile.current_occupation || "Not specified"}
-      </div>
-    </div>
+    function isLikelyMeaningfulText(value, { allowDigits = false, allowShortTerm = false, minLetters = 2 } = {}) {
+      const text = normalizeWhitespace(value);
+      if (!text) return false;
+      if (/[\u0000-\u001f]/u.test(text)) return false;
+      if (!allowDigits && /\d/u.test(text)) return false;
 
-    <div class="profile-row">
-      <div class="profile-label">
-        Experience
-      </div>
-      <div class="profile-value">
-        ${profile.experience_years || 0} years
-      </div>
-    </div>
+      const letters = text.match(/\p{L}/gu) || [];
+      if (letters.length < minLetters) {
+        const shortKey = text.toLocaleLowerCase();
+        return allowShortTerm && SHORT_VOCATIONAL_TERMS.has(shortKey);
+      }
 
-    <div class="profile-row">
-      <div class="profile-label">Skills</div>
-      <div>
-        ${
-          skills.length
-          ? skills.map(
-              item =>
-              `<span class="tag">${item}</span>`
-            ).join("")
-          : `<span class="empty">None</span>`
+      const compact = letters.join("").toLocaleLowerCase();
+      if (/^(.)\1{3,}$/u.test(compact)) return false;
+      if (/^(.{1,2})\1{2,}$/u.test(compact)) return false;
+
+      // Conservative gibberish check only for Latin-script single words.
+      if (/^[A-Za-z]+$/.test(text)) {
+        const lower = text.toLowerCase();
+        if (allowShortTerm && SHORT_VOCATIONAL_TERMS.has(lower)) return true;
+        if (lower.length >= 6) {
+          const vowels = (lower.match(/[aeiou]/g) || []).length;
+          const vowelRatio = vowels / lower.length;
+          if (vowelRatio < 0.18) return false;
+          if (/[bcdfghjklmnpqrstvwxyz]{6,}/i.test(lower)) return false;
         }
-      </div>
-    </div>
+      }
 
-    <div class="profile-row">
-      <div class="profile-label">Interests</div>
-      <div>
-        ${
-          interests.length
-          ? interests.map(
-              item =>
-              `<span class="tag">${item}</span>`
-            ).join("")
-          : `<span class="empty">None</span>`
+      return true;
+    }
+
+    function normalizeProfileList(value) {
+      const seen = new Set();
+      const items = String(value || "")
+        .split(/[,;\n]/)
+        .map(item => canonicalizeVocationalTerm(normalizeWhitespace(item)))
+        .filter(Boolean);
+
+      const result = [];
+      for (const item of items) {
+        const key = item.toLocaleLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        result.push(item);
+      }
+      return result;
+    }
+
+    function clearFieldError(fieldId) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      field.classList.remove("invalid");
+      field.removeAttribute("aria-invalid");
+      const error = field.parentElement?.querySelector(`.field-error[data-for="${fieldId}"]`);
+      error?.remove();
+    }
+
+    function setFieldError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      clearFieldError(fieldId);
+      field.classList.add("invalid");
+      field.setAttribute("aria-invalid", "true");
+
+      const error = document.createElement("div");
+      error.className = "field-error";
+      error.dataset.for = fieldId;
+      error.textContent = message;
+      field.insertAdjacentElement("afterend", error);
+    }
+
+    function clearValidationErrors() {
+      document.querySelectorAll(".field-error").forEach(node => node.remove());
+      document.querySelectorAll(".invalid").forEach(node => {
+        node.classList.remove("invalid");
+        node.removeAttribute("aria-invalid");
+      });
+      const status = document.getElementById("onboardingStatus");
+      if (status) status.classList.remove("validation-error");
+    }
+
+    function setValidationStatus(message, source = "manual") {
+      const id = source === "voice" ? "voiceCreateStatus" : "onboardingStatus";
+      const status = document.getElementById(id);
+      if (!status) return;
+      status.textContent = message || "";
+      if (source === "manual") status.classList.toggle("validation-error", Boolean(message));
+    }
+
+    function maxPlausibleExperience(age) {
+      if (!Number.isFinite(age)) return 0;
+      return Math.max(0, Math.floor(age - 14));
+    }
+
+    function validateTextField(fieldId, message, options = {}) {
+      const value = document.getElementById(fieldId)?.value || "";
+      if (!isLikelyMeaningfulText(value, options)) {
+        setFieldError(fieldId, message);
+        return false;
+      }
+      clearFieldError(fieldId);
+      return true;
+    }
+
+    function validateProfileData(source = "manual") {
+      clearValidationErrors();
+
+      const payload = buildBeneficiaryPayload();
+      const errors = [];
+
+      if (!isLikelyMeaningfulText(payload.name, { minLetters: 2 })) {
+        errors.push(["profileName", t("invalid_name")]);
+      }
+
+      if (!Number.isFinite(payload.age) || payload.age < 18 || payload.age > 100) {
+        errors.push(["profileAge", t("invalid_age")]);
+      }
+
+      if (!payload.gender) {
+        errors.push(["profileGender", t("required_fields")]);
+      }
+
+      if (!isLikelyMeaningfulText(payload.state, { minLetters: 2 })) {
+        errors.push(["profileState", t("invalid_state")]);
+      }
+
+      if (!isLikelyMeaningfulText(payload.district, { minLetters: 2 })) {
+        errors.push(["profileDistrict", t("invalid_district")]);
+      }
+
+      if (payload.village && !isLikelyMeaningfulText(payload.village, { minLetters: 2 })) {
+        errors.push(["profileVillage", t("invalid_village")]);
+      }
+
+      if (!payload.education_level) {
+        errors.push(["profileEducation", t("required_fields")]);
+      }
+
+      if (payload.current_occupation && payload.current_occupation !== "Not working" &&
+          !isLikelyMeaningfulText(payload.current_occupation, { allowDigits: true, allowShortTerm: true, minLetters: 2 })) {
+        errors.push(["profileOccupation", t("invalid_occupation")]);
+      }
+
+      const maxExperience = maxPlausibleExperience(payload.age);
+      if (!Number.isFinite(payload.experience_years) || payload.experience_years < 0 || payload.experience_years > 80) {
+        errors.push(["profileExperience", t("invalid_experience")]);
+      } else if (Number.isFinite(payload.age) && payload.experience_years > maxExperience) {
+        errors.push(["profileExperience", formatT("experience_age_mismatch", { max: maxExperience })]);
+      }
+
+      if (!Number.isFinite(payload.income_target) || payload.income_target < 0 || payload.income_target > 1000000) {
+        errors.push(["profileIncome", t("invalid_income")]);
+      }
+
+      if (!payload.existing_skills.length) {
+        errors.push(["profileSkills", t("skills_required")]);
+      } else if (payload.existing_skills.length > 12) {
+        errors.push(["profileSkills", t("too_many_skills")]);
+      } else {
+        const badSkill = payload.existing_skills.find(item =>
+          !isLikelyMeaningfulText(item, { allowDigits: true, allowShortTerm: true, minLetters: 2 })
+        );
+        if (badSkill) errors.push(["profileSkills", formatT("invalid_skill_item", { item: badSkill })]);
+      }
+
+      if (!payload.interests.length) {
+        errors.push(["profileInterests", t("interests_required")]);
+      } else if (payload.interests.length > 12) {
+        errors.push(["profileInterests", t("too_many_interests")]);
+      } else {
+        const badInterest = payload.interests.find(item =>
+          !isLikelyMeaningfulText(item, { allowDigits: true, allowShortTerm: true, minLetters: 2 })
+        );
+        if (badInterest) errors.push(["profileInterests", formatT("invalid_interest_item", { item: badInterest })]);
+      }
+
+      for (const [fieldId, message] of errors) setFieldError(fieldId, message);
+
+      if (errors.length) {
+        setValidationStatus(errors[0][1], source);
+        if (source === "manual") {
+          const firstField = document.getElementById(errors[0][0]);
+          firstField?.scrollIntoView({ behavior: "smooth", block: "center" });
+          firstField?.focus?.();
         }
-      </div>
-    </div>
-  `;
-}
-
-
-function renderRecommendations(items) {
-
-  const container =
-    document.getElementById(
-      "recommendations"
-    );
-
-  if (!items.length) {
-
-    container.innerHTML =
-      `<div class="empty">
-        No suitable recommendations found.
-      </div>`;
-
-    return;
-  }
-
-  container.innerHTML =
-    items.map(
-      renderRecommendation
-    ).join("");
-}
-
-
-function renderRecommendation(item) {
-
-  const skillGap =
-    item.skill_gap || [];
-
-  const matchedSkills =
-    item.matched_skills || [];
-
-  const matchedInterests =
-    item.matched_interests || [];
-
-  const qualifications =
-    item.nsqf_qualifications || [];
-
-  const schemes =
-    item.government_schemes || [];
-
-  const opportunities =
-    item.local_opportunities || [];
-
-
-  return `
-
-    <div class="recommendation">
-
-      <div class="recommendation-header">
-
-        <div>
-          <div class="occupation">
-            ${item.occupation}
-          </div>
-
-          <div class="sector">
-            ${item.sector}
-          </div>
-        </div>
-
-        <div class="score">
-          ${item.match_score}% Match
-        </div>
-
-      </div>
-
-
-      <div class="meter">
-        <div
-          class="meter-fill"
-          style="width:${item.match_score}%"
-        ></div>
-      </div>
-
-
-      <div>
-        ${item.recommendation_explanation || ""}
-      </div>
-
-
-      <div class="subgrid">
-
-        <div class="mini-card">
-          <div class="mini-title">
-            Matched Skills
-          </div>
-
-          ${
-            matchedSkills.length
-            ? matchedSkills.map(
-                skill =>
-                `<span class="tag good">
-                  ${skill}
-                </span>`
-              ).join("")
-            : `<span class="empty">
-                No direct skill match
-              </span>`
-          }
-        </div>
-
-
-        <div class="mini-card">
-          <div class="mini-title">
-            Skill Gaps
-          </div>
-
-          ${
-            skillGap.length
-            ? skillGap.map(
-                skill =>
-                `<span class="tag warning">
-                  ${skill}
-                </span>`
-              ).join("")
-            : `<span class="empty">
-                No major skill gap
-              </span>`
-          }
-        </div>
-
-
-        <div class="mini-card">
-          <div class="mini-title">
-            Interests Matched
-          </div>
-
-          ${
-            matchedInterests.length
-            ? matchedInterests.map(
-                interest =>
-                `<span class="tag">
-                  ${interest}
-                </span>`
-              ).join("")
-            : `<span class="empty">
-                No direct interest match
-              </span>`
-          }
-        </div>
-
-
-        <div class="mini-card">
-          <div class="mini-title">
-            NSQF Qualification
-          </div>
-
-          ${
-            qualifications.length
-            ? qualifications.map(
-              q => `
-
-                <div style="margin-bottom:10px">
-
-                  <strong>
-                    ${q.qualification_name}
-                  </strong>
-
-                  <div>
-                    Level:
-                    ${q.nsqf_level}
-                  </div>
-
-                  <div>
-                    Code:
-                    ${q.qualification_code}
-                  </div>
-
-                  <div>
-                    Duration:
-                    ${q.duration_hours} hours
-                  </div>
-
-                  <div>
-                    Eligible:
-                    ${
-                      q.overall_eligible
-                      ? "Yes"
-                      : "Not yet"
-                    }
-                  </div>
-
-                </div>
-
-              `
-            ).join("")
-            : `<span class="empty">
-                No mapped NSQF qualification yet
-              </span>`
-          }
-        </div>
-
-
-        <div class="mini-card">
-          <div class="mini-title">
-            Government Schemes
-          </div>
-
-          ${
-            schemes.length
-            ? schemes.map(
-              scheme => `
-
-                <div style="margin-bottom:10px">
-
-                  <strong>
-                    ${scheme.scheme_name}
-                  </strong>
-
-                  <div>
-                    ${scheme.benefit || ""}
-                  </div>
-
-                </div>
-
-              `
-            ).join("")
-            : `<span class="empty">
-                Scheme data will appear here
-              </span>`
-          }
-        </div>
-
-
-        <div class="mini-card">
-          <div class="mini-title">
-            Local Opportunities
-          </div>
-
-          ${
-            opportunities.length
-            ? opportunities.map(
-              opportunity => `
-
-                <div style="margin-bottom:10px">
-
-                  <strong>
-                    ${opportunity.opportunity_name}
-                  </strong>
-
-                  <div>
-                    ${opportunity.provider || ""}
-                  </div>
-
-                </div>
-
-              `
-            ).join("")
-            : `<span class="empty">
-                Local opportunities will appear here
-              </span>`
-          }
-        </div>
-
-      </div>
-
-    </div>
-  `;
-}
-
-
-function startListening() {
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition) {
-
-    alert(
-      "Speech recognition is not supported in this browser."
-    );
-
-    return;
-  }
-
-  const recognition =
-    new SpeechRecognition();
-
-  recognition.lang =
-    getSpeechLanguage();
-
-  recognition.interimResults =
-    false;
-
-  recognition.continuous =
-    false;
-
-  recognition.start();
-
-  document.getElementById(
-    "transcript"
-  ).innerText =
-    "Listening...";
-
-
-  recognition.onresult =
-    function(event) {
-
-      spokenText =
-        event.results[0][0]
-          .transcript;
-
-      document.getElementById(
-        "transcript"
-      ).innerText =
-        "You said: "
-        + spokenText;
+        return false;
+      }
+
+      setValidationStatus("", source);
+      return true;
+    }
+
+    function setOnboardingMode(mode) {
+      onboardingMode = mode === "voice" ? "voice" : "manual";
+
+      const manualPanel = document.getElementById("manualOnboardingPanel");
+      const voicePanel = document.getElementById("voiceOnboardingPanel");
+      const manualButton = document.getElementById("manualModeButton");
+      const voiceButton = document.getElementById("voiceModeButton");
+
+      manualPanel?.classList.toggle("onboarding-panel-hidden", onboardingMode !== "manual");
+      voicePanel?.classList.toggle("onboarding-panel-hidden", onboardingMode !== "voice");
+      manualButton?.classList.toggle("active", onboardingMode === "manual");
+      voiceButton?.classList.toggle("active", onboardingMode === "voice");
+
+      if (onboardingMode === "manual") {
+        stopVoiceCapture();
+        renderManualOnboardingUI();
+      } else {
+        renderVoiceOnboardingUI();
+      }
+    }
+
+    function renderManualOnboardingUI() {
+      document.querySelectorAll("#manualOnboardingPanel .onboarding-step").forEach(section => {
+        section.classList.add("active");
+      });
+
+      const badge = document.getElementById("onboardingStepBadge");
+      const progress = document.getElementById("onboardingProgress");
+      const createButton = document.getElementById("createProfileButton");
+
+      if (badge) badge.hidden = true;
+      if (progress) progress.hidden = true;
+      if (createButton) createButton.style.display = "inline-flex";
+    }
+
+    function inferManualStepFromVoiceProgress() {
+      if (voiceQuestionIndex <= 5) return 1;
+      if (voiceQuestionIndex <= 8) return 2;
+      if (voiceQuestionIndex <= 10) return 3;
+      return 4;
+    }
+
+    function getVoiceQuestions() {
+      return [
+        { fieldId: "profileName", key: "vq_name", type: "text", required: true },
+        { fieldId: "profileAge", key: "vq_age", type: "age", required: true },
+        { fieldId: "profileGender", key: "vq_gender", type: "gender", required: true },
+        { fieldId: "profileState", key: "vq_state", type: "text", required: true },
+        { fieldId: "profileDistrict", key: "vq_district", type: "text", required: true },
+        { fieldId: "profileVillage", key: "vq_village", type: "text", required: false, defaultValue: "" },
+        { fieldId: "profileEducation", key: "vq_education", type: "education", required: true },
+        { fieldId: "profileOccupation", key: "vq_occupation", type: "occupation", required: false, defaultValue: "" },
+        { fieldId: "profileExperience", key: "vq_experience", type: "experience", required: false, defaultValue: 0 },
+        { fieldId: "profileSkills", key: "vq_skills", type: "list", required: true },
+        { fieldId: "profileInterests", key: "vq_interests", type: "list", required: true },
+        { fieldId: "profileIncome", key: "vq_income", type: "income", required: false, defaultValue: 0 },
+        { fieldId: null, key: "vq_relocation", type: "relocation", required: true }
+      ];
+    }
+
+    function resetVoiceOnboarding() {
+      stopVoiceCapture();
+      voiceQuestionIndex = 0;
+      pendingVoiceAnswer = null;
+      voiceInterviewStarted = false;
+      voiceInterviewComplete = false;
+
+      document.getElementById("voiceInterviewPanel")?.classList.remove("onboarding-panel-hidden");
+      document.getElementById("voiceReviewPanel")?.classList.add("onboarding-panel-hidden");
+
+      const status = document.getElementById("voiceOnboardingStatus");
+      if (status) {
+        status.className = "voice-onboarding-status";
+        status.textContent = t("voice_waiting_answer");
+      }
+
+      const answerBlock = document.getElementById("voiceAnswerBlock");
+      answerBlock?.classList.add("voice-answer-hidden");
+
+      const startButton = document.getElementById("voiceStartButton");
+      if (startButton) startButton.style.display = "inline-flex";
+
+      ["voiceRetryButton", "voiceSkipButton", "voiceConfirmButton"].forEach(id => {
+        const button = document.getElementById(id);
+        if (button) button.style.display = "none";
+      });
+
+      renderVoiceOnboardingUI();
+    }
+
+    function renderVoiceOnboardingUI() {
+      const badge = document.getElementById("onboardingStepBadge");
+      const progress = document.getElementById("onboardingProgress");
+
+      if (badge) badge.hidden = false;
+      if (progress) progress.hidden = false;
+
+      if (voiceInterviewComplete) {
+        renderVoiceReview();
+        return;
+      }
+
+      const questions = getVoiceQuestions();
+      const question = questions[Math.min(voiceQuestionIndex, questions.length - 1)];
+      if (!question) return;
+
+      const questionEl = document.getElementById("voiceQuestion");
+      const counter = document.getElementById("voiceQuestionCounter");
+      const hint = document.getElementById("voiceQuestionHint");
+
+      if (questionEl) questionEl.textContent = t(question.key);
+      if (counter) {
+        counter.textContent = formatT("voice_question_progress", {
+          current: voiceQuestionIndex + 1,
+          total: questions.length
+        });
+      }
+      if (hint) hint.textContent = question.required ? "" : t("voice_optional_hint");
+
+      if (badge) badge.textContent = formatT("voice_question_progress", {
+        current: voiceQuestionIndex + 1,
+        total: questions.length
+      });
+
+      const fill = document.getElementById("onboardingProgressFill");
+      if (fill) fill.style.width = `${((voiceQuestionIndex + 1) / questions.length) * 100}%`;
+
+      const skipButton = document.getElementById("voiceSkipButton");
+      if (skipButton) skipButton.style.display = voiceInterviewStarted && !question.required ? "inline-flex" : "none";
+    }
+
+    function startVoiceOnboarding() {
+      if (!getSpeechRecognitionConstructor()) {
+        setVoiceStatus(t("voice_not_supported"), true);
+        return;
+      }
+
+      voiceInterviewStarted = true;
+      voiceQuestionIndex = 0;
+      pendingVoiceAnswer = null;
+      voiceInterviewComplete = false;
+
+      const startButton = document.getElementById("voiceStartButton");
+      if (startButton) startButton.style.display = "none";
+
+      askCurrentVoiceQuestion();
+    }
+
+    function retryVoiceQuestion() {
+      pendingVoiceAnswer = null;
+      document.getElementById("voiceAnswerBlock")?.classList.add("voice-answer-hidden");
+      const confirmButton = document.getElementById("voiceConfirmButton");
+      if (confirmButton) confirmButton.style.display = "none";
+      askCurrentVoiceQuestion();
+    }
+
+    function askCurrentVoiceQuestion() {
+      if (!voiceInterviewStarted || voiceInterviewComplete) return;
+
+      renderVoiceOnboardingUI();
+      const questions = getVoiceQuestions();
+      const question = questions[voiceQuestionIndex];
+      if (!question) {
+        completeVoiceInterview();
+        return;
+      }
+
+      pendingVoiceAnswer = null;
+      document.getElementById("voiceAnswerBlock")?.classList.add("voice-answer-hidden");
+      const confirmButton = document.getElementById("voiceConfirmButton");
+      const retryButton = document.getElementById("voiceRetryButton");
+      if (confirmButton) confirmButton.style.display = "none";
+      if (retryButton) retryButton.style.display = "none";
+
+      setVoiceStatus(t("voice_prompting"));
+      speakForOnboarding(t(question.key), beginVoiceRecognition);
+    }
+
+    function getSpeechRecognitionConstructor() {
+      return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    }
+
+    function speakForOnboarding(text, onEnd) {
+      if (!("speechSynthesis" in window)) {
+        onEnd?.();
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = getSpeechLanguage();
+      speech.rate = 0.95;
+      speech.onend = () => onEnd?.();
+      speech.onerror = () => onEnd?.();
+      window.speechSynthesis.speak(speech);
+    }
+
+    function beginVoiceRecognition() {
+      const Recognition = getSpeechRecognitionConstructor();
+      if (!Recognition) {
+        setVoiceStatus(t("voice_not_supported"), true);
+        return;
+      }
+
+      stopVoiceCapture(false);
+      const recognition = new Recognition();
+      voiceRecognition = recognition;
+      recognition.lang = getSpeechLanguage();
+      recognition.interimResults = false;
+      recognition.continuous = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => setVoiceStatus(t("voice_listening_now"));
+
+      recognition.onresult = event => {
+        const transcript = event.results?.[0]?.[0]?.transcript?.trim() || "";
+        setVoiceStatus(t("voice_processing"));
+        processVoiceOnboardingAnswer(transcript);
+      };
+
+      recognition.onerror = event => {
+        voiceRecognition = null;
+        const permissionErrors = ["not-allowed", "service-not-allowed", "audio-capture"];
+        setVoiceStatus(
+          permissionErrors.includes(event.error) ? t("voice_microphone_denied") : `${t("voice_error")} ${event.error}`,
+          true
+        );
+        const retryButton = document.getElementById("voiceRetryButton");
+        if (retryButton) retryButton.style.display = "inline-flex";
+      };
+
+      recognition.onend = () => {
+        if (voiceRecognition === recognition) voiceRecognition = null;
+      };
+
+      try {
+        recognition.start();
+      } catch (_) {
+        setVoiceStatus(t("voice_unrecognized"), true);
+      }
+    }
+
+    function stopVoiceCapture(cancelSpeech = true) {
+      try { voiceRecognition?.abort(); } catch (_) {}
+      voiceRecognition = null;
+      if (cancelSpeech && "speechSynthesis" in window) window.speechSynthesis.cancel();
+    }
+
+    function setVoiceStatus(message, isError = false, isSuccess = false) {
+      const status = document.getElementById("voiceOnboardingStatus");
+      if (!status) return;
+      status.textContent = message;
+      status.className = "voice-onboarding-status" + (isError ? " error" : isSuccess ? " success" : "");
+    }
+
+    function normalizeUnicodeDigits(text) {
+      const devanagari = "०१२३४५६७८९";
+      const kannada = "೦೧೨೩೪೫೬೭೮೯";
+      return String(text || "")
+        .split("")
+        .map(char => {
+          let index = devanagari.indexOf(char);
+          if (index >= 0) return String(index);
+          index = kannada.indexOf(char);
+          if (index >= 0) return String(index);
+          return char;
+        })
+        .join("");
+    }
+
+    function parseEnglishNumberWords(text) {
+      const small = {
+        zero:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9,
+        ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15, sixteen:16,
+        seventeen:17, eighteen:18, nineteen:19, twenty:20, thirty:30, forty:40, fifty:50,
+        sixty:60, seventy:70, eighty:80, ninety:90
+      };
+      const words = String(text || "").toLowerCase().replace(/-/g, " ").split(/\s+/).filter(Boolean);
+      let total = 0, current = 0, seen = false;
+      for (const word of words) {
+        if (word === "and") continue;
+        if (word in small) { current += small[word]; seen = true; continue; }
+        if (word === "hundred") { current = Math.max(1, current) * 100; seen = true; continue; }
+        if (word === "thousand") { total += Math.max(1, current) * 1000; current = 0; seen = true; continue; }
+        if (word === "lakh" || word === "lakhs") { total += Math.max(1, current) * 100000; current = 0; seen = true; continue; }
+      }
+      return seen ? total + current : null;
+    }
+
+    const HINDI_NUMBER_WORDS = {
+      "शून्य":0,"जीरो":0,"एक":1,"दो":2,"तीन":3,"चार":4,"पांच":5,"पाँच":5,"छह":6,"सात":7,"आठ":8,"नौ":9,
+      "दस":10,"ग्यारह":11,"बारह":12,"तेरह":13,"चौदह":14,"पंद्रह":15,"सोलह":16,"सत्रह":17,"अठारह":18,"उन्नीस":19,
+      "बीस":20,"इक्कीस":21,"बाईस":22,"तेईस":23,"चौबीस":24,"पच्चीस":25,"छब्बीस":26,"सत्ताईस":27,"अट्ठाईस":28,"अट्ठाइस":28,"उनतीस":29,
+      "तीस":30,"इकतीस":31,"बत्तीस":32,"तैंतीस":33,"चौंतीस":34,"चौतीस":34,"पैंतीस":35,"छत्तीस":36,"सैंतीस":37,"अड़तीस":38,"अड़तीस":38,"उनतालीस":39,
+      "चालीस":40,"इकतालीस":41,"बयालीस":42,"तैंतालीस":43,"चवालीस":44,"पैंतालीस":45,"छियालीस":46,"सैंतालीस":47,"अड़तालीस":48,"अड़तालीस":48,"उनचास":49,
+      "पचास":50,"साठ":60,"सत्तर":70,"अस्सी":80,"नब्बे":90,"सौ":100
     };
 
-
-  recognition.onerror =
-    function(event) {
-
-      document.getElementById(
-        "transcript"
-      ).innerText =
-        "Voice error: "
-        + event.error;
+    const KANNADA_NUMBER_WORDS = {
+      "ಸೊನ್ನೆ":0,"ಶೂನ್ಯ":0,"ಒಂದು":1,"ಎರಡು":2,"ಮೂರು":3,"ನಾಲ್ಕು":4,"ಐದು":5,"ಆರು":6,"ಏಳು":7,"ಎಂಟು":8,"ಒಂಬತ್ತು":9,
+      "ಹತ್ತು":10,"ಹನ್ನೊಂದು":11,"ಹನ್ನೆರಡು":12,"ಹದಿಮೂರು":13,"ಹದಿನಾಲ್ಕು":14,"ಹದಿನೈದು":15,"ಹದಿನಾರು":16,"ಹದಿನೇಳು":17,"ಹದಿನೆಂಟು":18,"ಹತ್ತೊಂಬತ್ತು":19,
+      "ಇಪ್ಪತ್ತು":20,"ಇಪ್ಪತ್ತೊಂದು":21,"ಇಪ್ಪತ್ತೆರಡು":22,"ಇಪ್ಪತ್ತಮೂರು":23,"ಇಪ್ಪತ್ತನಾಲ್ಕು":24,"ಇಪ್ಪತ್ತೈದು":25,"ಇಪ್ಪತ್ತಾರು":26,"ಇಪ್ಪತ್ತೇಳು":27,"ಇಪ್ಪತ್ತೆಂಟು":28,"ಇಪ್ಪತ್ತೊಂಬತ್ತು":29,
+      "ಮೂವತ್ತು":30,"ಮೂವತ್ತೊಂದು":31,"ಮೂವತ್ತೆರಡು":32,"ಮೂವತ್ತಮೂರು":33,"ಮೂವತ್ತನಾಲ್ಕು":34,"ಮೂವತ್ತೈದು":35,"ಮೂವತ್ತಾರು":36,"ಮೂವತ್ತೇಳು":37,"ಮೂವತ್ತೆಂಟು":38,"ಮೂವತ್ತೊಂಬತ್ತು":39,
+      "ನಲವತ್ತು":40,"ನಲವತ್ತೊಂದು":41,"ನಲವತ್ತೆರಡು":42,"ನಲವತ್ತಮೂರು":43,"ನಲವತ್ತನಾಲ್ಕು":44,"ನಲವತ್ತೈದು":45,"ನಲವತ್ತಾರು":46,"ನಲವತ್ತೇಳು":47,"ನಲವತ್ತೆಂಟು":48,"ನಲವತ್ತೊಂಬತ್ತು":49,
+      "ಐವತ್ತು":50,"ಅರವತ್ತು":60,"ಎಪ್ಪತ್ತು":70,"ಎಂಬತ್ತು":80,"ತೊಂಬತ್ತು":90,"ನೂರು":100
     };
 
-}
+    function parseLocalizedWordNumber(text) {
+      const normalized = String(text || "").trim().toLowerCase();
+      const entries = currentLanguage === "hi" ? HINDI_NUMBER_WORDS : currentLanguage === "kn" ? KANNADA_NUMBER_WORDS : null;
+      if (!entries) return parseEnglishNumberWords(normalized);
 
+      let multiplier = 1;
+      let baseText = normalized;
+      const multipliers = currentLanguage === "hi"
+        ? [["लाख",100000],["हज़ार",1000],["हजार",1000],["सौ",100]]
+        : [["ಲಕ್ಷ",100000],["ಸಾವಿರ",1000],["ನೂರು",100]];
 
-async function sendVoiceQuery() {
+      for (const [word, value] of multipliers) {
+        if (normalized.includes(word)) {
+          multiplier = value;
+          baseText = normalized.replace(word, "").trim();
+          break;
+        }
+      }
 
-  if (!spokenText) {
+      if (!baseText && multiplier !== 1) return multiplier;
+      if (baseText in entries) return entries[baseText] * multiplier;
 
-    alert(
-      "Please speak first."
-    );
+      for (const [word, value] of Object.entries(entries)) {
+        if (baseText.includes(word)) return value * multiplier;
+      }
+      return null;
+    }
 
-    return;
-  }
+    function parseSpokenNumber(raw) {
+      const normalized = normalizeUnicodeDigits(raw).replaceAll(",", "").trim();
+      const direct = normalized.match(/\d+(?:\.\d+)?/);
+      if (direct) {
+        let value = Number(direct[0]);
+        const lower = normalized.toLowerCase();
+        if (/\b(lakh|lakhs)\b/.test(lower) || lower.includes("लाख") || lower.includes("ಲಕ್ಷ")) value *= 100000;
+        else if (/\bthousand\b/.test(lower) || lower.includes("हजार") || lower.includes("हज़ार") || lower.includes("ಸಾವಿರ")) value *= 1000;
+        else if (/\bhundred\b/.test(lower) || lower.includes("सौ") || lower.includes("ನೂರು")) value *= 100;
+        return value;
+      }
+      return parseLocalizedWordNumber(normalized);
+    }
 
+    function isSkipPhrase(raw) {
+      const text = String(raw || "").trim().toLowerCase();
+      return ["skip", "pass", "ಬಿಡಿ", "ಬಿಟ್ಟುಬಿಡಿ", "ಸ್ಕಿಪ್", "छोड़ें", "छोड़ दो", "छोडें", "स्किप"].some(word => text.includes(word));
+    }
 
-  const id =
-    getBeneficiaryId();
+    function normalizeGender(raw) {
+      const text = String(raw || "").trim().toLowerCase();
+      if (["male", "man", "boy", "ಪುರುಷ", "ಗಂಡು", "पुरुष", "आदमी"].some(word => text.includes(word))) return "Male";
+      if (["female", "woman", "girl", "ಮಹಿಳೆ", "ಹೆಣ್ಣು", "महिला", "स्त्री"].some(word => text.includes(word))) return "Female";
+      if (["other", "ಇತರೆ", "अन्य", "दूसरा"].some(word => text.includes(word))) return "Other";
+      return null;
+    }
 
-  const language =
-    getSelectedLanguage();
+    function normalizeEducation(raw) {
+      const text = normalizeUnicodeDigits(raw).trim().toLowerCase();
+      const mappings = [
+        ["Postgraduate", ["postgraduate", "post graduate", "masters", "master", "ಸ್ನಾತಕೋತ್ತರ", "मास्टर", "स्नातकोत्तर"]],
+        ["Graduate", ["graduate", "degree", "bachelor", "ಪದವಿ", "ಡಿಗ್ರಿ", "स्नातक", "डिग्री"]],
+        ["Diploma", ["diploma", "ಡಿಪ್ಲೊಮಾ", "डिप्लोमा"]],
+        ["ITI", ["iti", "i t i", "ಐಟಿಐ", "आईटीआई"]],
+        ["12th", ["12", "12th", "twelfth", "puc", "second puc", "12ನೇ", "ಪಿಯುಸಿ", "12वीं", "बारहवीं"]],
+        ["10th", ["10", "10th", "tenth", "sslc", "10ನೇ", "ಎಸ್ ಎಸ್ ಎಲ್ ಸಿ", "10वीं", "दसवीं"]],
+        ["8th", ["8", "8th", "eighth", "8ನೇ", "ಎಂಟನೇ", "8वीं", "आठवीं"]],
+        ["Primary", ["primary", "ಪ್ರಾಥಮಿಕ", "प्राथमिक"]],
+        ["No formal schooling", ["no formal schooling", "no schooling", "not educated", "schooling none", "ಔಪಚಾರಿಕ ಶಿಕ್ಷಣ ಇಲ್ಲ", "ಶಿಕ್ಷಣ ಇಲ್ಲ", "ಓದಿಲ್ಲ", "औपचारिक शिक्षा नहीं", "पढ़ाई नहीं", "स्कूल नहीं"]]
+      ];
+      for (const [value, aliases] of mappings) {
+        if (aliases.some(alias => text.includes(alias.toLowerCase()))) return value;
+      }
+      return null;
+    }
 
+    function normalizeRelocation(raw) {
+      const text = String(raw || "").trim().toLowerCase();
+      const yes = ["yes", "yeah", "yep", "willing", "ಹೌದು", "ಸರಿ", "ಸಿದ್ಧ", "हाँ", "हां", "जी हाँ", "तैयार"];
+      const no = ["no", "nope", "not willing", "ಇಲ್ಲ", "ಬೇಡ", "ಸಿದ್ಧ ಇಲ್ಲ", "नहीं", "नही", "ना"];
+      if (no.some(word => text.includes(word))) return false;
+      if (yes.some(word => text.includes(word))) return true;
+      return null;
+    }
 
-  try {
+    function normalizeListSpeech(raw) {
+      let text = String(raw || "").trim();
+      text = text
+        .replace(/\s+(and|plus)\s+/gi, ", ")
+        .replace(/\s+(ಮತ್ತು|ಹಾಗೂ)\s+/g, ", ")
+        .replace(/\s+(और|तथा)\s+/g, ", ")
+        .replace(/\s*;\s*/g, ", ");
+      return text;
+    }
 
-    const response =
-      await fetch(
-        `${API_BASE}/assistant/query/${id}`,
-        {
+    function normalizeVoiceAnswer(question, raw) {
+      if (!raw) return { valid: false, message: t("voice_unrecognized") };
+      if (!question.required && isSkipPhrase(raw)) {
+        return { valid: true, value: question.defaultValue ?? "", display: t("voice_skip") };
+      }
+
+      if (question.type === "text") {
+        const value = normalizeWhitespace(raw);
+        const allowDigits = question.fieldId === "profileVillage";
+        if (!isLikelyMeaningfulText(value, { allowDigits, minLetters: 2 })) {
+          return { valid: false, message: t("voice_meaningful_text_needed") };
+        }
+        return { valid: true, value, display: value };
+      }
+      if (question.type === "occupation") {
+        const text = normalizeWhitespace(raw);
+        const notWorking = ["not working", "unemployed", "ಕೆಲಸ ಇಲ್ಲ", "ಕೆಲಸ ಮಾಡುತ್ತಿಲ್ಲ", "काम नहीं", "बेरोजगार"].some(word => text.toLowerCase().includes(word));
+        if (notWorking) return { valid: true, value: "Not working", display: t("not_specified") };
+        if (!isLikelyMeaningfulText(text, { allowDigits: true, allowShortTerm: true, minLetters: 2 })) {
+          return { valid: false, message: t("voice_meaningful_text_needed") };
+        }
+        const value = canonicalizeOccupation(text);
+        return { valid: true, value, display: value };
+      }
+      if (question.type === "list") {
+        const spoken = normalizeListSpeech(raw);
+        const values = normalizeProfileList(spoken);
+        if (!values.length) return { valid: false, message: t("voice_unrecognized") };
+        const badItem = values.find(item =>
+          !isLikelyMeaningfulText(item, { allowDigits: true, allowShortTerm: true, minLetters: 2 })
+        );
+        if (badItem) return { valid: false, message: t("voice_meaningful_text_needed") };
+        const value = values.join(", ");
+        return { valid: true, value, display: value };
+      }
+      if (question.type === "gender") {
+        const value = normalizeGender(raw);
+        return value ? { valid: true, value, display: t(value === "Male" ? "male" : value === "Female" ? "female" : "other") } : { valid: false, message: t("voice_invalid_choice") };
+      }
+      if (question.type === "education") {
+        const value = normalizeEducation(raw);
+        const keyMap = {"No formal schooling":"edu_no_school","Primary":"edu_primary","8th":"edu_8th","10th":"edu_10th","12th":"edu_12th","ITI":"edu_iti","Diploma":"edu_diploma","Graduate":"edu_graduate","Postgraduate":"edu_postgraduate"};
+        return value ? { valid: true, value, display: t(keyMap[value]) } : { valid: false, message: t("voice_invalid_choice") };
+      }
+      if (["age", "experience", "income"].includes(question.type)) {
+        const value = parseSpokenNumber(raw);
+        if (value === null || !Number.isFinite(value)) return { valid: false, message: t("voice_number_not_understood") };
+        if (question.type === "age" && (value < 18 || value > 100)) return { valid: false, message: t("invalid_age") };
+        if (question.type === "experience") {
+          if (value < 0 || value > 80) return { valid: false, message: t("invalid_experience") };
+          const age = Number(document.getElementById("profileAge")?.value);
+          if (Number.isFinite(age) && age >= 18 && value > maxPlausibleExperience(age)) {
+            return { valid: false, message: formatT("experience_age_mismatch", { max: maxPlausibleExperience(age) }) };
+          }
+        }
+        if (question.type === "income" && (value < 0 || value > 1000000)) {
+          return { valid: false, message: t("invalid_income") };
+        }
+        return { valid: true, value, display: String(value) };
+      }
+      if (question.type === "relocation") {
+        const value = normalizeRelocation(raw);
+        return value === null ? { valid: false, message: t("voice_invalid_choice") } : { valid: true, value, display: t(value ? "relocate_yes" : "relocate_no") };
+      }
+      return { valid: true, value: raw.trim(), display: raw.trim() };
+    }
+
+    function processVoiceOnboardingAnswer(raw) {
+      const question = getVoiceQuestions()[voiceQuestionIndex];
+      if (!question) return;
+
+      const normalized = normalizeVoiceAnswer(question, raw);
+      if (!normalized.valid) {
+        pendingVoiceAnswer = null;
+        setVoiceStatus(normalized.message || t("voice_unrecognized"), true);
+        const retryButton = document.getElementById("voiceRetryButton");
+        if (retryButton) retryButton.style.display = "inline-flex";
+        return;
+      }
+
+      pendingVoiceAnswer = { question, raw, ...normalized };
+      const preview = document.getElementById("voiceAnswerPreview");
+      if (preview) preview.textContent = normalized.display;
+      document.getElementById("voiceAnswerBlock")?.classList.remove("voice-answer-hidden");
+      setVoiceStatus(t("voice_answer_heard"), false, true);
+
+      const retryButton = document.getElementById("voiceRetryButton");
+      const confirmButton = document.getElementById("voiceConfirmButton");
+      if (retryButton) retryButton.style.display = "inline-flex";
+      if (confirmButton) confirmButton.style.display = "inline-flex";
+    }
+
+    function applyVoiceValue(question, value) {
+      if (question.type === "relocation") {
+        const target = document.querySelector(`input[name="relocation"][value="${value ? "true" : "false"}"]`);
+        if (target) target.checked = true;
+        return;
+      }
+
+      const field = document.getElementById(question.fieldId);
+      if (!field) return;
+      field.value = value ?? "";
+      field.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    function confirmVoiceAnswer() {
+      if (!pendingVoiceAnswer) return;
+      stopVoiceCapture();
+      applyVoiceValue(pendingVoiceAnswer.question, pendingVoiceAnswer.value);
+      pendingVoiceAnswer = null;
+      voiceQuestionIndex += 1;
+
+      if (voiceQuestionIndex >= getVoiceQuestions().length) {
+        completeVoiceInterview();
+        return;
+      }
+
+      askCurrentVoiceQuestion();
+    }
+
+    function skipVoiceQuestion() {
+      const question = getVoiceQuestions()[voiceQuestionIndex];
+      if (!question || question.required) return;
+      stopVoiceCapture();
+      applyVoiceValue(question, question.defaultValue ?? "");
+      pendingVoiceAnswer = null;
+      voiceQuestionIndex += 1;
+
+      if (voiceQuestionIndex >= getVoiceQuestions().length) completeVoiceInterview();
+      else askCurrentVoiceQuestion();
+    }
+
+    function completeVoiceInterview() {
+      stopVoiceCapture();
+      voiceInterviewComplete = true;
+      voiceInterviewStarted = false;
+      document.getElementById("voiceInterviewPanel")?.classList.add("onboarding-panel-hidden");
+      document.getElementById("voiceReviewPanel")?.classList.remove("onboarding-panel-hidden");
+
+      const badge = document.getElementById("onboardingStepBadge");
+      if (badge) badge.textContent = t("voice_complete_badge");
+      const fill = document.getElementById("onboardingProgressFill");
+      if (fill) fill.style.width = "100%";
+
+      renderVoiceReview();
+      speakForOnboarding(t("voice_interview_complete"));
+    }
+
+    function renderVoiceReview() {
+      const container = document.getElementById("voiceReviewGrid");
+      if (!container) return;
+      const payload = buildBeneficiaryPayload();
+      const items = [
+        [t("full_name"), payload.name || "-"],
+        [t("age"), payload.age || "-"],
+        [t("gender"), payload.gender ? t(payload.gender === "Male" ? "male" : payload.gender === "Female" ? "female" : "other") : "-"],
+        [t("location"), [payload.village, payload.district, payload.state].filter(Boolean).join(", ") || "-"],
+        [t("education_level"), translateValue(payload.education_level) || "-"],
+        [t("current_occupation_field"), payload.current_occupation || t("not_specified")],
+        [t("experience_years_field"), `${payload.experience_years || 0} ${t("years")}`],
+        [t("existing_skills_field"), payload.existing_skills.join(", ") || "-"],
+        [t("interests_field"), payload.interests.join(", ") || "-"],
+        [t("income_target_field"), `₹${payload.income_target || 0}`],
+        [t("relocation_field"), t(payload.willing_to_relocate ? "relocate_yes" : "relocate_no")]
+      ];
+
+      container.innerHTML = items.map(([label, value]) => `
+        <div class="voice-review-item">
+          <div class="voice-review-label">${escapeHtml(label)}</div>
+          <div class="voice-review-value">${escapeHtml(value)}</div>
+        </div>
+      `).join("");
+    }
+
+    function editVoiceDetailsManually() {
+      setOnboardingMode("manual");
+      onboardingStep = 1;
+      updateOnboardingStep();
+    }
+
+    async function createProfileFromVoice() {
+      await submitBeneficiaryProfile({ preventDefault() {} }, "voice");
+    }
+
+    function showOnboarding(resetForm = false) {
+      const gate = document.getElementById("onboardingGate");
+      if (!gate) return;
+
+      if (resetForm) {
+        document.getElementById("onboardingForm")?.reset();
+        const experience = document.getElementById("profileExperience");
+        const income = document.getElementById("profileIncome");
+        if (experience) experience.value = "0";
+        if (income) income.value = "0";
+        onboardingStep = 1;
+        onboardingMode = "manual";
+        resetVoiceOnboarding();
+        document.getElementById("onboardingStatus").textContent = "";
+        const voiceCreateStatus = document.getElementById("voiceCreateStatus");
+        if (voiceCreateStatus) voiceCreateStatus.textContent = "";
+      }
+
+      gate.classList.remove("onboarding-hidden");
+      setOnboardingMode(onboardingMode);
+      if (onboardingMode === "manual") updateOnboardingStep();
+      else renderVoiceOnboardingUI();
+    }
+
+    function hideOnboarding() {
+      stopVoiceCapture();
+      document.getElementById("onboardingGate")?.classList.add("onboarding-hidden");
+    }
+
+    function updateOnboardingStep() {
+      if (onboardingMode === "voice") {
+        renderVoiceOnboardingUI();
+        return;
+      }
+
+      renderManualOnboardingUI();
+    }
+
+    function validateOnboardingStep(step) {
+      clearValidationErrors();
+
+      if (step === 1) {
+        const nameOk = validateTextField("profileName", t("invalid_name"), { minLetters: 2 });
+        const age = Number(document.getElementById("profileAge").value);
+        const gender = document.getElementById("profileGender").value;
+        const stateOk = validateTextField("profileState", t("invalid_state"), { minLetters: 2 });
+        const districtOk = validateTextField("profileDistrict", t("invalid_district"), { minLetters: 2 });
+        const village = document.getElementById("profileVillage").value.trim();
+        const villageOk = !village || validateTextField("profileVillage", t("invalid_village"), { minLetters: 2 });
+
+        if (!Number.isFinite(age) || age < 18 || age > 100) setFieldError("profileAge", t("invalid_age"));
+        if (!gender) setFieldError("profileGender", t("required_fields"));
+
+        if (!nameOk || !stateOk || !districtOk || !villageOk ||
+            !Number.isFinite(age) || age < 18 || age > 100 || !gender) {
+          setValidationStatus(t("profile_fix_errors"));
+          return false;
+        }
+      }
+
+      if (step === 2) {
+        const education = document.getElementById("profileEducation").value;
+        const occupation = normalizeWhitespace(document.getElementById("profileOccupation").value);
+        const experience = Number(document.getElementById("profileExperience").value) || 0;
+        const age = Number(document.getElementById("profileAge").value);
+
+        if (!education) setFieldError("profileEducation", t("required_fields"));
+
+        let occupationOk = true;
+        if (occupation && !isLikelyMeaningfulText(occupation, { allowDigits: true, allowShortTerm: true, minLetters: 2 })) {
+          setFieldError("profileOccupation", t("invalid_occupation"));
+          occupationOk = false;
+        }
+
+        let experienceOk = true;
+        if (!Number.isFinite(experience) || experience < 0 || experience > 80) {
+          setFieldError("profileExperience", t("invalid_experience"));
+          experienceOk = false;
+        } else if (Number.isFinite(age) && age >= 18 && experience > maxPlausibleExperience(age)) {
+          setFieldError("profileExperience", formatT("experience_age_mismatch", { max: maxPlausibleExperience(age) }));
+          experienceOk = false;
+        }
+
+        if (!education || !occupationOk || !experienceOk) {
+          setValidationStatus(t("profile_fix_errors"));
+          return false;
+        }
+      }
+
+      if (step === 3) {
+        const skills = normalizeProfileList(document.getElementById("profileSkills").value);
+        const interests = normalizeProfileList(document.getElementById("profileInterests").value);
+
+        let ok = true;
+
+        if (!skills.length) {
+          setFieldError("profileSkills", t("skills_required"));
+          ok = false;
+        } else if (skills.length > 12) {
+          setFieldError("profileSkills", t("too_many_skills"));
+          ok = false;
+        } else {
+          const badSkill = skills.find(item =>
+            !isLikelyMeaningfulText(item, { allowDigits: true, allowShortTerm: true, minLetters: 2 })
+          );
+          if (badSkill) {
+            setFieldError("profileSkills", formatT("invalid_skill_item", { item: badSkill }));
+            ok = false;
+          }
+        }
+
+        if (!interests.length) {
+          setFieldError("profileInterests", t("interests_required"));
+          ok = false;
+        } else if (interests.length > 12) {
+          setFieldError("profileInterests", t("too_many_interests"));
+          ok = false;
+        } else {
+          const badInterest = interests.find(item =>
+            !isLikelyMeaningfulText(item, { allowDigits: true, allowShortTerm: true, minLetters: 2 })
+          );
+          if (badInterest) {
+            setFieldError("profileInterests", formatT("invalid_interest_item", { item: badInterest }));
+            ok = false;
+          }
+        }
+
+        if (!ok) {
+          setValidationStatus(t("profile_fix_errors"));
+          return false;
+        }
+
+        document.getElementById("profileSkills").value = skills.join(", ");
+        document.getElementById("profileInterests").value = interests.join(", ");
+      }
+
+      if (step === 4) {
+        const income = Number(document.getElementById("profileIncome").value) || 0;
+        if (!Number.isFinite(income) || income < 0 || income > 1000000) {
+          setFieldError("profileIncome", t("invalid_income"));
+          setValidationStatus(t("profile_fix_errors"));
+          return false;
+        }
+      }
+
+      setValidationStatus("");
+      return true;
+    }
+
+    function nextOnboardingStep() {
+      if (!validateOnboardingStep(onboardingStep)) return;
+      if (onboardingStep < ONBOARDING_TOTAL_STEPS) onboardingStep += 1;
+      updateOnboardingStep();
+    }
+
+    function previousOnboardingStep() {
+      if (onboardingStep > 1) onboardingStep -= 1;
+      updateOnboardingStep();
+    }
+
+    function buildBeneficiaryPayload() {
+      const relocation = document.querySelector('input[name="relocation"]:checked')?.value === "true";
+      const occupationRaw = normalizeWhitespace(document.getElementById("profileOccupation").value);
+
+      return {
+        name: normalizeWhitespace(document.getElementById("profileName").value),
+        age: Number(document.getElementById("profileAge").value),
+        gender: document.getElementById("profileGender").value,
+        state: normalizeWhitespace(document.getElementById("profileState").value),
+        district: normalizeWhitespace(document.getElementById("profileDistrict").value),
+        village: normalizeWhitespace(document.getElementById("profileVillage").value),
+        education_level: document.getElementById("profileEducation").value,
+        current_occupation: occupationRaw ? canonicalizeOccupation(occupationRaw) : "Not working",
+        existing_skills: normalizeProfileList(document.getElementById("profileSkills").value),
+        interests: normalizeProfileList(document.getElementById("profileInterests").value),
+        preferred_language: getBackendLanguage(),
+        experience_years: Number(document.getElementById("profileExperience").value) || 0,
+        income_target: Number(document.getElementById("profileIncome").value) || 0,
+        willing_to_relocate: relocation
+      };
+    }
+
+    async function submitBeneficiaryProfile(event, source = "manual") {
+      event?.preventDefault?.();
+
+      if (!validateProfileData(source)) return;
+
+      const button = document.getElementById(source === "voice" ? "voiceCreateProfileButton" : "createProfileButton");
+      const status = document.getElementById(source === "voice" ? "voiceCreateStatus" : "onboardingStatus");
+      const payload = buildBeneficiaryPayload();
+
+      button.disabled = true;
+      button.textContent = t("creating_profile");
+      status.textContent = "";
+
+      try {
+        const response = await fetch(`${API_BASE}/beneficiaries/`, {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            query: spokenText,
-            language: language
-          })
+        if (!response.ok) {
+          let detail = "";
+          try {
+            const errorData = await response.json();
+            if (Array.isArray(errorData.detail)) {
+              detail = errorData.detail.map(item => item.msg).filter(Boolean).join("; ");
+            } else if (typeof errorData.detail === "string") {
+              detail = errorData.detail;
+            }
+          } catch (_) {}
+          throw new Error(detail || t("profile_create_failed"));
         }
-      );
 
+        const data = await response.json();
+        if (!data.beneficiary_id) throw new Error(t("profile_create_failed"));
 
-    if (!response.ok) {
-      throw new Error(
-        "Assistant request failed"
-      );
+        activeBeneficiaryId = String(data.beneficiary_id);
+        localStorage.setItem("jeevikaBeneficiaryId", activeBeneficiaryId);
+        status.textContent = t("profile_created");
+
+        await loadDashboard(activeBeneficiaryId);
+        hideOnboarding();
+      } catch (error) {
+        status.textContent = error.message || t("profile_create_failed");
+      } finally {
+        button.disabled = false;
+        button.textContent = source === "voice" ? t("voice_create_profile") : t("create_profile");
+      }
     }
 
+    function startNewProfile() {
+      if (activeBeneficiaryId && !window.confirm(t("new_profile_confirm"))) return;
 
-    const data =
-      await response.json();
+      activeBeneficiaryId = "";
+      currentProfile = null;
+      currentRecommendations = [];
+      localStorage.removeItem("jeevikaBeneficiaryId");
+      spokenText = "";
+      onboardingMode = "manual";
+      resetVoiceOnboarding();
 
+      document.getElementById("profileContent").innerHTML = `<div class="empty">${t("dashboard_loading")}</div>`;
+      document.getElementById("recommendations").innerHTML = `<div class="empty">${t("dashboard_loading")}</div>`;
+      document.getElementById("transcript").textContent = t("waiting_voice");
+      document.getElementById("assistantResponse").textContent = t("assistant_placeholder");
+      const assistantInput = document.getElementById("assistantTextInput");
+      if (assistantInput) assistantInput.value = "";
 
-    document.getElementById(
-      "assistantResponse"
-    ).innerText =
-      data.assistant_response;
-
-
-    speakResponse(
-      data.assistant_response,
-      language
-    );
-
-
-    if (
-      data.top_recommendations
-      &&
-      data.top_recommendations.length
-    ) {
-
-      renderRecommendations(
-        data.top_recommendations
-      );
-
+      showOnboarding(true);
     }
 
-  }
-  catch (error) {
+    async function loadDashboard(id = activeBeneficiaryId) {
+      if (!id) {
+        showOnboarding();
+        return;
+      }
 
-    document.getElementById(
-      "assistantResponse"
-    ).innerText =
-      error.message;
+      document.getElementById("profileContent").innerHTML = `<div class="empty">${t("loading")}</div>`;
+      document.getElementById("recommendations").innerHTML = `<div class="empty">${t("dashboard_loading")}</div>`;
 
-  }
+      try {
+        const profileResponse = await fetch(`${API_BASE}/beneficiaries/${encodeURIComponent(id)}`);
+        if (!profileResponse.ok) throw new Error(t("beneficiary_not_found"));
 
-}
+        currentProfile = await profileResponse.json();
+        renderProfile(currentProfile);
 
+        const recommendationResponse = await fetch(
+          `${API_BASE}/recommendations/${encodeURIComponent(id)}`,
+          { method: "POST" }
+        );
 
-function speakResponse(
-  text,
-  language
-) {
+        if (!recommendationResponse.ok) throw new Error(t("recommendation_failed"));
 
-  const speech =
-    new SpeechSynthesisUtterance(
-      text
-    );
+        const data = await recommendationResponse.json();
+        currentRecommendations = Array.isArray(data.recommendations) ? data.recommendations : [];
+        renderRecommendations(currentRecommendations);
+      } catch (error) {
+        if (String(error.message) === t("beneficiary_not_found")) {
+          activeBeneficiaryId = "";
+          localStorage.removeItem("jeevikaBeneficiaryId");
+          showOnboarding(true);
+        }
+        alert(error.message || t("recommendation_failed"));
+      }
+    }
 
-  if (language === "Kannada") {
-    speech.lang = "kn-IN";
-  }
-  else if (language === "Hindi") {
-    speech.lang = "hi-IN";
-  }
-  else {
-    speech.lang = "en-IN";
-  }
+    function renderProfile(profile) {
+      const skills = Array.isArray(profile.existing_skills) ? profile.existing_skills : [];
+      const interests = Array.isArray(profile.interests) ? profile.interests : [];
 
-  window.speechSynthesis.cancel();
+      document.getElementById("profileContent").innerHTML = `
+        <div class="profile-row">
+          <div class="profile-label">${t("name")}</div>
+          <div class="profile-value">${escapeHtml(profile.name || "-")}</div>
+        </div>
 
-  window.speechSynthesis.speak(
-    speech
-  );
-}
+        <div class="profile-row">
+          <div class="profile-label">${t("age")}</div>
+          <div class="profile-value">${escapeHtml(profile.age ?? "-")}</div>
+        </div>
 
-</script>
+        <div class="profile-row">
+          <div class="profile-label">${t("gender")}</div>
+          <div class="profile-value">${translatedValue(profile.gender || "-")}</div>
+        </div>
 
+        <div class="profile-row">
+          <div class="profile-label">${t("location")}</div>
+          <div class="profile-value">
+            ${profile.village ? `${escapeHtml(profile.village)}, ` : ""}${escapeHtml(profile.district || "-")}${profile.state ? `, ${escapeHtml(profile.state)}` : ""}
+          </div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label">${t("education")}</div>
+          <div class="profile-value">${translatedValue(profile.education_level || "-")}</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label">${t("current_occupation")}</div>
+          <div class="profile-value">${profile.current_occupation ? translatedValue(profile.current_occupation) : t("not_specified")}</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label">${t("experience")}</div>
+          <div class="profile-value">${escapeHtml(profile.experience_years ?? 0)} ${t("years")}</div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label">${t("skills")}</div>
+          <div>
+            ${skills.length
+              ? skills.map(item => `<span class="tag">${translatedValue(item)}</span>`).join("")
+              : `<span class="empty">${t("none")}</span>`}
+          </div>
+        </div>
+
+        <div class="profile-row">
+          <div class="profile-label">${t("interests")}</div>
+          <div>
+            ${interests.length
+              ? interests.map(item => `<span class="tag">${translatedValue(item)}</span>`).join("")
+              : `<span class="empty">${t("none")}</span>`}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRecommendations(items) {
+      currentRecommendations = Array.isArray(items) ? items : [];
+      visibleRecommendationCount = Math.min(3, currentRecommendations.length);
+      expandedRecommendationIndexes = new Set(currentRecommendations.length ? [0] : []);
+      renderRecommendationList();
+    }
+
+    function renderRecommendationList() {
+      const container = document.getElementById("recommendations");
+      const items = currentRecommendations;
+
+      if (!items.length) {
+        const tips = [
+          t("no_recommendations_tip_skills"),
+          t("no_recommendations_tip_interests"),
+          t("no_recommendations_tip_occupation")
+        ];
+
+        container.innerHTML = `
+          <div class="recommendation-guidance">
+            <strong>${t("no_recommendations_title")}</strong>
+            <div>${t("no_recommendations_help")}</div>
+            <ul>${tips.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+            <button type="button" onclick="startNewProfile()">${t("new_profile")}</button>
+          </div>
+        `;
+        return;
+      }
+
+      const topScore = Math.max(...items.map(item => Number(item.match_score || 0)));
+      const confidenceNote = topScore < 35
+        ? `<div class="low-confidence-note"><strong>${t("low_confidence_title")}</strong> ${t("low_confidence_help")}</div>`
+        : "";
+
+      const visibleItems = items.slice(0, visibleRecommendationCount);
+      const recommendationHtml = visibleItems
+        .map((item, index) => renderRecommendation(item, index))
+        .join("");
+
+      const hasHidden = visibleRecommendationCount < items.length;
+      const canCollapse = items.length > 3 && visibleRecommendationCount >= items.length;
+      const moreControl = (hasHidden || canCollapse)
+        ? `
+          <div class="recommendations-more-wrap">
+            <button
+              type="button"
+              class="recommendations-more-button"
+              onclick="toggleMoreRecommendations()"
+              aria-expanded="${canCollapse ? "true" : "false"}"
+            >
+              ${hasHidden
+                ? `${t("show_more_recommendations")} (${items.length - visibleRecommendationCount})`
+                : t("show_fewer_recommendations")}
+            </button>
+          </div>
+        `
+        : "";
+
+      container.innerHTML = confidenceNote + recommendationHtml + moreControl;
+    }
+
+    function buildLocalizedExplanation(item, matchedSkills) {
+      const occupation = translateValue(item.occupation || "");
+      const skills = matchedSkills.length
+        ? matchedSkills.map(translateValue).join(", ")
+        : t("no_matched_skills_for_reason");
+
+      return formatT("recommendation_reason", {
+        occupation,
+        skills,
+        score: item.match_score ?? 0
+      });
+    }
+
+    function toggleRecommendationDetails(index) {
+      if (expandedRecommendationIndexes.has(index)) {
+        expandedRecommendationIndexes.delete(index);
+      } else {
+        expandedRecommendationIndexes.add(index);
+      }
+      renderRecommendationList();
+    }
+
+    function toggleMoreRecommendations() {
+      if (visibleRecommendationCount < currentRecommendations.length) {
+        visibleRecommendationCount = currentRecommendations.length;
+      } else {
+        visibleRecommendationCount = Math.min(3, currentRecommendations.length);
+        expandedRecommendationIndexes = new Set([0]);
+        document.getElementById("recommendationsCard")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      renderRecommendationList();
+    }
+
+    function getQualificationEligibilityStatus(q) {
+      if (q?.eligibility_status) return String(q.eligibility_status);
+      return q?.overall_eligible ? "eligible" : "not_eligible";
+    }
+
+    function qualificationStatusClass(status) {
+      if (status === "eligible") return "eligible";
+      if (status === "needs_verification") return "verify";
+      return "not-eligible";
+    }
+
+    function qualificationStatusLabel(status) {
+      if (status === "eligible") return t("nsqf_status_eligible");
+      if (status === "needs_verification") return t("nsqf_status_verify");
+      return t("nsqf_status_not_eligible");
+    }
+
+    function qualificationMappingLabel(mappingType) {
+      return mappingType === "related_pathway"
+        ? t("nsqf_related_pathway")
+        : t("nsqf_exact_pathway");
+    }
+
+    function qualificationValidityLabel(status) {
+      if (status === "active") return t("nsqf_validity_active");
+      if (status === "expired") return t("nsqf_validity_expired");
+      if (status === "not_yet_active") return t("nsqf_validity_not_active");
+      return t("nsqf_validity_unconfirmed");
+    }
+
+    function renderQualificationRoutes(q) {
+      const routes = Array.isArray(q?.eligibility_routes) ? q.eligibility_routes : [];
+      if (!routes.length) return "";
+
+      return `
+        <details class="qualification-routes">
+          <summary>${t("nsqf_eligibility_routes")} (${routes.length})</summary>
+          <div class="qualification-routes-list">
+            ${routes.map((route, routeIndex) => {
+              const status = route.eligibility_status ||
+                (route.overall_eligible ? "eligible" :
+                  (route.verification_needed ? "needs_verification" : "not_eligible"));
+              const statusClass = qualificationStatusClass(status);
+
+              const education = route.minimum_education
+                ? translatedValue(route.minimum_education)
+                : t("not_required");
+
+              const experience = route.experience_required
+                ? translatedValue(route.experience_required)
+                : t("not_required");
+
+              const training = route.training_qualification
+                ? translatedValue(route.training_qualification)
+                : "";
+
+              const previousLevel = route.previous_nsqf_level
+                ? escapeHtml(route.previous_nsqf_level)
+                : "";
+
+              return `
+                <div class="qualification-route">
+                  <div class="qualification-route-head">
+                    <strong>${t("nsqf_route")} ${routeIndex + 1}</strong>
+                    <span class="qualification-route-status ${statusClass}">
+                      ${qualificationStatusLabel(status)}
+                    </span>
+                  </div>
+                  <div><strong>${t("minimum_education")}:</strong> ${education}</div>
+                  <div><strong>${t("experience_required")}:</strong> ${experience}</div>
+                  ${training ? `<div><strong>${t("training_requirement")}:</strong> ${training}</div>` : ""}
+                  ${previousLevel ? `<div><strong>${t("previous_nsqf_level")}:</strong> ${previousLevel}</div>` : ""}
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </details>
+      `;
+    }
+
+    function renderNsqlQualification(q) {
+      const mappingType = String(q?.mapping_type || "exact");
+      const eligibilityStatus = getQualificationEligibilityStatus(q);
+      const eligibilityClass = qualificationStatusClass(eligibilityStatus);
+      const validityStatus = String(q?.validity_status || "validity_unconfirmed");
+      const sourceUrl = String(q?.official_source_url || "").trim();
+
+      return `
+        <div class="qualification-item">
+          <div class="qualification-title-row">
+            <div class="qualification-name">
+              ${translatedValue(q?.qualification_name || "-")}
+            </div>
+
+            <div class="qualification-badges">
+              <span class="qualification-badge ${mappingType === "related_pathway" ? "related" : "exact"}">
+                ${qualificationMappingLabel(mappingType)}
+              </span>
+
+              <span class="qualification-badge ${eligibilityClass}">
+                ${qualificationStatusLabel(eligibilityStatus)}
+              </span>
+
+              <span class="qualification-badge validity">
+                ${qualificationValidityLabel(validityStatus)}
+              </span>
+            </div>
+          </div>
+
+          <div class="qualification-meta">
+            <div><strong>${t("level")}:</strong> ${escapeHtml(q?.nsqf_level ?? "-")}</div>
+            <div><strong>${t("code")}:</strong> ${escapeHtml(q?.qualification_code || "-")}</div>
+            <div><strong>${t("duration")}:</strong> ${escapeHtml(q?.duration_hours || "-")} ${t("hours")}</div>
+            <div>
+              <strong>${t("valid_until")}:</strong>
+              ${q?.valid_till ? escapeHtml(q.valid_till) : t("not_specified")}
+            </div>
+          </div>
+
+          ${q?.eligibility_message
+            ? `<div class="qualification-message">${escapeHtml(q.eligibility_message)}</div>`
+            : ""}
+
+          ${renderQualificationRoutes(q)}
+
+          ${sourceUrl ? `
+            <div class="qualification-source">
+              <a
+                href="${escapeHtml(sourceUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >↗ ${t("view_official_source")}</a>
+            </div>
+          ` : ""}
+        </div>
+      `;
+    }
+
+    function renderRecommendation(item, index) {
+      const skillGap = Array.isArray(item.skill_gap) ? item.skill_gap : [];
+      const matchedSkills = Array.isArray(item.matched_skills) ? item.matched_skills : [];
+      const matchedInterests = Array.isArray(item.matched_interests) ? item.matched_interests : [];
+      const qualifications = Array.isArray(item.nsqf_qualifications) ? item.nsqf_qualifications : [];
+      const schemes = Array.isArray(item.government_schemes) ? item.government_schemes : [];
+      const opportunities = Array.isArray(item.local_opportunities) ? item.local_opportunities : [];
+      const score = Number(item.match_score || 0);
+      const isExpanded = expandedRecommendationIndexes.has(index);
+      const detailsId = `recommendation-details-${index}`;
+
+      return `
+        <div class="recommendation ${isExpanded ? "expanded" : "compact"}">
+          <div class="recommendation-header">
+            <div>
+              <div class="recommendation-rank">#${index + 1}</div>
+              <div class="occupation">${translatedValue(item.occupation || "-")}</div>
+              <div class="sector">${translatedValue(item.sector || "-")}</div>
+            </div>
+            <div class="score">${escapeHtml(score)}% ${t("match")}</div>
+          </div>
+
+          <div class="meter" aria-label="${escapeHtml(score)}% ${t("match")}">
+            <div class="meter-fill" style="width:${Math.max(0, Math.min(100, score))}%"></div>
+          </div>
+
+          ${isExpanded ? `
+            <div class="recommendation-details" id="${detailsId}">
+              <div class="recommendation-explanation">${escapeHtml(buildLocalizedExplanation(item, matchedSkills))}</div>
+
+              <div class="subgrid">
+                <div class="mini-card" data-section="skills">
+                  <div class="mini-title">${t("matched_skills")}</div>
+                  ${matchedSkills.length
+                    ? matchedSkills.map(skill => `<span class="tag good">${translatedValue(skill)}</span>`).join("")
+                    : `<span class="empty">${t("no_skill_match")}</span>`}
+                </div>
+
+                <div class="mini-card" data-section="skills">
+                  <div class="mini-title">${t("skill_gaps")}</div>
+                  ${skillGap.length
+                    ? skillGap.map(skill => `<span class="tag warning">${translatedValue(skill)}</span>`).join("")
+                    : `<span class="empty">${t("no_skill_gap")}</span>`}
+                </div>
+
+                <div class="mini-card" data-section="skills">
+                  <div class="mini-title">${t("interests_matched")}</div>
+                  ${matchedInterests.length
+                    ? matchedInterests.map(interest => `<span class="tag">${translatedValue(interest)}</span>`).join("")
+                    : `<span class="empty">${t("no_interest_match")}</span>`}
+                </div>
+
+                <div class="mini-card" data-section="nsqf">
+                  <div class="mini-title">${t("nsqf_qualification")}</div>
+                  ${qualifications.length
+                    ? qualifications.map(renderNsqlQualification).join("")
+                    : `<span class="empty nsqf-empty-state">${
+                        item.nsqf_mapping_status === "expired_or_inactive_only"
+                          ? t("nsqf_expired_only")
+                          : t("no_nsqf")
+                      }</span>`}
+                </div>
+
+                <div class="mini-card" data-section="schemes">
+                  <div class="mini-title">${t("government_schemes")}</div>
+                  ${schemes.length
+                    ? schemes.map(scheme => `
+                        <div class="scheme-item">
+                          <strong>${escapeHtml(scheme.scheme_name || "-")}</strong>
+                          ${scheme.benefit ? `<div>${translatedValue(scheme.benefit)}</div>` : ""}
+                        </div>
+                      `).join("")
+                    : `<span class="empty">${t("no_scheme")}</span>`}
+                </div>
+
+                <div class="mini-card" data-section="opportunities">
+                  <div class="mini-title">${t("local_opportunities")}</div>
+                  ${opportunities.length
+                    ? opportunities.map(opportunity => `
+                        <div class="opportunity-item">
+                          <strong>${translatedValue(opportunity.opportunity_name || "-")}</strong>
+                          ${opportunity.provider ? `<div>${escapeHtml(opportunity.provider)}</div>` : ""}
+                        </div>
+                      `).join("")
+                    : `<span class="empty">${t("no_opportunity")}</span>`}
+                </div>
+              </div>
+            </div>
+          ` : ""}
+
+          <div class="recommendation-actions">
+            <button
+              type="button"
+              class="recommendation-toggle"
+              onclick="toggleRecommendationDetails(${index})"
+              aria-expanded="${isExpanded ? "true" : "false"}"
+              aria-controls="${detailsId}"
+            >
+              ${isExpanded ? t("hide_details") : t("view_details")}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function startListening() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        alert(t("speech_not_supported"));
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.lang = getSpeechLanguage();
+      recognition.interimResults = false;
+      recognition.continuous = false;
+
+      document.getElementById("transcript").innerText = t("listening");
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        spokenText = event.results[0][0].transcript;
+        document.getElementById("transcript").innerText = `${t("you_said")} ${spokenText}`;
+
+        const input = document.getElementById("assistantTextInput");
+        if (input) input.value = spokenText;
+      };
+
+      recognition.onerror = (event) => {
+        document.getElementById("transcript").innerText = `${t("voice_error")} ${event.error}`;
+      };
+    }
+
+    function normalizeAssistantText(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[.,!?;:()\[\]{}"'`]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function includesAny(text, words) {
+      return words.some(word => text.includes(word));
+    }
+
+    function detectAssistantIntent(query) {
+      const text = normalizeAssistantText(query);
+
+      const groups = {
+        why: [
+          "why", "reason", "explain", "because",
+          "क्यों", "कारण", "समझाओ", "क्यूँ",
+          "ಏಕೆ", "ಯಾಕೆ", "ಕಾರಣ", "ವಿವರಿಸಿ"
+        ],
+        eligibility: [
+          "eligible", "eligibility", "qualify", "can i join",
+          "पात्र", "पात्रता", "योग्य", "क्या मैं",
+          "ಅರ್ಹ", "ಅರ್ಹತೆ", "ನಾನು ಸೇರಬಹುದೇ"
+        ],
+        schemes: [
+          "scheme", "schemes", "government support", "subsidy", "loan",
+          "योजना", "योजनाएँ", "सरकारी", "सब्सिडी", "लोन",
+          "ಯೋಜನೆ", "ಯೋಜನೆಗಳು", "ಸರ್ಕಾರಿ", "ಸಹಾಯಧನ", "ಸಾಲ"
+        ],
+        nsqf: [
+          "nsqf", "course", "training", "qualification", "certificate",
+          "कोर्स", "पाठ्यक्रम", "प्रशिक्षण", "योग्यता", "प्रमाणपत्र",
+          "ಕೋರ್ಸ್", "ತರಬೇತಿ", "ಅರ್ಹತೆ", "ಪ್ರಮಾಣಪತ್ರ"
+        ],
+        skills: [
+          "skill", "skills", "learn", "missing", "gap", "improve",
+          "कौशल", "सीख", "कमी", "सुधार",
+          "ಕೌಶಲ್ಯ", "ಕಲಿಯ", "ಕೊರತೆ", "ಅಭಿವೃದ್ಧಿ"
+        ],
+        alternative: [
+          "alternative", "another", "other option", "next option", "more jobs",
+          "दूसरा", "दूसरी", "अन्य", "अगला विकल्प", "और काम",
+          "ಬೇರೆ", "ಇನ್ನೊಂದು", "ಮುಂದಿನ ಆಯ್ಕೆ", "ಹೆಚ್ಚು ಕೆಲಸ"
+        ],
+        profile: [
+          "my profile", "my details", "about me",
+          "मेरी जानकारी", "मेरा प्रोफाइल", "मेरे बारे",
+          "ನನ್ನ ವಿವರ", "ನನ್ನ ಪ್ರೊಫೈಲ್", "ನನ್ನ ಬಗ್ಗೆ"
+        ],
+        recommendation: [
+          "job", "jobs", "work", "livelihood", "recommend", "best", "suitable", "career",
+          "नौकरी", "काम", "रोजगार", "आजीविका", "सुझाव", "उपयुक्त", "करियर",
+          "ಕೆಲಸ", "ಉದ್ಯೋಗ", "ಜೀವನೋಪಾಯ", "ಶಿಫಾರಸು", "ಸೂಕ್ತ", "ವೃತ್ತಿ"
+        ]
+      };
+
+      for (const intent of ["why", "eligibility", "schemes", "nsqf", "skills", "alternative", "profile", "recommendation"]) {
+        if (includesAny(text, groups[intent])) return intent;
+      }
+
+      return "unknown";
+    }
+
+    function findRecommendationFromQuery(query) {
+      if (!currentRecommendations.length) return null;
+
+      const text = normalizeAssistantText(query);
+      if (!text) return currentRecommendations[0];
+
+      const direct = currentRecommendations.find(item => {
+        const english = normalizeAssistantText(item.occupation || "");
+        const localized = normalizeAssistantText(translateValue(item.occupation || ""));
+        return (english && text.includes(english)) || (localized && text.includes(localized));
+      });
+
+      if (direct) return direct;
+
+      // Match on meaningful occupation words when the full title is not spoken.
+      let best = null;
+      let bestScore = 0;
+      for (const item of currentRecommendations) {
+        const candidates = [item.occupation || "", translateValue(item.occupation || "")];
+        for (const candidate of candidates) {
+          const tokens = normalizeAssistantText(candidate)
+            .split(" ")
+            .filter(token => token.length >= 4);
+          const score = tokens.filter(token => text.includes(token)).length;
+          if (score > bestScore) {
+            best = item;
+            bestScore = score;
+          }
+        }
+      }
+
+      return best || currentRecommendations[0];
+    }
+
+    function uniqueTranslated(values) {
+      const seen = new Set();
+      const result = [];
+
+      for (const value of values) {
+        if (!value) continue;
+        const translated = translateValue(value);
+        const key = normalizeAssistantText(translated);
+        if (!key || seen.has(key)) continue;
+        seen.add(key);
+        result.push(translated);
+      }
+
+      return result;
+    }
+
+    function buildLocalAssistantResponse(intent, query = "") {
+      if (!currentProfile) {
+        return {
+          handled: true,
+          text: t("assistant_no_profile")
+        };
+      }
+
+      if (!currentRecommendations.length) {
+        return {
+          handled: true,
+          text: t("assistant_no_recommendations")
+        };
+      }
+
+      const top = findRecommendationFromQuery(query) || currentRecommendations[0];
+      const occupation = translateValue(top.occupation || "-");
+      const score = Number(top.match_score || 0);
+
+      if (intent === "recommendation") {
+        const matched = uniqueTranslated(top.matched_skills || []).slice(0, 4);
+        return {
+          handled: true,
+          text: formatT("assistant_best_response", {
+            occupation,
+            score,
+            skills: matched.length ? matched.join(", ") : t("assistant_profile_factors")
+          }),
+          section: "recommendations"
+        };
+      }
+
+      if (intent === "why") {
+        const matched = uniqueTranslated(top.matched_skills || []).slice(0, 5);
+        const interests = uniqueTranslated(top.matched_interests || []).slice(0, 3);
+        const reasons = [...matched, ...interests];
+        return {
+          handled: true,
+          text: reasons.length
+            ? formatT("assistant_why_response", {
+                occupation,
+                score,
+                reasons: reasons.join(", ")
+              })
+            : formatT("assistant_why_profile_response", { occupation, score }),
+          section: "recommendations"
+        };
+      }
+
+      if (intent === "skills") {
+        const gaps = uniqueTranslated(
+          currentRecommendations
+            .slice(0, 3)
+            .flatMap(item => Array.isArray(item.skill_gap) ? item.skill_gap : [])
+        ).slice(0, 8);
+
+        return {
+          handled: true,
+          text: gaps.length
+            ? formatT("assistant_skills_response", { skills: gaps.join(", ") })
+            : t("assistant_no_skill_gaps"),
+          section: "skills"
+        };
+      }
+
+      if (intent === "nsqf" || intent === "eligibility") {
+        const itemWithQualification =
+          (Array.isArray(top.nsqf_qualifications) && top.nsqf_qualifications.length ? top : null) ||
+          currentRecommendations.find(item => Array.isArray(item.nsqf_qualifications) && item.nsqf_qualifications.length);
+
+        if (!itemWithQualification) {
+          const expiredOnly = currentRecommendations.some(
+            item => item.nsqf_mapping_status === "expired_or_inactive_only"
+          );
+
+          return {
+            handled: true,
+            text: expiredOnly
+              ? t("assistant_nsqf_expired_only")
+              : t("assistant_no_nsqf"),
+            section: "nsqf"
+          };
+        }
+
+        const q = itemWithQualification.nsqf_qualifications[0];
+        const qOccupation = translateValue(itemWithQualification.occupation || "-");
+        const qualification = translateValue(q.qualification_name || "-");
+        const eligibilityStatus = getQualificationEligibilityStatus(q);
+        const eligibilityText = qualificationStatusLabel(eligibilityStatus);
+        const pathwayText = qualificationMappingLabel(q.mapping_type || "exact");
+
+        if (intent === "eligibility") {
+          let responseKey = "assistant_eligibility_no";
+
+          if (eligibilityStatus === "eligible") {
+            responseKey = "assistant_eligibility_yes";
+          } else if (eligibilityStatus === "needs_verification") {
+            responseKey = "assistant_eligibility_verify";
+          }
+
+          return {
+            handled: true,
+            text: formatT(responseKey, {
+              qualification,
+              occupation: qOccupation
+            }),
+            section: "nsqf"
+          };
+        }
+
+        return {
+          handled: true,
+          text: formatT("assistant_nsqf_response_v2", {
+            occupation: qOccupation,
+            qualification,
+            level: q.nsqf_level ?? "-",
+            code: q.qualification_code || "-",
+            duration: q.duration_hours ?? "-",
+            eligibility: eligibilityText,
+            pathway: pathwayText
+          }),
+          section: "nsqf"
+        };
+      }
+
+      if (intent === "schemes") {
+        const schemes = [];
+        const seen = new Set();
+
+        currentRecommendations.slice(0, 3).forEach(item => {
+          (item.government_schemes || []).forEach(scheme => {
+            const name = String(scheme.scheme_name || "").trim();
+            if (!name || seen.has(name)) return;
+            seen.add(name);
+            schemes.push(name);
+          });
+        });
+
+        return {
+          handled: true,
+          text: schemes.length
+            ? formatT("assistant_schemes_response", { schemes: schemes.slice(0, 6).join(", ") })
+            : t("assistant_no_schemes"),
+          section: "schemes"
+        };
+      }
+
+      if (intent === "alternative") {
+        const alternatives = currentRecommendations
+          .slice(1, 5)
+          .map(item => `${translateValue(item.occupation || "-")} (${Number(item.match_score || 0)}%)`);
+
+        return {
+          handled: true,
+          text: alternatives.length
+            ? formatT("assistant_alternatives_response", { options: alternatives.join(", ") })
+            : t("assistant_no_alternatives"),
+          section: "recommendations"
+        };
+      }
+
+      if (intent === "profile") {
+        const profileSkills = uniqueTranslated(currentProfile.existing_skills || []).slice(0, 6);
+        return {
+          handled: true,
+          text: formatT("assistant_profile_response", {
+            name: currentProfile.name || "-",
+            education: translateValue(currentProfile.education_level || t("not_specified")),
+            occupation: translateValue(currentProfile.current_occupation || t("not_specified")),
+            experience: currentProfile.experience_years ?? 0,
+            skills: profileSkills.length ? profileSkills.join(", ") : t("none")
+          }),
+          section: "profile"
+        };
+      }
+
+      return { handled: false, text: "" };
+    }
+
+    function presentAssistantAnswer(text, section = null) {
+      const responseBox = document.getElementById("assistantResponse");
+      responseBox.innerText = text;
+      speakResponse(text);
+
+      if (section === "skills") {
+        navigateTo("recommendations");
+        setTimeout(() => {
+          document.querySelectorAll('[data-section="skills"]').forEach(card => card.classList.add("section-focus"));
+        }, 250);
+      } else if (section) {
+        navigateTo(section);
+      }
+    }
+
+    function askQuickQuestion(intent) {
+      const result = buildLocalAssistantResponse(intent, "");
+      if (result.handled) {
+        document.getElementById("transcript").innerText = t("assistant_quick_question_used");
+        presentAssistantAnswer(result.text, result.section);
+      }
+    }
+
+    async function submitAssistantQuery() {
+      const input = document.getElementById("assistantTextInput");
+      const query = String(input?.value || spokenText || "").trim();
+
+      if (!query) {
+        alert(t("assistant_enter_or_speak"));
+        return;
+      }
+
+      spokenText = query;
+      document.getElementById("transcript").innerText = `${t("you_said")} ${query}`;
+
+      const intent = detectAssistantIntent(query);
+      const local = buildLocalAssistantResponse(intent, query);
+
+      if (local.handled && intent !== "unknown") {
+        presentAssistantAnswer(local.text, local.section);
+        return;
+      }
+
+      await sendAssistantFallback(query);
+    }
+
+    async function sendVoiceQuery() {
+      // Kept for compatibility with earlier UI calls.
+      return submitAssistantQuery();
+    }
+
+    async function sendAssistantFallback(query) {
+      const id = getBeneficiaryId();
+      if (!id) {
+        presentAssistantAnswer(t("assistant_no_profile"));
+        return;
+      }
+
+      const language = getSelectedLanguage();
+      const responseBox = document.getElementById("assistantResponse");
+      responseBox.innerText = t("assistant_thinking");
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/assistant/query/${encodeURIComponent(id)}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, language })
+          }
+        );
+
+        if (!response.ok) throw new Error(t("assistant_failed"));
+
+        const data = await response.json();
+        const assistantText = data.assistant_response || t("assistant_failed");
+        presentAssistantAnswer(assistantText);
+
+        if (Array.isArray(data.top_recommendations) && data.top_recommendations.length) {
+          currentRecommendations = data.top_recommendations;
+          renderRecommendations(currentRecommendations);
+        }
+      } catch (error) {
+        responseBox.innerText = error.message || t("assistant_failed");
+      }
+    }
+
+    function speakResponse(text) {
+      if (!("speechSynthesis" in window)) return;
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = getSpeechLanguage();
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(speech);
+    }
+
+    function setSidebarCollapsed(collapsed, persist = true) {
+      const shell = document.getElementById("appShell");
+      const toggle = document.getElementById("navToggle");
+      if (!shell || !toggle) return;
+
+      shell.classList.toggle("sidebar-collapsed", collapsed);
+      toggle.classList.toggle("collapsed", collapsed);
+      toggle.textContent = collapsed ? "☰" : "‹";
+      toggle.setAttribute("aria-expanded", String(!collapsed));
+
+      const labelKey = collapsed ? "show_navigation" : "hide_navigation";
+      toggle.setAttribute("data-i18n-aria-label", labelKey);
+      toggle.setAttribute("aria-label", t(labelKey));
+      toggle.setAttribute("title", t(labelKey));
+
+      if (persist) {
+        localStorage.setItem("jeevikaSidebarCollapsed", collapsed ? "true" : "false");
+      }
+    }
+
+    function toggleSidebar() {
+      const shell = document.getElementById("appShell");
+      if (!shell) return;
+      setSidebarCollapsed(!shell.classList.contains("sidebar-collapsed"));
+    }
+
+    function navigateTo(section) {
+      document.querySelectorAll(".nav-item").forEach(item => {
+        item.classList.toggle("active", item.dataset.nav === section);
+      });
+
+      document.querySelectorAll(".mini-card.section-focus").forEach(card => {
+        card.classList.remove("section-focus");
+      });
+
+      const targets = {
+        dashboard: document.getElementById("dashboardTop"),
+        profile: document.getElementById("profileCard"),
+        recommendations: document.getElementById("recommendationsCard"),
+        voice: document.getElementById("voiceCard"),
+        nsqf: document.getElementById("recommendationsCard"),
+        schemes: document.getElementById("recommendationsCard"),
+        opportunities: document.getElementById("recommendationsCard")
+      };
+
+      targets[section]?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      if (["nsqf", "schemes", "opportunities"].includes(section)) {
+        setTimeout(() => {
+          document.querySelectorAll(`[data-section="${section}"]`).forEach(card => {
+            card.classList.add("section-focus");
+          });
+        }, 250);
+      }
+
+      if (window.innerWidth <= 950) {
+        setSidebarCollapsed(true);
+      }
+    }
+
+    window.addEventListener("jeevika-language-changed", () => {
+      const shell = document.getElementById("appShell");
+      if (shell) {
+        setSidebarCollapsed(shell.classList.contains("sidebar-collapsed"), false);
+      }
+
+      if (currentProfile) renderProfile(currentProfile);
+      if (currentRecommendations.length) renderRecommendations(currentRecommendations);
+      if (onboardingMode === "voice") {
+        renderVoiceOnboardingUI();
+        if (voiceInterviewComplete) renderVoiceReview();
+      } else {
+        updateOnboardingStep();
+      }
+
+      if (!activeBeneficiaryId) {
+        showOnboarding();
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedLanguage = localStorage.getItem("jeevikaLanguage");
+      activeBeneficiaryId = localStorage.getItem("jeevikaBeneficiaryId") || "";
+
+      const savedSidebarState = localStorage.getItem("jeevikaSidebarCollapsed");
+      const shouldStartCollapsed = savedSidebarState === "true" ||
+        (savedSidebarState === null && window.innerWidth <= 950);
+      setSidebarCollapsed(shouldStartCollapsed, false);
+
+      [
+        "profileName", "profileAge", "profileGender", "profileState", "profileDistrict", "profileVillage",
+        "profileEducation", "profileOccupation", "profileExperience", "profileSkills", "profileInterests", "profileIncome"
+      ].forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (!field) return;
+        const eventName = field.tagName === "SELECT" ? "change" : "input";
+        field.addEventListener(eventName, () => clearFieldError(fieldId));
+      });
+
+      if (savedLanguage) {
+        if (activeBeneficiaryId) {
+          loadDashboard(activeBeneficiaryId);
+        } else {
+          showOnboarding();
+        }
+      }
+    });
+
+  </script>
 </body>
 </html>
