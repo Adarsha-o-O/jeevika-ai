@@ -1635,6 +1635,158 @@
       }
     }
 
+  
+    /* ============================================================
+       GOVERNMENT SCHEME INTELLIGENCE — EXPLAINABLE FRONTEND
+       ============================================================ */
+
+    .scheme-item {
+      margin-bottom: 10px;
+      padding: 12px;
+      border: 1px solid #e1e7ee;
+      border-radius: 12px;
+      background: #fbfcfe;
+      line-height: 1.45;
+    }
+
+    .scheme-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .scheme-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .scheme-name {
+      font-weight: 850;
+      color: #1c2940;
+      line-height: 1.35;
+      max-width: 100%;
+    }
+
+    .scheme-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .scheme-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .scheme-badge.high {
+      color: #17684d;
+      background: #e5f8ef;
+      border-color: #ccebdc;
+    }
+
+    .scheme-badge.relevant {
+      color: #31589b;
+      background: #edf3ff;
+      border-color: #d7e3fb;
+    }
+
+    .scheme-badge.possible {
+      color: #865f08;
+      background: #fff7df;
+      border-color: #f0dfab;
+    }
+
+    .scheme-type {
+      margin-top: 5px;
+      color: #657086;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .scheme-benefit {
+      margin-top: 8px;
+      color: #334056;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .scheme-section {
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid #e7ebf1;
+    }
+
+    .scheme-section-title {
+      margin-bottom: 5px;
+      color: #27364e;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .scheme-list {
+      margin: 0;
+      padding-left: 17px;
+      color: #536177;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .scheme-list li + li {
+      margin-top: 3px;
+    }
+
+    .scheme-note {
+      margin-top: 9px;
+      padding: 8px 9px;
+      border-radius: 9px;
+      background: #fffaf0;
+      color: #765d21;
+      font-size: 10.5px;
+      line-height: 1.45;
+    }
+
+    .scheme-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      margin-top: 9px;
+      color: #6b778b;
+      font-size: 10.5px;
+    }
+
+    .scheme-source {
+      margin-top: 9px;
+    }
+
+    .scheme-source a {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--green-700);
+      font-size: 11px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .scheme-source a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 650px) {
+      .scheme-title-row {
+        gap: 7px;
+      }
+    }
+
   </style>
 
   <script src="i18n.js"></script>
@@ -3459,6 +3611,167 @@
       `;
     }
 
+
+    function schemeRelevanceLabel(level) {
+      const value = String(level || "").toLowerCase();
+
+      if (value === "high") {
+        return t("scheme_highly_relevant");
+      }
+
+      if (value === "relevant") {
+        return t("scheme_relevant");
+      }
+
+      return t("scheme_worth_checking");
+    }
+
+    function schemeRelevanceClass(level) {
+      const value = String(level || "").toLowerCase();
+
+      if (value === "high") return "high";
+      if (value === "relevant") return "relevant";
+      return "possible";
+    }
+
+    function schemeTypeLabel(value) {
+      const types = {
+        "Skilling / Certification": "scheme_type_skilling",
+        "Apprenticeship / On-the-job Training": "scheme_type_apprenticeship",
+        "Self-employment / Micro-enterprise": "scheme_type_self_employment",
+        "Rural Skill Training / Placement": "scheme_type_rural_training",
+        "Street-vendor Working Capital": "scheme_type_street_vendor",
+        "Micro-enterprise Credit": "scheme_type_micro_credit"
+      };
+
+      const key = types[String(value || "")];
+      return key ? t(key) : translatedValue(value || "");
+    }
+
+    function translateSchemeText(value) {
+      const text = String(value || "");
+
+      const known = {
+        "The recommended livelihood has identified skill gaps that may benefit from formal skilling.": "scheme_reason_skill_gaps",
+        "Jeevika has an NSQF pathway mapped for this livelihood.": "scheme_reason_nsqf",
+        "The beneficiary is within the PMKVY 4.0 Short-Term Training age range.": "scheme_reason_pmkvy_age",
+        "Prior work experience may make Recognition of Prior Learning worth checking.": "scheme_reason_rpl",
+        "The recommended occupation is suitable for an apprenticeship or on-the-job training pathway.": "scheme_reason_apprenticeship",
+        "The beneficiary meets the general minimum apprenticeship age threshold.": "scheme_reason_apprenticeship_age",
+        "A mapped skill qualification makes structured work-based training especially relevant.": "scheme_reason_work_based_training",
+        "The livelihood or beneficiary preference points toward self-employment or starting a micro-enterprise.": "scheme_reason_self_employment",
+        "The beneficiary meets the basic PMEGP adult-age condition.": "scheme_reason_pmegp_age",
+        "The beneficiary falls within an age band that can be relevant for DDU-GKY.": "scheme_reason_ddu_age",
+        "A village/town location is recorded, so rural-programme relevance is worth verifying.": "scheme_reason_rural_signal",
+        "The occupation/current work explicitly matches a street-vending livelihood.": "scheme_reason_street_vendor",
+        "The livelihood or beneficiary preference points toward a micro-enterprise/self-employment pathway.": "scheme_reason_micro_enterprise",
+        "The livelihood is an allied-agriculture activity such as poultry, dairy or beekeeping, which falls within PMMY's stated activity scope.": "scheme_reason_allied_agriculture",
+
+        "Aadhaar/identity and job-role eligibility": "scheme_verify_identity_job_role",
+        "availability of the relevant approved training pathway": "scheme_verify_training_availability",
+        "whether the prior experience satisfies the selected RPL job role": "scheme_verify_rpl_experience",
+        "trade-specific education and physical requirements": "scheme_verify_trade_requirements",
+        "availability of a registered establishment and apprenticeship contract": "scheme_verify_apprenticeship_place",
+        "whether this is a new eligible enterprise/project": "scheme_verify_new_enterprise",
+        "project activity and project-cost rules": "scheme_verify_project_rules",
+        "previous government-subsidy assistance": "scheme_verify_previous_subsidy",
+        "education requirement where the project-cost threshold makes it applicable": "scheme_verify_pmegp_education",
+        "rural residence": "scheme_verify_rural_residence",
+        "poor-household / programme target-group criteria": "scheme_verify_household_criteria",
+        "other DDU-GKY admission conditions": "scheme_verify_ddu_conditions",
+        "street-vendor identification and local-body / scheme documentation requirements": "scheme_verify_vendor_documents",
+        "enterprise and loan-purpose details": "scheme_verify_enterprise_details",
+        "lender appraisal and applicable PMMY category": "scheme_verify_lender"
+      };
+
+      const key = known[text];
+      return key ? t(key) : translatedValue(text);
+    }
+
+    function renderSchemeList(values) {
+      const items = Array.isArray(values) ? values.filter(Boolean) : [];
+
+      if (!items.length) return "";
+
+      return `
+        <ul class="scheme-list">
+          ${items.map(value => `<li>${escapeHtml(translateSchemeText(value))}</li>`).join("")}
+        </ul>
+      `;
+    }
+
+    function renderGovernmentScheme(scheme) {
+      const level = String(scheme?.relevance_level || "possible");
+      const sourceUrl = String(scheme?.official_url || "").trim();
+      const reasons = Array.isArray(scheme?.relevance_reasons)
+        ? scheme.relevance_reasons
+        : [];
+      const verification = Array.isArray(scheme?.verification_points)
+        ? scheme.verification_points
+        : [];
+
+      return `
+        <div class="scheme-item">
+          <div class="scheme-title-row">
+            <div class="scheme-name">
+              ${escapeHtml(scheme?.scheme_name || "-")}
+            </div>
+
+            <div class="scheme-badges">
+              <span class="scheme-badge ${schemeRelevanceClass(level)}">
+                ${schemeRelevanceLabel(level)}
+              </span>
+            </div>
+          </div>
+
+          ${scheme?.scheme_type
+            ? `<div class="scheme-type">${schemeTypeLabel(scheme.scheme_type)}</div>`
+            : ""}
+
+          ${scheme?.benefit
+            ? `<div class="scheme-benefit"><strong>${t("scheme_benefit")}:</strong> ${translatedValue(scheme.benefit)}</div>`
+            : ""}
+
+          ${reasons.length ? `
+            <div class="scheme-section">
+              <div class="scheme-section-title">${t("scheme_why_suggested")}</div>
+              ${renderSchemeList(reasons)}
+            </div>
+          ` : ""}
+
+          ${verification.length ? `
+            <div class="scheme-section">
+              <div class="scheme-section-title">${t("scheme_verify_before_applying")}</div>
+              ${renderSchemeList(verification)}
+            </div>
+          ` : ""}
+
+          <div class="scheme-note">
+            ${t("scheme_relevance_not_eligibility")}
+          </div>
+
+          <div class="scheme-meta">
+            ${scheme?.application_mode
+              ? `<span><strong>${t("scheme_application_mode")}:</strong> ${translatedValue(scheme.application_mode)}</span>`
+              : ""}
+            ${scheme?.last_verified
+              ? `<span><strong>${t("scheme_information_checked")}:</strong> ${escapeHtml(scheme.last_verified)}</span>`
+              : ""}
+          </div>
+
+          ${sourceUrl ? `
+            <div class="scheme-source">
+              <a
+                href="${escapeHtml(sourceUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >↗ ${t("view_official_scheme")}</a>
+            </div>
+          ` : ""}
+        </div>
+      `;
+    }
+
     function renderRecommendation(item, index) {
       const skillGap = Array.isArray(item.skill_gap) ? item.skill_gap : [];
       const matchedSkills = Array.isArray(item.matched_skills) ? item.matched_skills : [];
@@ -3525,12 +3838,7 @@
                 <div class="mini-card" data-section="schemes">
                   <div class="mini-title">${t("government_schemes")}</div>
                   ${schemes.length
-                    ? schemes.map(scheme => `
-                        <div class="scheme-item">
-                          <strong>${escapeHtml(scheme.scheme_name || "-")}</strong>
-                          ${scheme.benefit ? `<div>${translatedValue(scheme.benefit)}</div>` : ""}
-                        </div>
-                      `).join("")
+                    ? schemes.map(renderGovernmentScheme).join("")
                     : `<span class="empty">${t("no_scheme")}</span>`}
                 </div>
 
@@ -3834,22 +4142,37 @@
       }
 
       if (intent === "schemes") {
-        const schemes = [];
-        const seen = new Set();
+        const bestByScheme = new Map();
 
         currentRecommendations.slice(0, 3).forEach(item => {
           (item.government_schemes || []).forEach(scheme => {
             const name = String(scheme.scheme_name || "").trim();
-            if (!name || seen.has(name)) return;
-            seen.add(name);
-            schemes.push(name);
+            if (!name) return;
+
+            const score = Number(scheme.relevance_score || 0);
+            const previous = bestByScheme.get(name);
+
+            if (!previous || score > previous.score) {
+              bestByScheme.set(name, {
+                name,
+                score,
+                level: String(scheme.relevance_level || "possible")
+              });
+            }
           });
         });
+
+        const schemes = Array.from(bestByScheme.values())
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3)
+          .map(item => `${item.name} — ${schemeRelevanceLabel(item.level)}`);
 
         return {
           handled: true,
           text: schemes.length
-            ? formatT("assistant_schemes_response", { schemes: schemes.slice(0, 6).join(", ") })
+            ? formatT("assistant_schemes_response_v2", {
+                schemes: schemes.join(", ")
+              })
             : t("assistant_no_schemes"),
           section: "schemes"
         };
