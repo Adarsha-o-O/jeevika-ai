@@ -1,4 +1,5 @@
 from difflib import SequenceMatcher
+import re
 from typing import List, Set
 
 
@@ -7,6 +8,14 @@ SKILL_ALIASES = {
     "vehicle repair": "mechanical work",
     "mechanic work": "mechanical work",
     "car mechanic": "mechanical work",
+
+    "bike repair": "mechanical work",
+    "motorcycle repair": "mechanical work",
+    "two wheeler repair": "mechanical work",
+    "two-wheeler repair": "mechanical work",
+    "vehicle servicing": "mechanical work",
+    "bike servicing": "mechanical work",
+    "automobile servicing": "mechanical work",
 
     "computer knowledge": "computer basics",
     "basic computer": "computer basics",
@@ -40,13 +49,24 @@ SKILL_ALIASES = {
     "mobile repairing": "electronics repair",
 
     "cooking skills": "cooking",
-    "cleaning work": "cleaning"
+    "cleaning work": "cleaning",
+
+    "beauty care": "beauty services",
+    "salon work": "beauty services",
+    "beauty work": "beauty services"
 }
 
 
 INTEREST_ALIASES = {
     "cars": "automobiles",
     "vehicles": "automobiles",
+    "motorcycles": "automobiles",
+    "bikes": "automobiles",
+
+    "vehicle servicing": "automobiles",
+    "automobile servicing": "automobiles",
+    "bike servicing": "automobiles",
+    "car servicing": "automobiles",
 
     "computer": "computers",
     "technology": "technical work",
@@ -56,25 +76,61 @@ INTEREST_ALIASES = {
     "fashion designing": "design",
 
     "repairing": "repair work",
+    "mechanics": "repair work",
 
     "helping people": "healthcare",
 
-    "food": "cooking"
+    "food": "cooking",
+
+    "beauty": "beauty and wellness",
+    "wellness": "beauty and wellness",
+    "salon": "beauty and wellness"
 }
 
 
-def normalize_text(value: str) -> str:
-    return str(value).lower().strip()
+def normalize_text(
+    value: str
+) -> str:
+
+    value = str(
+        value
+    ).lower().strip()
+
+    # Normalize repeated spaces without
+    # changing meaningful punctuation.
+    return re.sub(
+        r"\s+",
+        " ",
+        value
+    )
 
 
-def normalize_skill(value: str) -> str:
-    value = normalize_text(value)
-    return SKILL_ALIASES.get(value, value)
+def normalize_skill(
+    value: str
+) -> str:
+
+    value = normalize_text(
+        value
+    )
+
+    return SKILL_ALIASES.get(
+        value,
+        value
+    )
 
 
-def normalize_interest(value: str) -> str:
-    value = normalize_text(value)
-    return INTEREST_ALIASES.get(value, value)
+def normalize_interest(
+    value: str
+) -> str:
+
+    value = normalize_text(
+        value
+    )
+
+    return INTEREST_ALIASES.get(
+        value,
+        value
+    )
 
 
 def similarity_score(
@@ -84,8 +140,12 @@ def similarity_score(
 
     return SequenceMatcher(
         None,
-        value1,
-        value2
+        normalize_text(
+            value1
+        ),
+        normalize_text(
+            value2
+        )
     ).ratio()
 
 
@@ -95,29 +155,41 @@ def is_similar(
     threshold: float = 0.82
 ) -> bool:
 
-    value1 = normalize_text(value1)
-    value2 = normalize_text(value2)
+    value1 = normalize_text(
+        value1
+    )
+
+    value2 = normalize_text(
+        value2
+    )
 
     if value1 == value2:
         return True
 
-    # Direct phrase containment
+    # Direct phrase containment.
     if (
         len(value1) >= 4
-        and len(value2) >= 4
-        and (
+        and
+        len(value2) >= 4
+        and
+        (
             value1 in value2
-            or value2 in value1
+            or
+            value2 in value1
         )
     ):
         return True
 
-    # Prevent false matches such as
-    # technical work vs mechanical work
+    # Prevent common false fuzzy matches such as:
+    # technical work vs mechanical work.
     if (
         len(value1) >= 2
-        and len(value2) >= 2
-        and value1[:2] != value2[:2]
+        and
+        len(value2) >= 2
+        and
+        value1[:2]
+        !=
+        value2[:2]
     ):
         return False
 
@@ -126,7 +198,8 @@ def is_similar(
             value1,
             value2
         )
-        >= threshold
+        >=
+        threshold
     )
 
 
@@ -145,7 +218,11 @@ def find_matches(
                 user_value,
                 required
             ):
-                matched.add(required)
+                matched.add(
+                    required
+                )
                 break
 
-    return sorted(matched)
+    return sorted(
+        matched
+    )
