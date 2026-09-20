@@ -1787,6 +1787,172 @@
       }
     }
 
+  
+    /* ============================================================
+       VERIFIED OPPORTUNITY SOURCES — EXPLAINABLE FRONTEND
+       ============================================================ */
+
+    .opportunity-item {
+      margin-bottom: 10px;
+      padding: 12px;
+      border: 1px solid #e1e7ee;
+      border-radius: 12px;
+      background: #fbfcfe;
+      line-height: 1.45;
+    }
+
+    .opportunity-item:last-child { margin-bottom: 0; }
+
+    .opportunity-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .opportunity-name {
+      font-weight: 850;
+      color: #1c2940;
+      line-height: 1.35;
+    }
+
+    .opportunity-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .opportunity-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-size: 10px;
+      line-height: 1.2;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .opportunity-badge.high {
+      color: #17684d;
+      background: #e5f8ef;
+      border-color: #ccebdc;
+    }
+
+    .opportunity-badge.relevant {
+      color: #31589b;
+      background: #edf3ff;
+      border-color: #d7e3fb;
+    }
+
+    .opportunity-badge.possible {
+      color: #865f08;
+      background: #fff7df;
+      border-color: #f0dfab;
+    }
+
+    .opportunity-badge.district {
+      color: #17684d;
+      background: #eef9f4;
+      border-color: #d2ebdf;
+    }
+
+    .opportunity-badge.state {
+      color: #31589b;
+      background: #f0f5ff;
+      border-color: #dbe5fa;
+    }
+
+    .opportunity-badge.national {
+      color: #5b4a83;
+      background: #f6f1ff;
+      border-color: #e4daf8;
+    }
+
+    .opportunity-type {
+      margin-top: 5px;
+      color: #657086;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .opportunity-provider {
+      margin-top: 6px;
+      color: #405069;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .opportunity-description {
+      margin-top: 8px;
+      color: #536177;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .opportunity-section {
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid #e7ebf1;
+    }
+
+    .opportunity-section-title {
+      margin-bottom: 5px;
+      color: #27364e;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .opportunity-list {
+      margin: 0;
+      padding-left: 17px;
+      color: #536177;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .opportunity-list li + li { margin-top: 3px; }
+
+    .opportunity-note {
+      margin-top: 9px;
+      padding: 8px 9px;
+      border-radius: 9px;
+      background: #f5f8fb;
+      color: #58667a;
+      font-size: 10.5px;
+      line-height: 1.45;
+    }
+
+    .opportunity-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      margin-top: 9px;
+      color: #6b778b;
+      font-size: 10.5px;
+    }
+
+    .opportunity-source { margin-top: 9px; }
+
+    .opportunity-source a {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--green-700);
+      font-size: 11px;
+      font-weight: 850;
+      text-decoration: none;
+    }
+
+    .opportunity-source a:hover { text-decoration: underline; }
+
+    @media (max-width: 650px) {
+      .opportunity-title-row { gap: 7px; }
+    }
+
   </style>
 
   <script src="i18n.js"></script>
@@ -2101,6 +2267,7 @@
             <button class="assistant-chip" onclick="askQuickQuestion('skills')" data-i18n="quick_skills">Skills to learn</button>
             <button class="assistant-chip" onclick="askQuickQuestion('nsqf')" data-i18n="quick_nsqf">NSQF course</button>
             <button class="assistant-chip" onclick="askQuickQuestion('schemes')" data-i18n="quick_schemes">Schemes</button>
+            <button class="assistant-chip" onclick="askQuickQuestion('opportunities')" data-i18n="quick_opportunities">Opportunities</button>
             <button class="assistant-chip" onclick="askQuickQuestion('alternative')" data-i18n="quick_alternatives">Other options</button>
           </div>
 
@@ -3772,6 +3939,137 @@
       `;
     }
 
+    function opportunityRelevanceLabel(level) {
+      const value = String(level || "").toLowerCase();
+      if (value === "high") return t("opportunity_highly_relevant");
+      if (value === "relevant") return t("opportunity_relevant");
+      return t("opportunity_worth_checking");
+    }
+
+    function opportunityRelevanceClass(level) {
+      const value = String(level || "").toLowerCase();
+      if (value === "high") return "high";
+      if (value === "relevant") return "relevant";
+      return "possible";
+    }
+
+    function opportunityLocationLabel(level) {
+      const value = String(level || "").toLowerCase();
+      if (value === "district") return t("opportunity_district_source");
+      if (value === "state") return t("opportunity_state_source");
+      return t("opportunity_national_source");
+    }
+
+    function opportunityLocationClass(level) {
+      const value = String(level || "").toLowerCase();
+      if (value === "district") return "district";
+      if (value === "state") return "state";
+      return "national";
+    }
+
+    function translateOpportunityReason(value) {
+      const text = String(value || "");
+      const known = {
+        "This verified listing matches your district.": "opportunity_reason_district",
+        "This verified listing matches your state.": "opportunity_reason_state",
+        "This verified listing is available at national scope.": "opportunity_reason_national",
+        "The listing directly matches the recommended occupation.": "opportunity_reason_occupation_match",
+        "The beneficiary is in Karnataka and this is Karnataka Skill Development Corporation's official opportunity platform.": "opportunity_reason_skillconnect",
+        "The portal also supports apprenticeship and work-based opportunity discovery.": "opportunity_reason_skillconnect_apprenticeship",
+        "The portal includes courses and employability resources in addition to jobs.": "opportunity_reason_skillconnect_courses",
+        "National Career Service provides official job-search resources for jobseekers across India.": "opportunity_reason_ncs",
+        "The recommended occupation can be used as the search role/designation on NCS.": "opportunity_reason_ncs_role",
+        "The recommended occupation is suitable for an apprenticeship or on-the-job training pathway.": "opportunity_reason_apprenticeship",
+        "A mapped skill qualification makes apprenticeship exploration especially relevant.": "opportunity_reason_apprenticeship_nsqf",
+        "The recommendation has identified skill gaps that can be used to search for relevant training.": "opportunity_reason_training_gap",
+        "The livelihood has an NSQF-linked qualification pathway, so verified skill-course discovery is relevant.": "opportunity_reason_training_nsqf"
+      };
+
+      const key = known[text];
+      return key ? t(key) : translatedValue(text);
+    }
+
+    function renderOpportunityReasons(values) {
+      const items = Array.isArray(values) ? values.filter(Boolean) : [];
+      if (!items.length) return "";
+
+      return `
+        <ul class="opportunity-list">
+          ${items.map(value => `<li>${escapeHtml(translateOpportunityReason(value))}</li>`).join("")}
+        </ul>
+      `;
+    }
+
+    function renderVerifiedOpportunity(opportunity) {
+      const relevance = String(opportunity?.relevance_level || "possible");
+      const location = String(opportunity?.location_match_level || "national");
+      const sourceUrl = String(opportunity?.official_url || "").trim();
+      const reasons = Array.isArray(opportunity?.relevance_reasons)
+        ? opportunity.relevance_reasons
+        : [];
+
+      return `
+        <div class="opportunity-item">
+          <div class="opportunity-title-row">
+            <div class="opportunity-name">
+              ${escapeHtml(opportunity?.opportunity_name || "-")}
+            </div>
+
+            <div class="opportunity-badges">
+              <span class="opportunity-badge ${opportunityRelevanceClass(relevance)}">
+                ${opportunityRelevanceLabel(relevance)}
+              </span>
+              <span class="opportunity-badge ${opportunityLocationClass(location)}">
+                ${opportunityLocationLabel(location)}
+              </span>
+            </div>
+          </div>
+
+          ${opportunity?.opportunity_type
+            ? `<div class="opportunity-type">${translatedValue(opportunity.opportunity_type)}</div>`
+            : ""}
+
+          ${opportunity?.provider
+            ? `<div class="opportunity-provider">${escapeHtml(opportunity.provider)}</div>`
+            : ""}
+
+          ${opportunity?.description
+            ? `<div class="opportunity-description">${translatedValue(opportunity.description)}</div>`
+            : ""}
+
+          ${reasons.length ? `
+            <div class="opportunity-section">
+              <div class="opportunity-section-title">${t("opportunity_why_useful")}</div>
+              ${renderOpportunityReasons(reasons)}
+            </div>
+          ` : ""}
+
+          <div class="opportunity-note">
+            ${opportunity?.freshness_note
+              ? translatedValue(opportunity.freshness_note)
+              : t("opportunity_freshness_default")}
+          </div>
+
+          <div class="opportunity-meta">
+            ${opportunity?.delivery_mode
+              ? `<span><strong>${t("opportunity_delivery_mode")}:</strong> ${translatedValue(opportunity.delivery_mode)}</span>`
+              : ""}
+            ${opportunity?.last_verified
+              ? `<span><strong>${t("opportunity_information_checked")}:</strong> ${escapeHtml(opportunity.last_verified)}</span>`
+              : ""}
+          </div>
+
+          ${sourceUrl ? `
+            <div class="opportunity-source">
+              <a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">
+                ↗ ${t("open_official_portal")}
+              </a>
+            </div>
+          ` : ""}
+        </div>
+      `;
+    }
+
     function renderRecommendation(item, index) {
       const skillGap = Array.isArray(item.skill_gap) ? item.skill_gap : [];
       const matchedSkills = Array.isArray(item.matched_skills) ? item.matched_skills : [];
@@ -3843,15 +4141,14 @@
                 </div>
 
                 <div class="mini-card" data-section="opportunities">
-                  <div class="mini-title">${t("local_opportunities")}</div>
+                  <div class="mini-title">${t("verified_opportunity_sources")}</div>
                   ${opportunities.length
-                    ? opportunities.map(opportunity => `
-                        <div class="opportunity-item">
-                          <strong>${translatedValue(opportunity.opportunity_name || "-")}</strong>
-                          ${opportunity.provider ? `<div>${escapeHtml(opportunity.provider)}</div>` : ""}
-                        </div>
-                      `).join("")
-                    : `<span class="empty">${t("no_opportunity")}</span>`}
+                    ? opportunities.map(renderVerifiedOpportunity).join("")
+                    : `<span class="empty">${
+                        item.opportunity_discovery_status === "no_verified_source_match"
+                          ? t("no_verified_opportunity_source")
+                          : t("no_opportunity")
+                      }</span>`}
                 </div>
               </div>
             </div>
@@ -3932,6 +4229,12 @@
           "योजना", "योजनाएँ", "सरकारी", "सब्सिडी", "लोन",
           "ಯೋಜನೆ", "ಯೋಜನೆಗಳು", "ಸರ್ಕಾರಿ", "ಸಹಾಯಧನ", "ಸಾಲ"
         ],
+        opportunities: [
+          "opportunity", "opportunities", "opening", "openings", "job portal",
+          "where can i apply", "where to apply", "apprenticeship portal", "training portal",
+          "अवसर", "मौका", "रिक्ति", "कहाँ आवेदन", "नौकरी पोर्टल", "अप्रेंटिसशिप पोर्टल",
+          "ಅವಕಾಶ", "ಅವಕಾಶಗಳು", "ಖಾಲಿ ಹುದ್ದೆ", "ಎಲ್ಲಿ ಅರ್ಜಿ", "ಉದ್ಯೋಗ ಪೋರ್ಟಲ್", "ಅಪ್ರೆಂಟಿಸ್ ಪೋರ್ಟಲ್"
+        ],
         nsqf: [
           "nsqf", "course", "training", "qualification", "certificate",
           "कोर्स", "पाठ्यक्रम", "प्रशिक्षण", "योग्यता", "प्रमाणपत्र",
@@ -3959,7 +4262,7 @@
         ]
       };
 
-      for (const intent of ["why", "eligibility", "schemes", "nsqf", "skills", "alternative", "profile", "recommendation"]) {
+      for (const intent of ["why", "eligibility", "schemes", "opportunities", "nsqf", "skills", "alternative", "profile", "recommendation"]) {
         if (includesAny(text, groups[intent])) return intent;
       }
 
@@ -4175,6 +4478,46 @@
               })
             : t("assistant_no_schemes"),
           section: "schemes"
+        };
+      }
+
+      if (intent === "opportunities") {
+        const bestBySource = new Map();
+
+        currentRecommendations.slice(0, 3).forEach(item => {
+          (item.local_opportunities || []).forEach(opportunity => {
+            const name = String(opportunity.opportunity_name || "").trim();
+            if (!name) return;
+
+            const score = Number(opportunity.relevance_score || 0);
+            const previous = bestBySource.get(name);
+
+            if (!previous || score > previous.score) {
+              bestBySource.set(name, {
+                name,
+                score,
+                level: String(opportunity.relevance_level || "possible"),
+                location: String(opportunity.location_match_level || "national")
+              });
+            }
+          });
+        });
+
+        const sources = Array.from(bestBySource.values())
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3)
+          .map(item =>
+            `${item.name} — ${opportunityRelevanceLabel(item.level)}, ${opportunityLocationLabel(item.location)}`
+          );
+
+        return {
+          handled: true,
+          text: sources.length
+            ? formatT("assistant_opportunities_response", {
+                sources: sources.join(", ")
+              })
+            : t("assistant_no_opportunities"),
+          section: "opportunities"
         };
       }
 
