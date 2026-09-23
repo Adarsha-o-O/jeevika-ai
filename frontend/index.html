@@ -2134,7 +2134,6 @@
   }
 }
 
-
   </style>
 
   <script src="i18n.js"></script>
@@ -2191,6 +2190,7 @@
 
       <div class="stitch-mode-choice" role="group" aria-label="Profile input method">
 
+  <!-- VOICE OPTION -->
   <button
     id="voiceModeButton"
     type="button"
@@ -2198,13 +2198,29 @@
     onclick="setOnboardingMode('voice')"
   >
     <div class="stitch-mode-card-top">
-      <span class="stitch-mode-badge voice-badge">Recommended</span>
-      <span class="stitch-mode-status">🎙 Voice</span>
+
+      <span
+        class="stitch-mode-badge voice-badge"
+        data-i18n="onboarding_recommended"
+      >
+        Recommended
+      </span>
+
+      <span class="stitch-mode-status">
+        🎙
+        <span data-i18n="onboarding_voice_label">
+          Voice
+        </span>
+      </span>
+
     </div>
 
-    <div class="stitch-mode-icon voice-icon">🎙</div>
+    <div class="stitch-mode-icon voice-icon">
+      🎙
+    </div>
 
     <div class="stitch-mode-copy">
+
       <h3 data-i18n="onboarding_voice_mode">
         Tell Jeevika by Voice
       </h3>
@@ -2212,21 +2228,47 @@
       <p data-i18n="voice_onboarding_subtitle">
         Jeevika will ask one question at a time. Answer naturally in your selected language.
       </p>
+
     </div>
 
     <div class="stitch-mode-features">
-      <span>✓ English · ಕನ್ನಡ · हिन्दी</span>
-      <span>✓ Guided question-by-question setup</span>
-      <span>✓ Confirm, retry or skip answers</span>
+
+      <span>
+        ✓
+        <span data-i18n="onboarding_voice_languages">
+          English · ಕನ್ನಡ · हिन्दी
+        </span>
+      </span>
+
+      <span>
+        ✓
+        <span data-i18n="onboarding_voice_guided">
+          Guided question-by-question setup
+        </span>
+      </span>
+
+      <span>
+        ✓
+        <span data-i18n="onboarding_voice_controls">
+          Confirm, retry or skip answers
+        </span>
+      </span>
+
     </div>
 
     <div class="stitch-mode-action voice-action">
-      <span data-i18n="voice_start">Start Voice Setup</span>
+
+      <span data-i18n="voice_start">
+        Start Voice Setup
+      </span>
+
       <span>→</span>
+
     </div>
   </button>
 
 
+  <!-- MANUAL OPTION -->
   <button
     id="manualModeButton"
     type="button"
@@ -2234,31 +2276,72 @@
     onclick="setOnboardingMode('manual')"
   >
     <div class="stitch-mode-card-top">
-      <span class="stitch-mode-badge manual-badge">Manual</span>
-      <span class="stitch-mode-status">⌨ Form</span>
+
+      <span
+        class="stitch-mode-badge manual-badge"
+        data-i18n="onboarding_manual_label"
+      >
+        Manual
+      </span>
+
+      <span class="stitch-mode-status">
+        ⌨
+        <span data-i18n="onboarding_form_label">
+          Form
+        </span>
+      </span>
+
     </div>
 
-    <div class="stitch-mode-icon manual-icon">⌨</div>
+    <div class="stitch-mode-icon manual-icon">
+      ⌨
+    </div>
 
     <div class="stitch-mode-copy">
+
       <h3 data-i18n="onboarding_manual_mode">
         Enter Details
       </h3>
 
-      <p>
+      <p data-i18n="onboarding_manual_description">
         Fill your beneficiary details in one simple form and generate livelihood recommendations.
       </p>
+
     </div>
 
     <div class="stitch-mode-features">
-      <span>✓ Personal & location details</span>
-      <span>✓ Education, work, skills & interests</span>
-      <span>✓ Goals & preferences</span>
+
+      <span>
+        ✓
+        <span data-i18n="onboarding_manual_personal">
+          Personal &amp; location details
+        </span>
+      </span>
+
+      <span>
+        ✓
+        <span data-i18n="onboarding_manual_background">
+          Education, work, skills &amp; interests
+        </span>
+      </span>
+
+      <span>
+        ✓
+        <span data-i18n="onboarding_manual_goals">
+          Goals &amp; preferences
+        </span>
+      </span>
+
     </div>
 
     <div class="stitch-mode-action manual-action">
-      <span data-i18n="onboarding_manual_mode">Enter Details</span>
+
+      <span data-i18n="onboarding_manual_mode">
+        Enter Details
+      </span>
+
       <span>→</span>
+
     </div>
   </button>
 
