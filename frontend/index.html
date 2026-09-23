@@ -2701,6 +2701,352 @@ body {
 
 }
 
+/* ============================================================
+   STITCH REDESIGN — RECOMMENDATIONS, CSS-ONLY SAFE PASS
+   ============================================================ */
+
+/* Main recommendation container */
+.recommendation {
+  border: 1px solid #e1e7f0;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 3px 14px rgba(24, 39, 75, .035);
+}
+
+/* Make the #1 expanded result visually dominant */
+.recommendation.expanded {
+  padding: 20px;
+  border-color: #b8c8e8;
+  background: linear-gradient(145deg, #ffffff 0%, #fbfcff 100%);
+  box-shadow: 0 9px 28px rgba(23, 59, 122, .07);
+}
+
+.recommendation.expanded .recommendation-header {
+  align-items: flex-start;
+}
+
+.recommendation.expanded .occupation {
+  color: #172b54;
+  font-size: 21px;
+  line-height: 1.25;
+}
+
+.recommendation.expanded .sector {
+  color: #667085;
+  font-size: 13px;
+}
+
+
+/* Rank */
+.recommendation-rank {
+  background: #173b7a;
+  color: #ffffff;
+  min-width: 36px;
+  height: 27px;
+  padding: 0 9px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  box-shadow: none;
+}
+
+
+/* Match score */
+.score {
+  background: #e2f5ec;
+  color: #087454;
+  border: 1px solid #c9ebdd;
+  padding: 7px 11px;
+  font-size: 12px;
+}
+
+
+/* Match progress bar */
+.recommendation.expanded .meter {
+  height: 8px;
+  margin: 14px 0 12px;
+}
+
+.recommendation.expanded .meter-fill {
+  background: linear-gradient(90deg, #11956c, #4d7df3);
+}
+
+
+/* Why this livelihood fits */
+.recommendation-explanation {
+  padding: 12px 14px;
+  margin-bottom: 14px;
+
+  background: #f5f7fc;
+  border: 1px solid #e3e8f1;
+  border-radius: 11px;
+
+  color: #475467;
+  line-height: 1.55;
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   BETTER INFORMATION HIERARCHY
+   Existing order:
+   1 matched skills
+   2 skill gaps
+   3 matched interests
+   4 NSQF
+   5 schemes
+   6 opportunities
+   ============================================================ */
+
+.recommendation-details .subgrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+
+
+/* Matched skills */
+.recommendation-details .subgrid > .mini-card:nth-child(1) {
+  grid-column: span 4;
+}
+
+
+/* Skill gaps */
+.recommendation-details .subgrid > .mini-card:nth-child(2) {
+  grid-column: span 4;
+}
+
+
+/* Interests */
+.recommendation-details .subgrid > .mini-card:nth-child(3) {
+  grid-column: span 4;
+}
+
+
+/* NSQF gets full width */
+.recommendation-details .subgrid > .mini-card:nth-child(4) {
+  grid-column: 1 / -1;
+}
+
+
+/* Government schemes */
+.recommendation-details .subgrid > .mini-card:nth-child(5) {
+  grid-column: span 6;
+}
+
+
+/* Verified opportunities */
+.recommendation-details .subgrid > .mini-card:nth-child(6) {
+  grid-column: span 6;
+}
+
+
+/* General mini cards */
+.recommendation-details .mini-card {
+  padding: 14px;
+  border: 1px solid #e2e7ef;
+  border-radius: 12px;
+  background: #ffffff;
+  min-width: 0;
+}
+
+.recommendation-details .mini-title {
+  margin-bottom: 10px;
+
+  color: #172b54;
+
+  font-size: 12px;
+  font-weight: 850;
+}
+
+
+/* First three profile-fit cards */
+.recommendation-details .subgrid > .mini-card:nth-child(-n+3) {
+  min-height: 118px;
+  background: #fafbfe;
+}
+
+
+/* NSQF block */
+.recommendation-details .mini-card[data-section="nsqf"] {
+  background: #f8faff;
+  border-color: #d9e2f2;
+}
+
+
+/* Government schemes */
+.recommendation-details .mini-card[data-section="schemes"] {
+  background: #fffefa;
+}
+
+
+/* Opportunities */
+.recommendation-details .mini-card[data-section="opportunities"] {
+  background: #fbfefc;
+}
+
+
+/* Tags */
+.recommendation-details .tag {
+  margin: 3px 4px 3px 0;
+}
+
+
+/* ============================================================
+   COMPACT RESULTS #2 / #3 / ETC.
+   ============================================================ */
+
+.recommendation.compact {
+  padding: 13px 15px;
+  background: #ffffff;
+}
+
+.recommendation.compact .recommendation-header {
+  align-items: center;
+}
+
+.recommendation.compact .occupation {
+  font-size: 16px;
+  color: #172b54;
+}
+
+.recommendation.compact .sector {
+  font-size: 11px;
+}
+
+.recommendation.compact .recommendation-rank {
+  min-width: 32px;
+  height: 24px;
+  margin-bottom: 6px;
+  font-size: 10px;
+}
+
+.recommendation.compact .score {
+  padding: 5px 9px;
+  font-size: 11px;
+}
+
+.recommendation.compact .meter {
+  height: 6px;
+  margin: 8px 0 4px;
+}
+
+
+/* Buttons */
+.recommendation-toggle,
+.recommendations-more-button {
+  border: 1px solid #ccd7eb;
+  background: #f4f7fc;
+  color: #173b7a;
+
+  border-radius: 9px;
+  font-weight: 800;
+}
+
+.recommendation-toggle:hover,
+.recommendations-more-button:hover {
+  background: #173b7a;
+  border-color: #173b7a;
+  color: #ffffff;
+}
+
+
+/* More recommendations */
+.recommendations-more-wrap {
+  margin-top: 14px;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+  .recommendation-details .subgrid > .mini-card:nth-child(1),
+  .recommendation-details .subgrid > .mini-card:nth-child(2) {
+    grid-column: span 6;
+  }
+
+  .recommendation-details .subgrid > .mini-card:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .recommendation-details .subgrid > .mini-card:nth-child(5),
+  .recommendation-details .subgrid > .mini-card:nth-child(6) {
+    grid-column: 1 / -1;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 650px) {
+
+  .recommendation.expanded {
+    padding: 14px;
+  }
+
+  .recommendation.expanded .occupation {
+    font-size: 18px;
+  }
+
+  .recommendation-details .subgrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .recommendation-details .subgrid > .mini-card:nth-child(1),
+  .recommendation-details .subgrid > .mini-card:nth-child(2),
+  .recommendation-details .subgrid > .mini-card:nth-child(3),
+  .recommendation-details .subgrid > .mini-card:nth-child(4),
+  .recommendation-details .subgrid > .mini-card:nth-child(5),
+  .recommendation-details .subgrid > .mini-card:nth-child(6) {
+    grid-column: 1;
+  }
+
+  .recommendation-details .subgrid > .mini-card:nth-child(-n+3) {
+    min-height: 0;
+  }
+
+  .recommendation-actions {
+    justify-content: stretch;
+  }
+
+  .recommendation-toggle {
+    width: 100%;
+  }
+
+}
+
+/* Mobile polish after recommendation redesign */
+
+@media (max-width: 760px) {
+
+  /* Keep sidebar toggle near top-left */
+  .nav-toggle,
+  .nav-toggle.collapsed {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1500;
+  }
+
+  /* Allow horizontal quick-action scrolling without showing scrollbar */
+  .assistant-quick-actions {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .assistant-quick-actions::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 
   </style>
 
