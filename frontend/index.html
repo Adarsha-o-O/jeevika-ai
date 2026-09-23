@@ -2134,6 +2134,574 @@
   }
 }
 
+
+/* ============================================================
+   STITCH REDESIGN — MAIN DASHBOARD SHELL
+   ============================================================ */
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(212, 244, 233, .55), transparent 28%),
+    radial-gradient(circle at top right, rgba(222, 231, 255, .65), transparent 30%),
+    #f7f8fc;
+}
+
+/* ---------- APP SHELL ---------- */
+
+.app-shell {
+  grid-template-columns: 248px minmax(0, 1fr);
+  background: transparent;
+}
+
+
+/* ---------- SIDEBAR ---------- */
+
+.sidebar {
+  background: #ffffff;
+  color: #172033;
+  padding: 18px 14px;
+  border-right: 1px solid #e4e8f0;
+  box-shadow: 4px 0 22px rgba(25, 40, 75, .04);
+}
+
+.sidebar-brand {
+  margin-bottom: 22px;
+}
+
+.sidebar-logo-panel {
+  min-height: 86px;
+  padding: 8px;
+  margin-bottom: 4px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.sidebar-logo {
+  width: min(145px, 100%);
+  max-height: 82px;
+}
+
+.brand-sub {
+  color: #667085;
+  opacity: 1;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+/* ---------- NAVIGATION ---------- */
+
+.nav-item {
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 5px;
+  padding: 10px 13px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: transparent;
+  color: #475467;
+
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+
+  transition:
+    background .16s ease,
+    color .16s ease,
+    transform .16s ease;
+}
+
+.nav-item:hover {
+  background: #f0f3fa;
+  color: #173b7a;
+  transform: translateX(2px);
+}
+
+.nav-item.active {
+  background: #173b7a;
+  color: #ffffff;
+  box-shadow: 0 7px 18px rgba(23, 59, 122, .18);
+}
+
+
+/* ---------- SIDEBAR TOGGLE ---------- */
+
+.nav-toggle {
+  width: 38px;
+  height: 38px;
+
+  top: 18px;
+  left: 226px;
+
+  border-radius: 10px;
+
+  background: #173b7a;
+  border: 1px solid rgba(255,255,255,.15);
+
+  color: #ffffff;
+
+  box-shadow: 0 7px 20px rgba(23, 59, 122, .18);
+}
+
+.nav-toggle:hover {
+  background: #0d7557;
+}
+
+.nav-toggle.collapsed {
+  left: 14px;
+}
+
+
+/* ---------- MAIN CONTENT ---------- */
+
+.main {
+  padding: 22px 26px 34px;
+  min-width: 0;
+  background: transparent;
+}
+
+
+/* ---------- TOP BAR ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+
+  background: rgba(255,255,255,.94);
+
+  border: 1px solid #e5e9f1;
+  border-radius: 16px;
+
+  box-shadow: 0 7px 25px rgba(20, 38, 74, .06);
+
+  backdrop-filter: blur(10px);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-logo-wrap {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.header-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.topbar-copy {
+  min-width: 0;
+}
+
+.topbar .status {
+  color: #475467;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+
+/* ---------- LANGUAGE + NEW PROFILE ---------- */
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.control-label {
+  color: #667085;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.controls select {
+  min-height: 40px;
+
+  padding: 8px 34px 8px 12px;
+
+  background: #f8f9fc;
+  color: #172033;
+
+  border: 1px solid #dce2ec;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+.new-profile-button {
+  min-height: 40px;
+
+  padding: 8px 15px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: #173b7a;
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  box-shadow: 0 5px 15px rgba(23, 59, 122, .16);
+}
+
+.new-profile-button:hover {
+  background: #0d7557;
+}
+
+
+/* ---------- DASHBOARD GRID ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+
+  gap: 18px;
+  align-items: start;
+}
+
+.profile-card {
+  grid-column: span 4;
+}
+
+.voice-card {
+  grid-column: span 8;
+}
+
+.recommendations-card {
+  grid-column: span 12;
+}
+
+
+/* ---------- MAIN CARDS ---------- */
+
+.card {
+  background: rgba(255,255,255,.96);
+
+  border: 1px solid #e5e9f1;
+  border-radius: 16px;
+
+  padding: 19px;
+
+  box-shadow:
+    0 5px 18px rgba(24, 39, 75, .045),
+    0 1px 2px rgba(24, 39, 75, .03);
+}
+
+.section-title {
+  margin-bottom: 14px;
+
+  color: #172b54;
+
+  font-size: 15px;
+  font-weight: 850;
+  letter-spacing: -.01em;
+}
+
+
+/* ---------- PROFILE ---------- */
+
+.profile-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.98),
+      rgba(248,251,255,.98)
+    );
+}
+
+
+/* ---------- JEEVIKA ASSISTANT ---------- */
+
+.voice-card {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.98),
+      rgba(249,251,255,.98)
+    );
+}
+
+.assistant-compose {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+
+  gap: 8px;
+
+  padding: 8px;
+
+  background: #f5f7fb;
+
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+}
+
+.assistant-compose input {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+
+  padding: 9px 12px;
+
+  background: #ffffff;
+
+  border: 1px solid #dfe4ec;
+  border-radius: 9px;
+
+  color: #172033;
+}
+
+.assistant-compose input:focus {
+  outline: 2px solid rgba(23, 59, 122, .16);
+  border-color: #8199cb;
+}
+
+.assistant-compose button {
+  min-height: 42px;
+
+  padding: 8px 13px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: #0b805e;
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.assistant-compose button.secondary {
+  background: #173b7a;
+}
+
+.assistant-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.assistant-chip {
+  padding: 7px 11px;
+
+  border: 1px solid #dfe4ec;
+  border-radius: 999px;
+
+  background: #ffffff;
+  color: #344054;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.assistant-chip:hover {
+  background: #eef3ff;
+  color: #173b7a;
+
+  border-color: #c8d5ef;
+}
+
+.transcript,
+.assistant-response {
+  margin-top: 12px;
+
+  padding: 12px 14px;
+
+  border-radius: 11px;
+
+  background: #f7f8fc;
+  border: 1px solid #e6e9f0;
+
+  color: #475467;
+}
+
+
+/* ---------- RECOMMENDATIONS ---------- */
+
+.recommendations-card {
+  background: rgba(255,255,255,.98);
+}
+
+.recommendation {
+  border: 1px solid #e2e7f0;
+  border-radius: 14px;
+
+  padding: 16px;
+  margin-bottom: 12px;
+
+  background: #fbfcff;
+
+  box-shadow: 0 3px 12px rgba(23, 40, 75, .035);
+}
+
+.recommendation:first-child {
+  border-color: #b9c8e8;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f5f8ff
+    );
+
+  box-shadow: 0 8px 24px rgba(23, 59, 122, .08);
+}
+
+.recommendation-header {
+  gap: 12px;
+}
+
+.recommendation-rank {
+  background: #173b7a;
+  color: #ffffff;
+
+  border-radius: 999px;
+
+  font-weight: 800;
+}
+
+.recommendation-toggle,
+.recommendations-more-button {
+  border-radius: 9px;
+
+  border: 1px solid #ccd6e9;
+
+  background: #f2f5fb;
+  color: #173b7a;
+
+  font-weight: 750;
+}
+
+.recommendation-toggle:hover,
+.recommendations-more-button:hover {
+  background: #173b7a;
+  color: #ffffff;
+}
+
+
+/* ---------- EMPTY / LOADING ---------- */
+
+.empty {
+  color: #667085;
+  line-height: 1.55;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+  .profile-card {
+    grid-column: span 12;
+  }
+
+  .voice-card {
+    grid-column: span 12;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 760px) {
+
+  .app-shell,
+  .app-shell.sidebar-collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  .main {
+    padding: 14px;
+  }
+
+  .topbar {
+    align-items: stretch;
+    flex-direction: column;
+
+    padding: 13px;
+
+    border-radius: 14px;
+  }
+
+  .controls {
+    width: 100%;
+  }
+
+  .controls select {
+    flex: 1;
+  }
+
+  .new-profile-button {
+    flex: 1;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .profile-card,
+  .voice-card,
+  .recommendations-card {
+    grid-column: 1;
+  }
+
+  .card {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  .assistant-compose {
+    grid-template-columns: 1fr;
+  }
+
+  .assistant-compose button,
+  .assistant-compose button.secondary {
+    width: 100%;
+  }
+
+  .assistant-quick-actions {
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+    padding-bottom: 3px;
+  }
+
+  .assistant-chip {
+    flex: 0 0 auto;
+  }
+
+}
+
+
   </style>
 
   <script src="i18n.js"></script>
