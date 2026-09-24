@@ -3658,6 +3658,706 @@ body {
 
 }
 
+/* ============================================================
+   STITCH REDESIGN — PROFILE + ASSISTANT + HEADER POLISH
+   SAFE CSS-ONLY PASS
+   ============================================================ */
+
+
+/* ============================================================
+   BENEFICIARY PROFILE
+   ============================================================ */
+
+.profile-card {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fbfcff 100%
+    );
+
+  border-color: #dfe5ef;
+}
+
+.profile-card::before {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 4px;
+
+  background: linear-gradient(
+    90deg,
+    #0b8a63,
+    #173b7a
+  );
+}
+
+.profile-card .section-title {
+  margin-bottom: 16px;
+
+  color: #172b54;
+
+  font-size: 16px;
+  font-weight: 850;
+}
+
+
+/* Profile rows */
+
+.profile-card .profile-row {
+  margin: 0;
+  padding: 9px 0;
+
+  border-bottom: 1px solid #edf0f5;
+}
+
+.profile-card .profile-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.profile-card .profile-label {
+  margin-bottom: 3px;
+
+  color: #7a8496;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  letter-spacing: .02em;
+}
+
+.profile-card .profile-value {
+  margin-top: 0;
+
+  color: #172033;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  line-height: 1.45;
+}
+
+
+/* Profile tags */
+
+.profile-card .tag {
+  display: inline-flex;
+  align-items: center;
+
+  margin: 3px 4px 2px 0;
+  padding: 5px 8px;
+
+  background: #eef3ff;
+  color: #315a9c;
+
+  border: 1px solid #dbe4f5;
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   JEEVIKA ASSISTANT CARD
+   ============================================================ */
+
+.voice-card {
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fafcff 100%
+    );
+
+  border-color: #dfe5ef;
+}
+
+.voice-card::before {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 4px;
+
+  background: linear-gradient(
+    90deg,
+    #173b7a,
+    #0b8a63
+  );
+}
+
+.voice-card .section-title {
+  margin-bottom: 14px;
+
+  color: #172b54;
+
+  font-size: 16px;
+  font-weight: 850;
+}
+
+
+/* Assistant compose area */
+
+.voice-card .assistant-compose {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+
+  gap: 8px;
+
+  padding: 9px;
+
+  background: #f5f7fb;
+
+  border: 1px solid #e1e6ef;
+  border-radius: 13px;
+}
+
+.voice-card .assistant-compose input {
+  min-height: 44px;
+
+  padding: 10px 13px;
+
+  background: #ffffff;
+  color: #172033;
+
+  border: 1px solid #dce2ec;
+  border-radius: 10px;
+
+  font-size: 12px;
+}
+
+.voice-card .assistant-compose input:focus {
+  outline: 3px solid rgba(23, 59, 122, .10);
+  border-color: #8ca2cf;
+}
+
+
+/* Speak button */
+
+.voice-card .assistant-compose button:first-child {
+  min-width: 82px;
+  min-height: 44px;
+
+  background: #0b865f;
+  color: #ffffff;
+
+  border-radius: 10px;
+
+  box-shadow: 0 4px 12px rgba(11, 134, 95, .15);
+}
+
+
+/* Ask Jeevika button */
+
+.voice-card .assistant-compose button.secondary {
+  min-width: 105px;
+  min-height: 44px;
+
+  background: #173b7a;
+  color: #ffffff;
+
+  border-radius: 10px;
+
+  box-shadow: 0 4px 12px rgba(23, 59, 122, .14);
+}
+
+
+/* ============================================================
+   QUICK ACTIONS
+   ============================================================ */
+
+.voice-card .assistant-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin-top: 12px;
+}
+
+.voice-card .assistant-chip {
+  min-height: 32px;
+
+  padding: 6px 11px;
+
+  background: #ffffff;
+  color: #344054;
+
+  border: 1px solid #dfe4ec;
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  box-shadow: 0 1px 3px rgba(24, 39, 75, .025);
+}
+
+.voice-card .assistant-chip:hover {
+  background: #eef3ff;
+  color: #173b7a;
+
+  border-color: #c8d5ed;
+}
+
+
+/* ============================================================
+   TRANSCRIPT + ANSWER
+   ============================================================ */
+
+.voice-card .transcript,
+.voice-card .assistant-response {
+  position: relative;
+
+  margin-top: 11px;
+  padding: 12px 14px 12px 16px;
+
+  min-height: 48px;
+
+  border-radius: 11px;
+
+  color: #596579;
+
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+
+/* Voice transcript */
+
+.voice-card .transcript {
+  background: #f6f8fc;
+  border: 1px solid #e5e9f0;
+
+  border-left: 3px solid #0b865f;
+}
+
+
+/* Jeevika answer */
+
+.voice-card .assistant-response {
+  background: #f7f9fe;
+  border: 1px solid #e2e7f2;
+
+  border-left: 3px solid #173b7a;
+
+  color: #475467;
+}
+
+
+/* ============================================================
+   TOP HEADER POLISH
+   ============================================================ */
+
+.topbar {
+  min-height: 68px;
+
+  padding: 12px 16px;
+
+  border-color: #dfe5ef;
+
+  box-shadow: 0 5px 20px rgba(23, 40, 75, .045);
+}
+
+.topbar-brand {
+  gap: 10px;
+}
+
+.header-logo-wrap {
+  width: 42px;
+  height: 42px;
+  flex-basis: 42px;
+}
+
+.header-logo {
+  width: 42px;
+  height: 42px;
+}
+
+.topbar .status {
+  color: #344054;
+
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.controls {
+  gap: 8px;
+}
+
+.controls select {
+  min-height: 40px;
+
+  background: #fafbfe;
+
+  border-color: #dde3ed;
+}
+
+.new-profile-button {
+  min-height: 40px;
+
+  padding-left: 16px;
+  padding-right: 16px;
+
+  background: #173b7a;
+
+  border-radius: 10px;
+}
+
+.new-profile-button:hover {
+  background: #0b865f;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+  .profile-card,
+  .voice-card {
+    grid-column: 1 / -1;
+  }
+
+  .profile-card #profileContent {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 0 22px;
+  }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 650px) {
+
+  .profile-card #profileContent {
+    display: block;
+  }
+
+  .profile-card .profile-row {
+    padding: 8px 0;
+  }
+
+  .voice-card .assistant-compose {
+    grid-template-columns: 1fr;
+
+    padding: 8px;
+  }
+
+  .voice-card .assistant-compose button:first-child,
+  .voice-card .assistant-compose button.secondary {
+    width: 100%;
+  }
+
+  .voice-card .assistant-quick-actions {
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+
+    padding-bottom: 3px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .voice-card .assistant-quick-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .voice-card .assistant-chip {
+    flex: 0 0 auto;
+  }
+
+  .topbar {
+    min-height: 0;
+
+    padding: 12px;
+
+    gap: 10px;
+  }
+
+  .topbar-brand {
+    width: 100%;
+  }
+
+  .controls {
+    width: 100%;
+  }
+
+  .controls select,
+  .new-profile-button {
+    flex: 1;
+  }
+
+}
+
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .profile-card,
+  .voice-card,
+  .recommendations-card {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+/* ============================================================
+   FINAL MOBILE HEADER FIX
+   ============================================================ */
+
+@media (max-width: 650px) {
+
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .main {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Give hamburger its own space */
+  .topbar-brand {
+    width: 100%;
+    min-width: 0;
+    padding-left: 44px;
+    box-sizing: border-box;
+  }
+
+  .header-logo-wrap {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+  }
+
+  .header-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .topbar-copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .topbar .status {
+    font-size: 11px;
+    line-height: 1.35;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  /* Language + New Profile fit safely inside 390px */
+  .controls {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+
+    gap: 6px;
+  }
+
+  .control-label {
+    margin: 0;
+    white-space: nowrap;
+    font-size: 10px;
+  }
+
+  .controls select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+
+    padding: 8px 26px 8px 9px;
+
+    font-size: 11px;
+  }
+
+  .new-profile-button {
+    min-width: 0;
+    width: auto;
+
+    padding: 9px 10px;
+
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  /* Hamburger stays clear of page content */
+  .nav-toggle,
+  .nav-toggle.collapsed {
+    top: 12px;
+    left: 12px;
+
+    width: 36px;
+    height: 36px;
+  }
+
+}
+
+/* ============================================================
+   FINAL MOBILE RECOMMENDATION FIX
+   ============================================================ */
+
+@media (max-width: 650px) {
+
+  /* Recommendation section must use full phone width */
+  .recommendations-card,
+  #recommendations,
+  .recommendation {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .recommendation {
+    overflow: hidden;
+  }
+
+  .recommendation.expanded,
+  .recommendation.compact {
+    padding: 13px;
+  }
+
+  /* Header */
+  .recommendation-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .occupation,
+  .sector,
+  .recommendation-explanation {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .score {
+    white-space: nowrap;
+  }
+
+  /* Every recommendation detail becomes one full-width column */
+  .recommendation-details .subgrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    gap: 10px;
+  }
+
+  .recommendation-details .subgrid > .mini-card:nth-child(1),
+  .recommendation-details .subgrid > .mini-card:nth-child(2),
+  .recommendation-details .subgrid > .mini-card:nth-child(3),
+  .recommendation-details .subgrid > .mini-card:nth-child(4),
+  .recommendation-details .subgrid > .mini-card:nth-child(5),
+  .recommendation-details .subgrid > .mini-card:nth-child(6) {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  /* Nested cards */
+  .qualification-item,
+  .scheme-item,
+  .opportunity-item {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Prevent long qualification / scheme / opportunity names overflowing */
+  .qualification-name,
+  .scheme-name,
+  .opportunity-name,
+  .opportunity-provider,
+  .opportunity-description {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  /* Stack titles and badges */
+  .qualification-title-row,
+  .scheme-title-row,
+  .opportunity-title-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+  }
+
+  .qualification-badges,
+  .scheme-badges,
+  .opportunity-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 5px;
+    max-width: 100%;
+  }
+
+  /* Qualification information */
+  .qualification-meta {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  /* Lists must stay inside cards */
+  .scheme-section ul,
+  .opportunity-list {
+    padding-left: 18px;
+    padding-right: 2px;
+  }
+
+  /* Action buttons */
+  .recommendation-actions {
+    width: 100%;
+  }
+
+  .recommendation-toggle {
+    width: 100%;
+  }
+
+  .recommendations-more-button {
+    width: 100%;
+    min-width: 0;
+  }
+}
 
   </style>
 
